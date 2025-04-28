@@ -1,0 +1,28 @@
+/* grade tipo “tela de apps” */
+.menu-apps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+/* ícone estilo iOS (rounded-square) */
+.menu-apps .app-icon {
+    width: 72px;               /* pode ajustar */
+    height: 72px;
+    border-radius: 20px;       /* cantos arredondados */
+    background: #F5F5F7;       /* cinza claro iOS */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;           /* tamanho do ícone */
+    color: #0d6efd;            /* azul Bootstrap */
+    text-decoration: none;
+    transition: transform .2s;
+}
+.menu-apps .app-icon:hover {
+    transform: scale(1.08);
+}
+.menu-apps .app-icon:active {
+    transform: scale(.94);
+}

@@ -1,0 +1,98 @@
+<?php
+/******************* SEGURANÇA DE SESSÃO *******************/
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    header('Location: /pre-treino-rfc/views/login.php');
+    exit;
+}
+
+/******************* BUSCA DE DADOS ************************/
+require_once '../config/Database.php';
+use Config\Database;
+
+try {
+    $pdo = Database::getConnection();
+    $stmt = $pdo->query(
+        "SELECT id,
+                nome,
+                email,
+                telefone,
+                especialidade,
+                DATE_FORMAT(data_contratacao,'%d/%m/%Y') AS data_contratacao
+         FROM treinadores
+         ORDER BY id DESC"
+    );
+    $treinadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Erro ao buscar treinadores: " . $e->getMessage());
+}
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athletic Map – Lista de Treinadores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+            background:#07272D;color:#FFF;
+            min-height:100vh;display:flex;align-items:center;justify-content:center;
+            padding:40px 12px;
+        }
+        .container{
+            background:rgba(255,255,255,0.08);
+            padding:28px;border-radius:14px;
+            max-width:1100px;width:100%;
+        }
+        .logo{width:150px;display:block;margin:0 auto 20px;}
+        .table-responsive{white-space:nowrap;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="https://athleticmap.com/images/logo-atm.png" class="logo" alt="Athletic Map">
+    <h2 class="text-center mb-4">Lista de Treinadores</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-dark align-middle">
+            <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Especialidade</th>
+                <th>Contratado em</th>
+                <th class="text-center">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!empty($treinadores)): ?>
+                <?php foreach ($treinadores as $t): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($t['nome']) ?></td>
+                        <td><?= htmlspecialchars($t['email']) ?></td>
+                        <td><?= htmlspecialchars($t['telefone']) ?></td>
+                        <td><?= htmlspecialchars($t['especialidade']) ?></td>
+                        <td><?= $t['data_contratacao'] ?></td>
+                        <td class="text-center">
+                            <a href="/pre-treino-rfc/views/editar_treinador_form.php?id=<?= $t['id'] ?>"
+                               class="btn btn-sm btn-primary">Editar</a>
+                            <a href="/pre-treino-rfc/controllers/routerExcluirTreinador.php?id=<?= $t['id'] ?>"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('Excluir este treinador?')">Excluir</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="6" class="text-center">Nenhum treinador encontrado.</td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/pre-treino-rfc/index.php" class="btn btn-light mt-3">Voltar ao Painel</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
