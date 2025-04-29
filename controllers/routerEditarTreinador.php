@@ -8,13 +8,13 @@
 /******************* SEGURANÇA DE SESSÃO *******************/
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 
 /******************* AUTOLOAD BÁSICO ***********************/
 spl_autoload_register(function ($class) {
-    $base = dirname(__DIR__) . '/';                       // pre-treino-rfc/
+    $base = dirname(__DIR__) . '/';                       // psa-cbg/
     $file = $base . str_replace('\\', '/', $class) . '.php';
     if (file_exists($file)) require $file;
 });
@@ -36,6 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ctrl->editar();
 } else {
     /* acesso incorreto: redireciona à lista de treinadores */
-    header('Location: /pre-treino-rfc/views/lista_treinadores.php');
+    header('Location: /psa-cbg/views/lista_treinadores.php');
     exit;
 }

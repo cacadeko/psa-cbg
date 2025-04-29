@@ -48,7 +48,7 @@ use Controllers\PSEController;
 
         <div class="container mt-4">
             <h2 class="text-center">Filtrar</h2>
-                <form method="GET" action="/pre-treino-rfc/views/lista_pse.php">
+                <form method="GET" action="/psa-cbg/views/lista_pse.php">
                     <label class="form-label">Filtrar por Data</label>
                     <input type="date" class="form-control" name="data_filtro" value="<?php echo isset($_GET['data_filtro']) ? $_GET['data_filtro'] : ''; ?>">
                     <button type="submit" class="btn btn-primary w-100">Filtrar</button>
@@ -76,7 +76,7 @@ use Controllers\PSEController;
                                     <td><?php echo htmlspecialchars($registro['nota_pse']); ?></td>
                                     <td><?php echo htmlspecialchars($registro['created_at']); ?></td>
                                     <td>
-                                        <a href="/pre-treino-rfc/controllers/routerExcluirPSE.php?id=<?php echo $registro['id']; ?>" 
+                                        <a href="/psa-cbg/controllers/routerExcluirPSE.php?id=<?php echo $registro['id']; ?>" 
                                             class="btn btn-danger btn-sm" 
                                             onclick="return confirm('Tem certeza que deseja excluir este registro de PSE?');">
                                             Excluir
@@ -99,7 +99,7 @@ use Controllers\PSEController;
 
                     </table>
                 </div>
-            <a href="/pre-treino-rfc/index.php" class="btn btn-warning btn-sm">Voltar para o menu</a>
+            <a href="/psa-cbg/index.php" class="btn btn-warning btn-sm">Voltar para o menu</a>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>

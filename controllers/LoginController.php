@@ -13,7 +13,7 @@ class LoginController
     {
         /* só aceita POST */
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /pre-treino-rfc/views/login.php');
+            header('Location: /psa-cbg/views/login.php');
             exit;
         }
 
@@ -49,7 +49,7 @@ class LoginController
         $_SESSION['acesso']     = ($usuario['nivel'] === 'admin') ? 1 : 0; // compat.
 
         /* redireciona ao painel */
-        header('Location: /pre-treino-rfc/index.php');
+        header('Location: /psa-cbg/index.php');
         exit;
     }
 }

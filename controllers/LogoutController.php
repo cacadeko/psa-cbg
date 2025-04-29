@@ -4,6 +4,6 @@ namespace Controllers;
 
 session_start();
 session_destroy();
-header('Location: /pre-treino-rfc/views/login.php');
+header('Location: /psa-cbg/views/login.php');
 exit;
 ?>

@@ -29,12 +29,12 @@ class PSEController {
 
             if ($existeCadastro > 0) {
                 print("Erro: Apenas um cadastro de esforço permitido por dia.");
-                header('Location: /pre-treino-rfc/views/pse_form.php?success=3');
+                header('Location: /psa-cbg/views/pse_form.php?success=3');
                 exit;
             }
 
             if (PSE::create($atleta_id, $descricao, $nota_pse)) {
-                header('Location: /pre-treino-rfc/index.php?success=1');
+                header('Location: /psa-cbg/index.php?success=1');
                 exit;
             } else {
                 die("Erro ao registrar PSE.");
@@ -65,7 +65,7 @@ class PSEController {
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
             $id = $_GET['id'];
             if (PSE::excluir($id)) {
-                header('Location: /pre-treino-rfc/views/lista_pse.php?success=1');
+                header('Location: /psa-cbg/views/lista_pse.php?success=1');
                 exit;
             } else {
                 die("Erro ao excluir registro de PSE.");

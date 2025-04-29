@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 ?>
@@ -43,7 +43,7 @@ if (!isset($_SESSION['usuario'])) {
     <h3 class="text-center">Cadastrar Treinador</h3>
 
     <!-- ajuste o action se usar router/controller diferente -->
-    <form method="POST" action="/pre-treino-rfc/controllers/routerTreinador.php">
+    <form method="POST" action="/psa-cbg/controllers/routerTreinador.php">
 
         <div class="row g-3 mb-3">
             <div class="col-12">
@@ -73,7 +73,7 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
         <button type="submit" class="btn btn-primary w-100">Salvar</button>
-        <a href="/pre-treino-rfc/index.php" class="btn btn-light w-100 mt-2">Cancelar</a>
+        <a href="/psa-cbg/index.php" class="btn btn-light w-100 mt-2">Cancelar</a>
     </form>
 </div>
 

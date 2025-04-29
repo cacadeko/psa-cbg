@@ -18,7 +18,7 @@ class JogoController
             ':user'  => $_SESSION['usuario_id']
         ];
         Jogo::create($d);
-        header('Location: /pre-treino-rfc/views/lista_jogos.php');
+        header('Location: /psa-cbg/views/lista_jogos.php');
         exit;
     }
 

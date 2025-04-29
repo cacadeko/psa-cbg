@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 ?>
@@ -103,7 +103,7 @@ if (!isset($_SESSION['usuario'])) {
     <div class="container mt-4">
         <h1 class="text-center">Formulário PSE</h1>
         <h2 class="text-center">Percepção Subjetiva de Esforço</h2><br><br>
-        <form method="POST" action="/pre-treino-rfc/controllers/routerPSE.php">
+        <form method="POST" action="/psa-cbg/controllers/routerPSE.php">
             <div class="mb-3">
                 <h4>Atleta:</h4>
                 <input type="text" class="form-control" name="atleta_nome" value="<?php echo htmlspecialchars($_SESSION['usuario']); ?>" readonly>
@@ -135,7 +135,7 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Registrar</button>
-            <a href="/pre-treino-rfc/index.php" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+            <a href="/psa-cbg/index.php" class="btn btn-secondary w-100 mt-2">Cancelar</a>
             </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

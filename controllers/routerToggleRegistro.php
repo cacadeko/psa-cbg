@@ -7,7 +7,7 @@
     use Controllers\RegistroController;
 
     if (!isset($_SESSION['usuario'])) {
-        header('Location: /pre-treino-rfc/views/login.php');
+        header('Location: /psa-cbg/views/login.php');
         exit;
     }
     
@@ -15,6 +15,6 @@
 
     $registroController = new RegistroController();
     $registroController->alterarStatusRegistro($_POST['status']);
-    header('Location: /pre-treino-rfc/index.php?success=1&status=1');
+    header('Location: /psa-cbg/index.php?success=1&status=1');
     exit;
 ?>

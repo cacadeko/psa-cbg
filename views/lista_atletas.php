@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 
@@ -56,9 +56,9 @@ $atletas          = $atletaController->listar();   // ← filtrado
                         <td><?= htmlspecialchars($atleta['telefone']) ?></td>
                         <td><?= htmlspecialchars($atleta['categoria']) ?></td>
                         <td class="text-center">
-                            <a href="/pre-treino-rfc/views/editar_atleta_form.php?id=<?= $atleta['id'] ?>"
+                            <a href="/psa-cbg/views/editar_atleta_form.php?id=<?= $atleta['id'] ?>"
                                class="btn btn-warning btn-sm">Editar</a>
-                            <a href="/pre-treino-rfc/controllers/routerExcluirAtleta.php?id=<?= $atleta['id'] ?>"
+                            <a href="/psa-cbg/controllers/routerExcluirAtleta.php?id=<?= $atleta['id'] ?>"
                                class="btn btn-danger btn-sm"
                                onclick="return confirm('Tem certeza que deseja excluir este atleta?');">
                                Excluir
@@ -73,7 +73,7 @@ $atletas          = $atletaController->listar();   // ← filtrado
         </table>
     </div>
 
-    <a href="/pre-treino-rfc/index.php" class="btn btn-warning btn-sm">Voltar para o menu</a>
+    <a href="/psa-cbg/index.php" class="btn btn-warning btn-sm">Voltar para o menu</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -50,7 +50,7 @@ class TreinadoresController
             die('Erro ao cadastrar treinador.');
         }
 
-        header('Location: /pre-treino-rfc/index.php?success=1');
+        header('Location: /psa-cbg/index.php?success=1');
         exit;
     }
 
@@ -87,7 +87,7 @@ class TreinadoresController
             die('Erro ao atualizar treinador.');
         }
 
-        header('Location: /pre-treino-rfc/views/lista_treinadores.php?success=1');
+        header('Location: /psa-cbg/views/lista_treinadores.php?success=1');
         exit;
     }
 
@@ -96,7 +96,7 @@ class TreinadoresController
         if (!\Models\Treinador::delete($id)) {          // ou TreinadoresModel
             die('Erro ao excluir treinador.');
         }
-        header('Location: /pre-treino-rfc/views/lista_treinadores.php?deleted=1');
+        header('Location: /psa-cbg/views/lista_treinadores.php?deleted=1');
         exit;
     }
 

@@ -56,7 +56,7 @@ class SonoController {
 
             try {
                 if (QualidadeSono::create($atleta_id, $hora_dormir, $hora_acordar, $dor_corpo, $local_dor, $intensidade_dor, $avaliacao_psr, $avaliacao_sono, $acordou_durante_a_noite)) {
-                    header('Location: /pre-treino-rfc/index.php?success=1');
+                    header('Location: /psa-cbg/index.php?success=1');
                     exit;
                 } else {
                     throw new Exception("Erro ao inserir no banco de dados.");
@@ -90,7 +90,7 @@ class SonoController {
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
             $id = $_GET['id'];
             if (QualidadeSono::excluir($id)) {
-                header('Location: /pre-treino-rfc/views/lista_sono.php?success=1');
+                header('Location: /psa-cbg/views/lista_sono.php?success=1');
                 exit;
             } else {
                 die("Erro ao excluir registro de sono.");

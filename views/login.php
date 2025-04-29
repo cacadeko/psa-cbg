@@ -37,7 +37,7 @@
 <div class="container">
         <img src="https://athleticmap.com/images/logo-atm.png" alt="Athletic Map Logo" class="logo">
         <h2 class="text-center">Login</h2>
-        <form method="POST" action="/pre-treino-rfc/controllers/routerLogin.php">
+        <form method="POST" action="/psa-cbg/controllers/routerLogin.php">
             <div class="mb-3">
                 <label class="form-label">E-mail</label>
                 <input type="e-mail" class="form-control" name="email" required>

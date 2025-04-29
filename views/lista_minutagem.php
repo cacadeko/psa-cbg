@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 
@@ -47,9 +47,9 @@ $registros  = $ctrl->listar();
 <!-- TOP-BAR -->
 <div class="top-bar">
     <div class="box-top-bar">
-        <a href="/pre-treino-rfc/" class="home-icon" title="Home"><i class="fas fa-home"></i></a>
+        <a href="/psa-cbg/" class="home-icon" title="Home"><i class="fas fa-home"></i></a>
         <img src="https://athleticmap.com/images/logo-atm.png" class="logo-fixed" alt="ATM">
-        <a href="/pre-treino-rfc/controllers/LogoutController.php"
+        <a href="/psa-cbg/controllers/LogoutController.php"
            class="logout-icon" title="Sair"><i class="fas fa-power-off"></i></a>
     </div>
 </div>
@@ -87,7 +87,7 @@ $registros  = $ctrl->listar();
     </div>
 
     <div class="d-flex justify-content-end">
-        <a href="/pre-treino-rfc/index.php" class="btn btn-light mt-3">Voltar</a>
+        <a href="/psa-cbg/index.php" class="btn btn-light mt-3">Voltar</a>
     </div>
 </div>
 

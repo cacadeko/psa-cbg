@@ -37,7 +37,7 @@ use PDO;
             $conn = Database::getConnection();
             $stmt = $conn->prepare("UPDATE configuracoes SET registro_liberado = ? WHERE id = 1");
             return $stmt->execute([$status]);
-            header('Location: /pre-treino-rfc/index.php?success=1&status=1');
+            header('Location: /psa-cbg/index.php?success=1&status=1');
             exit;
 
         }

@@ -26,7 +26,7 @@ class UsuariosController
         ];
         UsuariosModel::adicionar_usuario($dados);
 
-        header('Location: /pre-treino-rfc/views/lista_usuarios.php?success=1');
+        header('Location: /psa-cbg/views/lista_usuarios.php?success=1');
         exit;
     }
 
@@ -46,7 +46,7 @@ class UsuariosController
         }
         UsuariosModel::update($id, $data);
 
-        header('Location: /pre-treino-rfc/views/lista_usuarios.php?edited=1');
+        header('Location: /psa-cbg/views/lista_usuarios.php?edited=1');
         exit;
     }
 
@@ -54,7 +54,7 @@ class UsuariosController
     public function excluir(int $id): void
     {
         UsuariosModel::delete($id);
-        header('Location: /pre-treino-rfc/views/lista_usuarios.php?deleted=1');
+        header('Location: /psa-cbg/views/lista_usuarios.php?deleted=1');
         exit;
     }
 }

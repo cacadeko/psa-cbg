@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 
@@ -26,6 +26,6 @@ $ctrl = new TreinadoresController();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ctrl->store();                // grava
 } else {
-    header('Location: /pre-treino-rfc/views/lista_treinadores.php');
+    header('Location: /psa-cbg/views/lista_treinadores.php');
     exit;
 }

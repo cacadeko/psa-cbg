@@ -115,7 +115,7 @@ $sono = $sonoController->listarTodos($data_filtro);
 
                             <td><?php echo htmlspecialchars($registro['intensidade_dor']); ?></td>
                             <td>
-                                <a href="/pre-treino-rfc/controllers/routerExcluirSono.php?id=<?php echo $registro['id']; ?>" 
+                                <a href="/psa-cbg/controllers/routerExcluirSono.php?id=<?php echo $registro['id']; ?>" 
                                     class="btn btn-danger btn-sm" 
                                     onclick="return confirm('Tem certeza que deseja excluir este registro de sono?');">
                                     Excluir
@@ -139,7 +139,7 @@ $sono = $sonoController->listarTodos($data_filtro);
 
             </table>
         </div>
-        <a href="/pre-treino-rfc/index.php" class="btn btn-warning btn-sm">Voltar para o menu</a>
+        <a href="/psa-cbg/index.php" class="btn btn-warning btn-sm">Voltar para o menu</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

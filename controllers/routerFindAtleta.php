@@ -7,7 +7,7 @@
 
     session_start();
     if (!isset($_SESSION['usuario'])) {
-        header('Location: /pre-treino-rfc/views/login.php');
+        header('Location: /psa-cbg/views/login.php');
         exit;
     }
 

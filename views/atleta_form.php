@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 ?>
@@ -100,12 +100,12 @@ if (!isset($_SESSION['usuario'])) {
 <!-- top-bar -->
 <div class="top-bar">
     <div class="box-top-bar">
-        <a href="/pre-treino-rfc/"
+        <a href="/psa-cbg/"
         class="home-icon" title="Home"><i class="fas fa-home"></i></a>
 
         <img src="https://athleticmap.com/images/logo-atm.png" class="logo-fixed" alt="ATM">
 
-        <a href="/pre-treino-rfc/controllers/LogoutController.php"
+        <a href="/psa-cbg/controllers/LogoutController.php"
         class="logout-icon" title="Sair"><i class="fas fa-power-off"></i></a>
     </div>
 </div>
@@ -114,7 +114,7 @@ if (!isset($_SESSION['usuario'])) {
 <div class="box">
     <h3 class="text-center mb-4">Cadastrar Atleta</h3>
 
-    <form method="POST" action="/pre-treino-rfc/controllers/routerAtleta.php">
+    <form method="POST" action="/psa-cbg/controllers/routerAtleta.php">
 
         <!-- id do treinador logado -->
         <input type="hidden" name="treinador_id"
@@ -184,7 +184,7 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
         <button class="btn btn-primary w-100">Salvar</button>
-        <a href="/pre-treino-rfc/index.php" class="btn btn-light w-100 mt-2">Cancelar</a>
+        <a href="/psa-cbg/index.php" class="btn btn-light w-100 mt-2">Cancelar</a>
     </form>
 </div>
     <!-- logo inferior-direita -->

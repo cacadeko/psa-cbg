@@ -61,7 +61,7 @@ class AtletaController
                 Atleta::vincularUsuario($atletaId, $usuarioId);
             }
 
-            header('Location: /pre-treino-rfc/index.php?success=1');
+            header('Location: /psa-cbg/index.php?success=1');
             exit;
 
         } catch (\Exception $e) {
@@ -100,7 +100,7 @@ class AtletaController
             $id = $_GET['id'];
 
             if (Atleta::excluir($id)) {
-                header('Location: /pre-treino-rfc/views/lista_atletas.php?success=1');
+                header('Location: /psa-cbg/views/lista_atletas.php?success=1');
                 exit;
             }
             die("Erro ao excluir atleta.");
@@ -134,7 +134,7 @@ class AtletaController
                     $senha,
                     $acesso
                 )) {
-                header('Location: /pre-treino-rfc/views/lista_atletas.php?success=1');
+                header('Location: /psa-cbg/views/lista_atletas.php?success=1');
                 exit;
             }
             die("Erro ao editar atleta.");

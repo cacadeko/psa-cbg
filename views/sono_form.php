@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 ?>
@@ -100,7 +100,7 @@ if (!isset($_SESSION['usuario'])) {
     </style>
 </head>
 <body>
-<form method="POST" action="/pre-treino-rfc/controllers/routerSono.php">
+<form method="POST" action="/psa-cbg/controllers/routerSono.php">
     <div class="container mt-4">
         <h2 class="text-center">Cadastro de PSR</h2>
             <div class="mb-3">
@@ -204,7 +204,7 @@ if (!isset($_SESSION['usuario'])) {
     </div>
     <br> 
     <button type="submit" class="btn btn-primary w-100">Registrar</button>
-    <a href="/pre-treino-rfc/index.php" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+    <a href="/psa-cbg/index.php" class="btn btn-secondary w-100 mt-2">Cancelar</a>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

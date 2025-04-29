@@ -2,7 +2,7 @@
 /******************* SEGURANÇA DE SESSÃO *******************/
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 
@@ -76,9 +76,9 @@ try {
                         <td><?= htmlspecialchars($t['especialidade']) ?></td>
                         <td><?= $t['data_contratacao'] ?></td>
                         <td class="text-center">
-                            <a href="/pre-treino-rfc/views/editar_treinador_form.php?id=<?= $t['id'] ?>"
+                            <a href="/psa-cbg/views/editar_treinador_form.php?id=<?= $t['id'] ?>"
                                class="btn btn-sm btn-primary">Editar</a>
-                            <a href="/pre-treino-rfc/controllers/routerExcluirTreinador.php?id=<?= $t['id'] ?>"
+                            <a href="/psa-cbg/controllers/routerExcluirTreinador.php?id=<?= $t['id'] ?>"
                                class="btn btn-sm btn-danger"
                                onclick="return confirm('Excluir este treinador?')">Excluir</a>
                         </td>
@@ -91,7 +91,7 @@ try {
         </table>
     </div>
 
-    <a href="/pre-treino-rfc/index.php" class="btn btn-light mt-3">Voltar ao Painel</a>
+    <a href="/psa-cbg/index.php" class="btn btn-light mt-3">Voltar ao Painel</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

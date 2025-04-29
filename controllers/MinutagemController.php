@@ -12,7 +12,7 @@ class MinutagemController
         if (session_status() === PHP_SESSION_NONE) session_start();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /pre-treino-rfc/index.php');
+            header('Location: /psa-cbg/index.php');
             exit;
         }
 
@@ -30,7 +30,7 @@ class MinutagemController
         ];
 
         Minutagem::create($dados);
-        header('Location: /pre-treino-rfc/views/lista_minutagem.php?success=1');
+        header('Location: /psa-cbg/views/lista_minutagem.php?success=1');
         exit;
     }
 

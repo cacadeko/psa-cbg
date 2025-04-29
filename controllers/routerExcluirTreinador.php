@@ -1,12 +1,12 @@
 <?php
 /**
  * Router – Excluir Treinador
- * URL de chamada: /pre-treino-rfc/controllers/routerExcluirTreinador.php?id=1
+ * URL de chamada: /psa-cbg/controllers/routerExcluirTreinador.php?id=1
  */
 
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 

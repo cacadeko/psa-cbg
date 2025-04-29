@@ -2,7 +2,7 @@
 /******************** SEGURANÇA *************************/
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 
@@ -41,7 +41,7 @@ if (!$treinador) {
 <div class="box">
     <h3 class="text-center mb-4">Editar Treinador</h3>
 
-    <form method="POST" action="/pre-treino-rfc/controllers/routerEditarTreinador.php">
+    <form method="POST" action="/psa-cbg/controllers/routerEditarTreinador.php">
         <input type="hidden" name="id" value="<?= $treinador['id'] ?>">
 
         <div class="row g-3 mb-3">
@@ -76,7 +76,7 @@ if (!$treinador) {
         </div>
 
         <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
-        <a href="/pre-treino-rfc/views/lista_treinadores.php" class="btn btn-light w-100 mt-2">Cancelar</a>
+        <a href="/psa-cbg/views/lista_treinadores.php" class="btn btn-light w-100 mt-2">Cancelar</a>
     </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -35,7 +35,7 @@
     <body>
         <div class="container mt-4">
             <h2 class="text-center">Editar Atleta</h2>
-            <form method="POST" action="/pre-treino-rfc/controllers/routerEditarAtleta.php">
+            <form method="POST" action="/psa-cbg/controllers/routerEditarAtleta.php">
                 <input type="hidden" name="id" value="<?php echo $atleta['id']; ?>">
                 <div class="mb-3">
                     <label class="form-label">Nome</label>
@@ -102,7 +102,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
-                <a href="/pre-treino-rfc/index.php" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+                <a href="/psa-cbg/index.php" class="btn btn-secondary w-100 mt-2">Cancelar</a>
             </form>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

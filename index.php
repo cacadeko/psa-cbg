@@ -22,7 +22,7 @@ spl_autoload_register(function ($class) {
 
 /* ───── 2. PROTEÇÃO DE ROTA ───── */
 if (!isset($_SESSION['usuario'])) {
-    header('Location: /pre-treino-rfc/views/login.php');
+    header('Location: /psa-cbg/views/login.php');
     exit;
 }
 
@@ -56,7 +56,36 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
 
         /* iPhone-grid */
         .menu-apps{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin:25px 0;}
-        .app-icon{width:78px;height:78px;border-radius:22px;background:#f5f5f7;display:flex;align-items:center;justify-content:center;font-size:34px;color:#0d6efd;text-decoration:none;transition:.25s;}
+        .app-icon {
+            width: 78px;
+            height: 78px;
+            border-radius: 22px;
+            background: #f5f5f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: .25s;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .app-icon i {
+            display: block;
+            font-size: 42px;
+            margin: 5px 0 0 0;
+        }
+                
+        .app-icon span {
+            font-size: 11.6px;
+            color: #696e75;
+            display: inline-block !important;
+            line-height: 10px;
+            font-weight: normal;
+            width: 70px;
+        }
         .app-icon:hover{transform:scale(1.08);background:#e8e8ea;}
         .app-icon:active{transform:scale(.92);}
         .i-blue{color:#0d6efd}.i-green{color:#198754}.i-yellow{color:#ffc107}.i-red{color:#dc3545}
@@ -69,7 +98,7 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
 
     <!-- botão sair -->
     <div class="top-bar">
-        <a href="/pre-treino-rfc/controllers/LogoutController.php" class="app-icon i-red logout-icon" title="Sair">
+        <a href="/psa-cbg/controllers/LogoutController.php" class="app-icon i-red logout-icon text-center" title="Sair">
             <i class="fas fa-power-off"></i>
         </a>
     </div>
@@ -84,32 +113,54 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
             <!-- ─────────── LINHA AZUL (cadastros / listas) ─────────── -->
             <div class="d-flex justify-content-center gap-3 mb-3">
                 <?php if ($nivelSessao === 'admin' || $nivelSessao === 'treinador'): ?>
-                    <!-- Atletas -->
-                    <a href="/pre-treino-rfc/views/atleta_form.php"   class="app-icon i-blue" title="Cadastrar Atleta"><i class="fas fa-running"></i></a>
-                    <a href="/pre-treino-rfc/views/lista_atletas.php" class="app-icon i-blue" title="Listar Atletas"><i class="fas fa-users-line"></i></a>
+                    <!-- Exemplo de botão com ícone e rótulo -->
+                    <a href="/psa-cbg/views/atleta_form.php" class="app-icon i-blue text-center" title="Cadastrar Atleta">
+                        <div>
+                            <i class="fas fa-running"></i>
+                            <span class="small d-block mt-1">Cadastrar Atleta</span>
+                        </div>
+                    </a>
+
+                    <a href="/psa-cbg/views/lista_atletas.php" class="app-icon i-blue text-center" title="Listar Atletas">
+                        <div>
+                            <i class="fas fa-users-line"></i>
+                            <span class="small d-block mt-1">Listar Atletas</span>
+                        </div>
+                    </a>
                 <?php endif; ?>
             </div>
             <div class="d-flex justify-content-center gap-3 mb-3">
                 <?php if ($nivelSessao === 'admin'): ?>
                     <!-- Treinadores -->
-                    <a href="/pre-treino-rfc/views/treinadores_form.php" class="app-icon i-blue" title="Cadastrar Treinador"><i class="fas fa-user-tie"></i></a>
-                    <a href="/pre-treino-rfc/views/lista_treinadores.php" class="app-icon i-blue" title="Listar Treinadores"><i class="fas fa-chalkboard-user"></i></a>
+                    <a href="/psa-cbg/views/treinadores_form.php" class="app-icon i-blue text-center" title="Cadastrar Treinador">
+                        <i class="fas fa-user-tie"></i>
+                        <span class="small d-block mt-1">Cadastrar Treinador</span>
+                    </a>
+                    <a href="/psa-cbg/views/lista_treinadores.php" class="app-icon i-blue text-center" title="Listar Treinadores">
+                        <i class="fas fa-chalkboard-user"></i>
+                        <span class="small d-block mt-1">Listar Treinador</span>
+                    </a>
                     <!-- Usuários -->
-                    <a href="/pre-treino-rfc/views/lista_usuarios.php" class="app-icon i-blue" title="Usuários"><i class="fas fa-user-gear"></i></a>
+                    <a href="/psa-cbg/views/lista_usuarios.php" class="app-icon i-blue text-center" title="Usuários">
+                        <i class="fas fa-user-gear"></i>
+                        <span class="small d-block mt-1">Listar Usuários</span>
+                    </a>
                 <?php endif; ?>
             </div>
 
             <div class="d-flex justify-content-center gap-3 mb-3">
                 <?php if ($nivelSessao === 'admin'): ?>
                     <!-- Cadastrar Jogo -->
-                    <a href="/pre-treino-rfc/views/jogo_form.php"
-                    class="app-icon i-blue" title="Cadastrar Jogo">
-                    <i class="fas fa-futbol"></i></a>
+                    <a href="/psa-cbg/views/jogo_form.php" class="app-icon i-blue text-center" title="Cadastrar Jogo">
+                        <i class="fas fa-futbol"></i>
+                        <span class="small d-block mt-1">Cadastrar Jogo</span>
+                    </a>
 
                     <!-- Listar Jogos -->
-                    <a href="/pre-treino-rfc/views/lista_jogos.php"
-                    class="app-icon i-blue" title="Listar Jogos">
-                    <i class="fas fa-calendar-day"></i></a>
+                    <a href="/psa-cbg/views/lista_jogos.php" class="app-icon i-blue text-center" title="Listar Jogos">
+                        <i class="fas fa-calendar-day"></i>
+                        <span class="small d-block mt-1">Listar Jogos</span>
+                    </a>
                 <?php endif; ?>
             </div>
             <!-- LINHA VERDE (Registros + Minutagem) -->
@@ -120,18 +171,30 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
             <?php if ($podeRegistrar): ?>
             <div class="d-flex justify-content-center gap-3 mb-3">
                 <!-- Pré / Pós -->
-                <a href="/pre-treino-rfc/views/sono_form.php" class="app-icon i-green" title="Registrar Pré-Treino"><i class="fas fa-bed"></i></a>
-                <a href="/pre-treino-rfc/views/pse_form.php"  class="app-icon i-green" title="Registrar Pós-Treino"><i class="fas fa-heartbeat"></i></a>
+                <a href="/psa-cbg/views/sono_form.php" class="app-icon i-green text-center" title="Pré-Treino">
+                    <div>
+                        <i class="fas fa-bed"></i>
+                        <span class="small d-block mt-1">Pré-Treino</span>
+                    </div>
+                </a>
 
+                <a href="/psa-cbg/views/pse_form.php" class="app-icon i-green text-center" title="Pós-Treino">
+                    <div>
+                        <i class="fas fa-heartbeat"></i>
+                        <span class="small d-block mt-1">Pós-Treino</span>
+                    </div>
+                </a>
                 <?php if (in_array($nivelSessao, ['admin','treinador'])): ?>
                     <!-- ★ NOVO: Minutagem -->
-                    <a href="/pre-treino-rfc/views/minutagem_form.php"
-                    class="app-icon i-green" title="Cadastrar Minutagem">
-                    <i class="fas fa-stopwatch"></i></a>
+                    <a href="/psa-cbg/views/minutagem_form.php" class="app-icon i-green text-center" title="Cadastrar Minutagem">
+                        <i class="fas fa-stopwatch"></i>
+                        <span class="small d-block mt-1">Cadastrar Minutagem</span>
+                    </a>
 
-                    <a href="/pre-treino-rfc/views/lista_minutagem.php"
-                    class="app-icon i-green" title="Listar Minutagens">
-                    <i class="fas fa-table-list"></i></a>
+                    <a href="/psa-cbg/views/lista_minutagem.php" class="app-icon i-green text-center" title="Listar Minutagens">
+                        <i class="fas fa-table-list"></i>
+                        <span class="small d-block mt-1">Listar Minutagem</span>
+                    </a>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
@@ -140,19 +203,27 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
             <!-- ─────────── LINHA AMARELA (relatórios) ─────────── -->
             <?php if ($nivelSessao === 'admin' || $nivelSessao === 'treinador'): ?>
             <div class="d-flex justify-content-center gap-3 mb-3">
-                <a href="/pre-treino-rfc/views/lista_sono.php" class="app-icon i-yellow" title="Pré-Treinos Registrados"><i class="fas fa-list"></i></a>
-                <a href="/pre-treino-rfc/views/lista_pse.php" class="app-icon i-yellow" title="Pós-Treinos Registrados"><i class="fas fa-list"></i></a>
-                <a href="/pre-treino-rfc/views/relatorio_presenca_form.php" class="app-icon i-yellow" title="Relatório de Presença"><i class="fas fa-file-lines"></i></a>
+                <a href="/psa-cbg/views/lista_sono.php" class="app-icon i-yellow text-center" title="Pré-Treinos Registrados">
+                    <i class="fas fa-list"></i>
+                    <span class="small d-block mt-1">Pré-Treinos Registrados</span>
+                </a>
+                <a href="/psa-cbg/views/lista_pse.php" class="app-icon i-yellow text-center" title="Pós-Treinos Registrados">
+                    <i class="fas fa-list"></i>
+                    <span class="small d-block mt-1">Pós-Treinos Registrados</span>
+                </a>
+                <a href="/psa-cbg/views/relatorio_presenca_form.php" class="app-icon i-yellow text-center" title="Relatório de Presença">
+                    <i class="fas fa-file-lines"></i>
+                    <span class="small d-block mt-1">Relatório de Presença</span>
+                </a>
             </div>
             <?php endif; ?>
 
             <!-- ─────────── LINHA VERMELHA (admin – bloqueio) ─────────── -->
             <?php if ($nivelSessao === 'admin'): ?>
             <div class="d-flex justify-content-center gap-3">
-                <form method="POST" action="/pre-treino-rfc/controllers/routerToggleRegistro.php">
+                <form method="POST" action="/psa-cbg/controllers/routerToggleRegistro.php">
                     <input type="hidden" name="status" value="<?= $statusRegistro == 0 ? 1 : 0 ?>">
-                    <button type="submit" class="app-icon i-red"
-                            title="<?= $statusRegistro == 0 ? 'Bloquear Registros' : 'Desbloquear Registros' ?>">
+                    <button type="submit" class="app-icon i-red" title="<?= $statusRegistro == 0 ? 'Bloquear Registros' : 'Desbloquear Registros' ?>">
                         <i class="fas <?= $statusRegistro == 0 ? 'fa-lock' : 'fa-lock-open' ?>"></i>
                     </button>
                 </form>

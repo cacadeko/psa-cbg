@@ -32,7 +32,7 @@ if (isset($_GET['error']))   { $msg = 'Ocorreu um erro.';                $alert=
         <div class="alert alert-<?= $alert ?>"><?= $msg ?></div>
     <?php endif; ?>
 
-    <a href="/pre-treino-rfc/views/usuario_form.php"
+    <a href="/psa-cbg/views/usuario_form.php"
        class="btn btn-primary mb-3">Cadastrar Novo Usuário</a>
 
     <?php if ($usuarios): ?>
@@ -54,9 +54,9 @@ if (isset($_GET['error']))   { $msg = 'Ocorreu um erro.';                $alert=
                     <td><?= htmlspecialchars($u['email']) ?></td>
                     <td><?= $u['nivel'] === 'admin' ? 'Admin' : ucfirst($u['nivel']) ?></td>
                     <td class="text-center">
-                        <a href="/pre-treino-rfc/views/editar_usuario_form.php?id=<?= $u['id'] ?>"
+                        <a href="/psa-cbg/views/editar_usuario_form.php?id=<?= $u['id'] ?>"
                            class="btn btn-sm btn-warning">Editar</a>
-                        <a href="/pre-treino-rfc/controllers/routerExcluirUsuario.php?id=<?= $u['id'] ?>"
+                        <a href="/psa-cbg/controllers/routerExcluirUsuario.php?id=<?= $u['id'] ?>"
                            class="btn btn-sm btn-danger"
                            onclick="return confirm('Confirma excluir?');">Excluir</a>
                     </td>
@@ -68,7 +68,7 @@ if (isset($_GET['error']))   { $msg = 'Ocorreu um erro.';                $alert=
         <p class="text-center">Nenhum usuário cadastrado.</p>
     <?php endif; ?>
 
-    <a href="/pre-treino-rfc/index.php" class="btn btn-secondary mt-3">Voltar</a>
+    <a href="/psa-cbg/index.php" class="btn btn-secondary mt-3">Voltar</a>
 </div>
 </body>
 </html>
