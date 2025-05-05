@@ -14,11 +14,11 @@ class PSEController {
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $atleta_id = $_POST['atleta_id'] ?? null;
-            $descricao = $_POST['descricao'] ?? null;
+            $grupo = $_POST['grupo'] ?? null;
             $nota_pse = $_POST['nota_pse'] ?? null;
             $data_hoje = date('Y-m-d');
 
-            if (!$atleta_id || !$descricao || !$nota_pse) {
+            if (!$atleta_id || !$grupo || !$nota_pse) {
                 die("Erro: Todos os campos obrigatórios devem ser preenchidos.");
             }
 
@@ -33,7 +33,7 @@ class PSEController {
                 exit;
             }
 
-            if (PSE::create($atleta_id, $descricao, $nota_pse)) {
+            if (PSE::create($atleta_id, $grupo, $nota_pse)) {
                 header('Location: /psa-cbg/index.php?success=1');
                 exit;
             } else {

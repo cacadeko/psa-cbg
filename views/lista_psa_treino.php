@@ -5,17 +5,23 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-require_once __DIR__ . '/../controllers/AtletaController.php';
-use Controllers\AtletaController;
+require_once '../controllers/PSATreinoController.php';
+use Controllers\PSATreinoController;
 
-$atletaController = new AtletaController();
-$atletas = $atletaController->listar();
+$ctrl = new PSATreinoController();
+$data_filtro = $_GET['data_filtro'] ?? null;
+$registros = $ctrl->listarTodos($data_filtro);
+
+$msg   = '';
+$alert = '';
+if (isset($_GET['success'])) { $msg = 'Registro salvo com sucesso!'; $alert='success'; }
+if (isset($_GET['error']))   { $msg = 'Ocorreu um erro.';            $alert='danger';  }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Athletic Map - Lista de Atletas</title>
+  <title>Lista de PSATreino</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -24,7 +30,6 @@ $atletas = $atletaController->listar();
       background: #07272D;
       color: #FFF;
       min-height: 100vh;
-      display: block;
       padding: 10px;
       margin: 0 auto;
       width: 80%;
@@ -79,44 +84,44 @@ $atletas = $atletaController->listar();
 </div>
 
 <div class="container mt-5 pt-5">
-  <h3 class="text-center mb-4">Lista de Atletas</h3>
+  <h3 class="text-center mb-4">Lista de PSATreino</h3>
 
+  <?php if ($msg): ?>
+    <div class="alert alert-<?= $alert ?>"><?= $msg ?></div>
+  <?php endif; ?>
+
+  <!-- Filtro -->
+  <form method="GET" action="lista_psa_treino.php" class="mb-4">
+    <label class="form-label">Filtrar por Data</label>
+    <input type="date" class="form-control mb-2" name="data_filtro" value="<?= htmlspecialchars($data_filtro ?? '') ?>">
+    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+  </form>
+
+  <!-- Tabela -->
   <div class="table-responsive">
     <table class="table table-dark table-striped align-middle">
       <thead>
         <tr>
-          <th>Nome</th>
-          <th>Data de Nascimento</th>
-          <th>Posição</th>
-          <th>E-mail</th>
-          <th>Telefone</th>
-          <th>Categoria</th>
-          <th class="text-center">Ações</th>
+          <th>Atleta</th>
+          <th>Descrição</th>
+          <th>Nota PSE</th>
+          <th>Tempo Treino</th>
+          <th>Turno</th>
+          <th>Data</th>
         </tr>
       </thead>
       <tbody>
-        <?php if ($atletas): ?>
-          <?php foreach ($atletas as $atleta): ?>
-            <tr>
-              <td><?= htmlspecialchars($atleta['nome']) ?></td>
-              <td><?= htmlspecialchars($atleta['data_nascimento']) ?></td>
-              <td><?= htmlspecialchars($atleta['posicao']) ?></td>
-              <td><?= htmlspecialchars($atleta['email']) ?></td>
-              <td><?= htmlspecialchars($atleta['telefone']) ?></td>
-              <td><?= htmlspecialchars($atleta['categoria']) ?></td>
-              <td class="text-center">
-                <a href="/psa-cbg/views/editar_atleta_form.php?id=<?= $atleta['id'] ?>"
-                   class="btn btn-warning btn-sm">Editar</a>
-                <a href="/psa-cbg/controllers/routerExcluirAtleta.php?id=<?= $atleta['id'] ?>"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Tem certeza que deseja excluir este atleta?');">
-                   Excluir
-                </a>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <tr><td colspan="7" class="text-center">Nenhum atleta encontrado.</td></tr>
+        <?php if ($registros): foreach ($registros as $r): ?>
+          <tr>
+            <td><?= htmlspecialchars($r['atleta_nome']) ?></td>
+            <td><?= htmlspecialchars($r['descricao']) ?></td>
+            <td><?= htmlspecialchars($r['nota_pse']) ?></td>
+            <td><?= htmlspecialchars($r['tempo_treino']) ?></td>
+            <td><?= htmlspecialchars($r['turno']) ?></td>
+            <td><?= date('d/m/Y', strtotime($r['created_at'])) ?></td>
+          </tr>
+        <?php endforeach; else: ?>
+          <tr><td colspan="6" class="text-center">Nenhum registro encontrado.</td></tr>
         <?php endif; ?>
       </tbody>
     </table>

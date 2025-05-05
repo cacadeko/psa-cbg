@@ -90,15 +90,16 @@ if (!isset($_SESSION['usuario'])) {
 
 <div class="container mt-5 pt-4">
     <h1 class="text-center">Controle de carga</h1>
-    <h2 class="text-center">Pós-Treino Físico</h2><br><br>
+    <h2 class="text-center">Pós-Técnico</h2><br><br>
 
-    <form method="POST" action="/psa-cbg/controllers/routerPSE.php">
+    <form method="POST" action="/psa-cbg/controllers/routerPsaTreino.php">
+
         <div class="mb-3">
             <h4>Atleta:</h4>
             <input type="text" class="form-control" name="atleta_nome" value="<?= htmlspecialchars($_SESSION['usuario']); ?>" readonly>
             <input type="hidden" name="atleta_id" value="<?= $_SESSION['usuario_id']; ?>">
         </div>
-        <br>
+
         <div class="mb-3">
             <h4>Grupo de Treino</h4>
             <div class="form-check">

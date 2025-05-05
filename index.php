@@ -105,7 +105,7 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
 
     <!-- painel principal -->
     <div class="container">
-        <img src="assets/img/logo-resende.png" class="logo" alt="Resende FC">
+        <img src="assets/img/logo-cbg.svg" class="logo" alt="CBG">
         <h3 class="text-center fw-bold mb-2">Módulo PSR &amp; PSE</h3>
         <p class="fw-bold" style="color:#E0E0E0;"><?= htmlspecialchars($usuarioSessao) ?></p>
 
@@ -151,16 +151,16 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
             <div class="d-flex justify-content-center gap-3 mb-3">
                 <?php if ($nivelSessao === 'admin'): ?>
                     <!-- Cadastrar Jogo -->
-                    <a href="/psa-cbg/views/jogo_form.php" class="app-icon i-blue text-center" title="Cadastrar Jogo">
+                    <!-- <a href="/psa-cbg/views/jogo_form.php" class="app-icon i-blue text-center" title="Cadastrar Jogo">
                         <i class="fas fa-futbol"></i>
                         <span class="small d-block mt-1">Cadastrar Jogo</span>
-                    </a>
+                    </a> -->
 
                     <!-- Listar Jogos -->
-                    <a href="/psa-cbg/views/lista_jogos.php" class="app-icon i-blue text-center" title="Listar Jogos">
+                    <!-- <a href="/psa-cbg/views/lista_jogos.php" class="app-icon i-blue text-center" title="Listar Jogos">
                         <i class="fas fa-calendar-day"></i>
                         <span class="small d-block mt-1">Listar Jogos</span>
-                    </a>
+                    </a> -->
                 <?php endif; ?>
             </div>
             <!-- LINHA VERDE (Registros + Minutagem) -->
@@ -184,9 +184,30 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
                         <span class="small d-block mt-1">Pós-Treino</span>
                     </div>
                 </a>
+                <a href="/psa-cbg/views/pse_pos_tecnico.php" class="app-icon i-green text-center" title="Pós-Treino">
+                    <div>
+                        <i class="fas fa-heartbeat"></i>
+                        <span class="small d-block mt-1">Pós-Técnico</span>
+                    </div>
+                </a>
+                <a href="/psa-cbg/views/pse_pfe.php" class="app-icon i-green text-center" title="Pós-Treino">
+                    <div>
+                        <i class="fas fa-heartbeat"></i>
+                        <span class="small d-block mt-1">Pós-PFE</span>
+                    </div>
+                </a>
+            </div>
+            <?php endif; ?>
+
+            <?php
+            $podeRegistrar = ($nivelSessao === 'admin' || $nivelSessao === 'treinador')
+                            || ($nivelSessao === 'atleta' && $statusRegistro == 0);
+            ?>
+            <?php if ($podeRegistrar): ?>
+            <div class="d-flex justify-content-center gap-3 mb-3">
                 <?php if (in_array($nivelSessao, ['admin','treinador'])): ?>
                     <!-- ★ NOVO: Minutagem -->
-                    <a href="/psa-cbg/views/minutagem_form.php" class="app-icon i-green text-center" title="Cadastrar Minutagem">
+                    <!-- <a href="/psa-cbg/views/minutagem_form.php" class="app-icon i-green text-center" title="Cadastrar Minutagem">
                         <i class="fas fa-stopwatch"></i>
                         <span class="small d-block mt-1">Cadastrar Minutagem</span>
                     </a>
@@ -194,7 +215,7 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
                     <a href="/psa-cbg/views/lista_minutagem.php" class="app-icon i-green text-center" title="Listar Minutagens">
                         <i class="fas fa-table-list"></i>
                         <span class="small d-block mt-1">Listar Minutagem</span>
-                    </a>
+                    </a> -->
                 <?php endif; ?>
             </div>
             <?php endif; ?>
@@ -211,6 +232,20 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
                     <i class="fas fa-list"></i>
                     <span class="small d-block mt-1">Pós-Treinos Registrados</span>
                 </a>
+                <a href="/psa-cbg/views/lista_psa_treino.php" class="app-icon i-yellow text-center" title="Pós-Treinos Registrados">
+                    <i class="fas fa-list"></i>
+                    <span class="small d-block mt-1">Pós-Técnico Registrados</span>
+                </a>
+                <a href="/psa-cbg/views/lista_pfe.php" class="app-icon i-yellow text-center" title="Pós-Treinos Registrados">
+                    <i class="fas fa-list"></i>
+                    <span class="small d-block mt-1">Pós-PFE Registrados</span>
+                </a>
+            </div>
+            <?php endif; ?>
+
+                        <!-- ─────────── LINHA AMARELA (relatórios) ─────────── -->
+                        <?php if ($nivelSessao === 'admin' || $nivelSessao === 'treinador'): ?>
+            <div class="d-flex justify-content-center gap-3 mb-3">
                 <a href="/psa-cbg/views/relatorio_presenca_form.php" class="app-icon i-yellow text-center" title="Relatório de Presença">
                     <i class="fas fa-file-lines"></i>
                     <span class="small d-block mt-1">Relatório de Presença</span>

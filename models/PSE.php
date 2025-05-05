@@ -6,10 +6,10 @@ use PDO;
 use PDOException;
 
 class PSE {
-    public static function create($atleta_id, $descricao, $avaliacao_pse) {
+    public static function create($atleta_id, $grupo, $avaliacao_pse) {
         $conn = \Config\Database::getConnection(); // <-- aqui com barra invertida
-        $stmt = $conn->prepare("INSERT INTO pse (atleta_id, descricao, nota_pse, created_at) VALUES (?, ?, ?, NOW())");
-        return $stmt->execute([$atleta_id, $descricao, $avaliacao_pse]);
+        $stmt = $conn->prepare("INSERT INTO pse (atleta_id, grupo, nota_pse, created_at) VALUES (?, ?, ?, NOW())");
+        return $stmt->execute([$atleta_id, $grupo, $avaliacao_pse]);
     }
 
     public static function listarTodos($data = null) {
@@ -32,7 +32,7 @@ class PSE {
             INNER JOIN atletas a ON pse.atleta_id = a.id
             WHERE a.treinador_id = ?
             ORDER BY pse.created_at DESC
-        ");
+");
         $stmt->execute([$treinadorId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
