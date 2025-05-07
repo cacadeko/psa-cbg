@@ -57,7 +57,7 @@ if (!isset($_SESSION['usuario'])) {
       background: #e8e8ea;
     }
     .logo-fixed { width: 117px; }
-    label { font-weight: 500; color: #dddddd; }
+    label { font-weight: 500; color: #dddddd; font-size: 19px; }
     .linha_sono {
       display: block;
       width: 100%;
@@ -74,6 +74,17 @@ if (!isset($_SESSION['usuario'])) {
     #linha_sono_8  { background: #8cb435; color: #fff; font-size: 20px; font-weight: bold; }
     #linha_sono_9  { background: #aacc53; color: #fff; font-size: 20px; font-weight: bold; }
     #linha_sono_10 { background: #999999; color: #fff; font-size: 20px; font-weight: bold; }
+
+    #linha_sono_cinco_5  { background: #bd2b2b; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_cinco_4  { background: #cb6767; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_cinco_3  { background: #b168a0; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_cinco_2  { background: #3279a7; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_cinco_1  { background: #65c0db; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_cinco_0  { background: #8cb435; color: #fff; font-size: 20px; font-weight: bold; }
+
+    .form-check {
+      min-height: 3.5rem !important;
+    }
   </style>
 </head>
 
@@ -96,15 +107,16 @@ if (!isset($_SESSION['usuario'])) {
     <input type="text" name="atleta_nome" value="<?= htmlspecialchars($_SESSION['usuario']); ?>" readonly class="form-control">
     <input type="hidden" name="atleta_id" value="<?= $_SESSION['usuario_id']; ?>">
   </div>
-
+  <br>
   <div class="mb-3">
     <h4>Como você se sente em relação à sua recuperação? *</h4>
+    <br>
+    <p>Escala de Qualidade Total de Recuperação (TQR)</p>
     <?php 
     $labels = [
-      "0"=>"Nada recuperado", "1"=>"Profundamente mal recuperado", "2"=>"Extremamente mal recuperado",
-      "3"=>"Muito mal recuperado", "4"=>"Mal recuperado", "5"=>"Razoavelmente recuperado",
-      "6"=>"Bem recuperado", "7"=>"Muito bem recuperado", "8"=>"Extremamente bem recuperado",
-      "9"=>"Excepcionalmente bem recuperado", "10"=>"Totalmente recuperado"
+      "0"=>"1 - Nada recuperado", "1"=>"2 - Extremamente mal recuperado", "2"=>"3 - Muito mal recuperado",
+      "3"=>"4 - Mal recuperado", "4"=>"5 - Razoavelmente recuperado", "5"=>"6 - Bem recuperado",
+      "6"=>"7 - Muito bem recuperado", "7"=>"8 - Extremamente bem recuperado", "8"=>"9 - Totalmente bem recuperado"
     ];
     foreach ($labels as $valor => $descricao): ?>
       <span id="linha_sono_<?= $valor ?>" class="linha_sono">
@@ -117,11 +129,41 @@ if (!isset($_SESSION['usuario'])) {
     <h4>Bem-Estar (FADIGA)*</h4>
     <?php 
     $labels = [
-      "0"=>"Não descansado", "1"=>"Pouco descansado", "2"=>"Neutro",
-      "3"=>"Descansado", "4"=>"Bem descansado", "5"=>"Muito descansado"
+      "0"=>"5 - Muito descansada", "1"=>"4 - Descansada", "2"=>"3 - Normal", "3"=>"2 - Mais cansada que o normal", 
+       "4"=>"1 - Muito cansada"
     ];
     foreach ($labels as $valor => $descricao): ?>
-      <span id="linha_sono_<?= $valor ?>" class="linha_sono">
+      <span id="linha_sono_cinco_<?= $valor ?>" class="linha_sono">
+        <input class="form-check-input" type="radio" name="avaliacao_sono" value="<?= $valor ?>" required> <?= $descricao ?>
+      </span>
+    <?php endforeach; ?>
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>O quanto você se sente cansada? *</h4>
+    <br>
+    <?php 
+    $labels = [
+      "0"=>"5 - Nenhum pouco Fadigado", "1"=>"4 - Um pouco fadigado", "2"=>"3 - Moderadamente fadigado", "3"=>"2 - Muito fadigado", "4"=>"1 - Fadiga e Exaustão total - Nada sobrando"
+      
+    ];
+    foreach ($labels as $valor => $descricao): ?>
+      <span id="linha_sono_cinco_<?= $valor ?>" class="linha_sono">
+        <input class="form-check-input" type="radio" name="avaliacao_psr" value="<?= $valor ?>" required> <?= $descricao ?>
+      </span>
+    <?php endforeach; ?>
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Bem-Estar (QUALIDADE DO SONO)*</h4>
+    <br>
+    <?php 
+    $labels = [
+      "0"=>"5 - Sono tranquilo e revigorante", "1"=>"4 - Bom", "2"=>"3 - Dificuldade em adormecer", "3"=>"2 - Sono inquieto", "4"=>"1 - Insônia"
+      
+    ];
+    foreach ($labels as $valor => $descricao): ?>
+      <span id="linha_sono_cinco_<?= $valor ?>" class="linha_sono">
         <input class="form-check-input" type="radio" name="avaliacao_sono" value="<?= $valor ?>" required> <?= $descricao ?>
       </span>
     <?php endforeach; ?>
@@ -129,6 +171,7 @@ if (!isset($_SESSION['usuario'])) {
   <br><br>
   <div class="mb-3">
     <h4>Quantas horas de sono? *</h4>
+    <br>
     <div class="form-check">
         <input class="form-check-input" type="radio" name="horas_sono_intervalo" value="Menos que 6 horas" required>
         <label class="form-check-label">Menos que 6 horas</label>
@@ -144,7 +187,177 @@ if (!isset($_SESSION['usuario'])) {
   </div>
   <br><br>
   <div class="mb-3">
-    <h4>Período Pré-Menstrual? *</h4>
+    <h4>Demorou a dormir? Se sim, quanto tempo? *</h4>
+    <br>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="horas_sono_intervalo" value="Menos que 6 horas" required>
+        <label class="form-check-label">Menos que 30 min</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="horas_sono_intervalo" value="Entre 6 e 7 horas" required>
+        <label class="form-check-label">Entre 30 min a 1h</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="horas_sono_intervalo" value="8 horas ou mais" required>
+        <label class="form-check-label">Mais que 1h</label>
+    </div>
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Se teve sono inquieto, qual o motivo?</h4>
+    <br>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Dor">
+        <label class="form-check-label">Dor</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Sem motivo específico">
+        <label class="form-check-label">Sem motivo específico</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Questões ambientais (ex: muito calor)">
+        <label class="form-check-label">Questões ambientais (ex: muito calor)</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Pesadelos">
+        <label class="form-check-label">Pesadelos</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Questões pessoais">
+        <label class="form-check-label">Questões pessoais</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Fatores relacionados ao treinamento">
+        <label class="form-check-label">Fatores relacionados ao treinamento</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Outro">
+        <label class="form-check-label">Outro</label>
+    </div>
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Acordou Durante a Noite? Se sim, quantas vezes?</h4>
+    <br>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="acordou_durante_a_noite" value="1" required> 1 vez
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="acordou_durante_a_noite" value="2" required> 2 a 4 vezes
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="acordou_durante_a_noite" value="3" required> 4 vezes ou mais
+    </div>
+  </div>
+  <br><br>
+  <div class="mb-3">
+  <h4>Bem-Estar (DOR MUSCULAR GERAL)*</h4>
+  <br>
+  <span class="linha_sono" id="linha_sono_cinco_0">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="1 - Muito relaxada" required>
+    5 – Sentindo-me ótima
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_1">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="2 - Relaxada" required>
+    4 – Sentindo-me bem
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_2">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="3 - Normal" required>
+    3 – Normal
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_3">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="4 - Sentindo-me estressada" required>
+    2 – Aumento das dores musculares
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_4">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="5 - Altamente estressada" required>
+    1 – Muito dolorida
+  </span>
+</div>
+<br><br>
+  <div class="mb-3">
+    <h4>Caracterize a sua DOR MUSCULAR GERAL de acordo com essa escala: *</h4>
+    <br>
+    <img src="../assets/img/escala-dor.png" alt="Mapa Dor" class="img-fluid" style="width: 800px;">
+    <br><br>
+    <div class="form-check">
+      <label>Sim</label>
+      <input class="form-check-input" type="radio" name="dor_corpo" value="Sim" required>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="dor_corpo" value="Não" required> Não
+    </div>
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Se a sua dor muscular for específica, qual o local?</h4>
+    <input type="text" class="form-control" name="local_dor" placeholder="Descreva o local da dor">
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Com relação dor muscular específica, classifique de acordo com a imagem como é: *</h4>
+    <img src="../assets/img/codigo-dor.png" alt="Mapa Dor" class="img-fluid" style="width: 800px;">
+    <br>
+    <br>
+    <div class="form-check">
+      <label>Sim</label>
+      <input class="form-check-input" type="radio" name="dor_corpo" value="Sim" required>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="dor_corpo" value="Não" required> Não
+    </div>
+  </div>
+  <br><br>
+  <div class="mb-3">
+  <h4>Bem-Estar (NÍVEL DE ESTRESSE) *</h4>
+  <span class="linha_sono" id="linha_sono_cinco_0">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="1 - Muito relaxada" required>
+    1 – Muito relaxada
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_1">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="2 - Relaxada" required>
+    2 – Relaxada
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_2">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="3 - Normal" required>
+    3 – Normal
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_3">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="4 - Sentindo-me estressada" required>
+    4 – Sentindo-me estressada
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_4">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="5 - Altamente estressada" required>
+    5 – Altamente estressada
+  </span>
+</div>
+<br><br>
+<div class="mb-3">
+  <h4>Bem-Estar (HUMOR) *</h4>
+  <span class="linha_sono" id="linha_sono_cinco_0">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="5" required>
+    5 – Muito bom humor
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_1">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="4" required>
+    4 – Bom humor em geral
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_2">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="3" required>
+    3 – Menos interessada em outras atividades que em habitual
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_3">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="2" required>
+    2 – Mal humorada com a família e colegas de trabalho
+  </span>
+  <span class="linha_sono" id="linha_sono_cinco_4">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="1" required>
+    1 – Muito irritada e triste
+  </span>
+</div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Período Pré-mestrual? *</h4>
     <div class="form-check">
         <input class="form-check-input" type="radio" name="periodo_premenstrual" value="Sim" required>
         <label class="form-check-label">SIM</label>
@@ -156,28 +369,16 @@ if (!isset($_SESSION['usuario'])) {
   </div>
   <br><br>
   <div class="mb-3">
-  <h4>Bem-Estar (NÍVEL DE ESTRESSE) *</h4>
-  <span class="linha_sono" id="linha_sono_1">
-    <input class="form-check-input" type="radio" name="nivel_estresse" value="1 - Muito relaxada" required>
-    1 – Muito relaxada
-  </span>
-  <span class="linha_sono" id="linha_sono_2">
-    <input class="form-check-input" type="radio" name="nivel_estresse" value="2 - Relaxada" required>
-    2 – Relaxada
-  </span>
-  <span class="linha_sono" id="linha_sono_3">
-    <input class="form-check-input" type="radio" name="nivel_estresse" value="3 - Normal" required>
-    3 – Normal
-  </span>
-  <span class="linha_sono" id="linha_sono_4">
-    <input class="form-check-input" type="radio" name="nivel_estresse" value="4 - Sentindo-me estressada" required>
-    4 – Sentindo-me estressada
-  </span>
-  <span class="linha_sono" id="linha_sono_5">
-    <input class="form-check-input" type="radio" name="nivel_estresse" value="5 - Altamente estressada" required>
-    5 – Altamente estressada
-  </span>
-</div>
+  <h4>Período mestrual? *</h4>
+  <div class="form-check">
+        <input class="form-check-input" type="radio" name="periodo_premenstrual" value="Sim" required>
+        <label class="form-check-label">SIM</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="periodo_premenstrual" value="Não" required>
+        <label class="form-check-label">NÃO</label>
+    </div>
+  </div>
 <br><br>
   <div class="mb-3">
     <h4>Está fazendo uso de medicação?</h4>
@@ -213,6 +414,10 @@ if (!isset($_SESSION['usuario'])) {
         <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Serenata">
         <label class="form-check-label">Serenata</label>
     </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="outro">
+        <label class="form-check-label">Outro</label>
+    </div>
   </div>
   <br><br>
   <div class="mb-3">
@@ -245,53 +450,12 @@ if (!isset($_SESSION['usuario'])) {
         <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="PS">
         <label class="form-check-label">PS</label>
     </div>
-  </div>
-  <br><br>
-  <div class="mb-3">
-    <h4>Acordou Durante a Noite?</h4>
     <div class="form-check">
-      <input class="form-check-input" type="radio" name="acordou_durante_a_noite" value="Sim" required> Sim
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="acordou_durante_a_noite" value="Não" required> Não
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="outro">
+        <label class="form-check-label">Outro</label>
     </div>
   </div>
-  <br><br>
-  <div class="mb-3">
-    <h4>Que horas foi dormir?</h4>
-    <input type="time" class="form-control" name="hora_dormir" required>
-  </div>
-  <br><br>
-  <div class="mb-3">
-    <h4>Acordou que horas?</h4>
-    <input type="time" class="form-control" name="hora_acordar" required>
-  </div>
-  <br><br>
-  <div class="mb-3">
-    <h4>Local da Dor</h4>
-    <img src="https://athleticmap.com/images/mapador.png" alt="Mapa Dor" class="img-fluid" style="max-width: 300px;">
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="dor_corpo" value="Sim" required> Sim
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="dor_corpo" value="Não" required> Não
-    </div>
-    <label class="form-label mt-2">Se sim, em que local?</label>
-    <input type="text" class="form-control" name="local_dor" placeholder="Descreva o local da dor">
-  </div>
-  <br><br>
-  <div class="mb-3">
-    <h4>Intensidade de Dor</h4>
-    <?php 
-    $x=0;
-    $intensidade_labels = ['Pior dor possivel', 'Dor muito severa', 'Dor severa', 'Dor moderada', 'Dor leve', 'Sem dor'];
-    foreach ($intensidade_labels as $valor): ?>
-      <span class="linha_sono" id="linha_sono_<?= $x ?>">
-        <input class="form-check-input" type="radio" name="intensidade_dor" value="<?= $valor ?>" required> <?= $valor ?>
-      </span>
-    <?php $x++; endforeach; ?>
-  </div>
-
+  
   <button type="submit" class="btn btn-primary w-100">Registrar</button>
   <a href="/psa-cbg/index.php" class="btn btn-secondary w-100 mt-2">Cancelar</a>
 

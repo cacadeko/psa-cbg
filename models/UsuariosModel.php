@@ -13,7 +13,7 @@ class UsuariosModel
     public static function adicionar_usuario(array $dados): int|false
     {
         $pdo = Database::getConnection();
-        $sql = "INSERT INTO usuarios (nome, email, senha, nivel)
+        $sql = "INSERT INTO usuarios (nome, email, senha_hash, nivel)
                 VALUES (:nome, :email, :senha, :nivel)";
         $stmt = $pdo->prepare($sql);
 
