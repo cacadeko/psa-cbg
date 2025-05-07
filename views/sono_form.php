@@ -299,13 +299,17 @@ if (!isset($_SESSION['usuario'])) {
     <img src="../assets/img/codigo-dor.png" alt="Mapa Dor" class="img-fluid" style="width: 800px;">
     <br>
     <br>
+    <p>DOR MUSCULAR GENERALIZADA</p>
     <div class="form-check">
-      <label>Sim</label>
-      <input class="form-check-input" type="radio" name="dor_corpo" value="Sim" required>
+      <input class="form-check-input" type="radio" name="dor_corpo" value="Sim" required>1
     </div>
     <div class="form-check">
-      <input class="form-check-input" type="radio" name="dor_corpo" value="Não" required> Não
+      <input class="form-check-input" type="radio" name="dor_corpo" value="Não" required>2
     </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="dor_corpo" value="Não" required>3
+    </div>
+    <p>DOR MUSCULAR PONTUAL</p>
   </div>
   <br><br>
   <div class="mb-3">
@@ -415,8 +419,11 @@ if (!isset($_SESSION['usuario'])) {
         <label class="form-check-label">Serenata</label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="outro">
-        <label class="form-check-label">Outro</label>
+      <input class="form-check-input" type="checkbox" id="medicacao_outro" name="uso_medicacao[]" value="Outro">
+      <label class="form-check-label" for="medicacao_outro">Outro</label>
+    </div>
+    <div class="mt-2" id="campo_outro_medicacao" style="display: none;">
+        <input type="text" name="uso_medicacao_outro" class="form-control" placeholder="Descreva a medicação">
     </div>
   </div>
   <br><br>
@@ -451,8 +458,11 @@ if (!isset($_SESSION['usuario'])) {
         <label class="form-check-label">PS</label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="outro">
-        <label class="form-check-label">Outro</label>
+      <input class="form-check-input" type="checkbox" id="motivo_outro" name="motivo_medicacao[]" value="Outro">
+      <label class="form-check-label" for="motivo_outro">Outro</label>
+    </div>
+    <div class="mt-2" id="campo_outro_motivo" style="display: none;">
+        <input type="text" name="motivo_medicacao_outro" class="form-control" placeholder="Descreva o motivo">
     </div>
   </div>
   
@@ -463,5 +473,21 @@ if (!isset($_SESSION['usuario'])) {
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const medicacaoOutro = document.getElementById('medicacao_outro');
+  const campoOutroMedicacao = document.getElementById('campo_outro_medicacao');
+
+  const motivoOutro = document.getElementById('motivo_outro');
+  const campoOutroMotivo = document.getElementById('campo_outro_motivo');
+
+  medicacaoOutro?.addEventListener('change', () => {
+    campoOutroMedicacao.style.display = medicacaoOutro.checked ? 'block' : 'none';
+  });
+
+  motivoOutro?.addEventListener('change', () => {
+    campoOutroMotivo.style.display = motivoOutro.checked ? 'block' : 'none';
+  });
+</script>
+
 </body>
 </html>
