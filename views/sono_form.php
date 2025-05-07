@@ -114,7 +114,7 @@ if (!isset($_SESSION['usuario'])) {
   </div>
   <br><br>
   <div class="mb-3">
-    <h4>Sono (Quantas horas dormiu? Quantas vezes acordou? Como acordou?)</h4>
+    <h4>Bem-Estar (FADIGA)*</h4>
     <?php 
     $labels = [
       "0"=>"Não descansado", "1"=>"Pouco descansado", "2"=>"Neutro",
@@ -125,6 +125,126 @@ if (!isset($_SESSION['usuario'])) {
         <input class="form-check-input" type="radio" name="avaliacao_sono" value="<?= $valor ?>" required> <?= $descricao ?>
       </span>
     <?php endforeach; ?>
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Quantas horas de sono? *</h4>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="horas_sono_intervalo" value="Menos que 6 horas" required>
+        <label class="form-check-label">Menos que 6 horas</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="horas_sono_intervalo" value="Entre 6 e 7 horas" required>
+        <label class="form-check-label">Entre 6 e 7 horas</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="horas_sono_intervalo" value="8 horas ou mais" required>
+        <label class="form-check-label">8 horas ou mais</label>
+    </div>
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Período Pré-Menstrual? *</h4>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="periodo_premenstrual" value="Sim" required>
+        <label class="form-check-label">SIM</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="periodo_premenstrual" value="Não" required>
+        <label class="form-check-label">NÃO</label>
+    </div>
+  </div>
+  <br><br>
+  <div class="mb-3">
+  <h4>Bem-Estar (NÍVEL DE ESTRESSE) *</h4>
+  <span class="linha_sono" id="linha_sono_1">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="1 - Muito relaxada" required>
+    1 – Muito relaxada
+  </span>
+  <span class="linha_sono" id="linha_sono_2">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="2 - Relaxada" required>
+    2 – Relaxada
+  </span>
+  <span class="linha_sono" id="linha_sono_3">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="3 - Normal" required>
+    3 – Normal
+  </span>
+  <span class="linha_sono" id="linha_sono_4">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="4 - Sentindo-me estressada" required>
+    4 – Sentindo-me estressada
+  </span>
+  <span class="linha_sono" id="linha_sono_5">
+    <input class="form-check-input" type="radio" name="nivel_estresse" value="5 - Altamente estressada" required>
+    5 – Altamente estressada
+  </span>
+</div>
+<br><br>
+  <div class="mb-3">
+    <h4>Está fazendo uso de medicação?</h4>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Arcoxia">
+        <label class="form-check-label">Arcoxia</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Lisador Dip">
+        <label class="form-check-label">Lisador Dip</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Paracetamol">
+        <label class="form-check-label">Paracetamol</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Meloxicam">
+        <label class="form-check-label">Meloxicam</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Diprospan">
+        <label class="form-check-label">Diprospan</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Tormiv">
+        <label class="form-check-label">Tormiv</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Paco">
+        <label class="form-check-label">Paco</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="uso_medicacao[]" value="Serenata">
+        <label class="form-check-label">Serenata</label>
+    </div>
+  </div>
+  <br><br>
+  <div class="mb-3">
+    <h4>Para que está usando a medicação?</h4>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="DOMS">
+        <label class="form-check-label">DOMS</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="Quadril">
+        <label class="form-check-label">Quadril</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="Tornozelo">
+        <label class="form-check-label">Tornozelo</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="Pé">
+        <label class="form-check-label">Pé</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="Ombro">
+        <label class="form-check-label">Ombro</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="Coluna">
+        <label class="form-check-label">Coluna</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="motivo_medicacao[]" value="PS">
+        <label class="form-check-label">PS</label>
+    </div>
   </div>
   <br><br>
   <div class="mb-3">
