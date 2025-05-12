@@ -181,7 +181,7 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
                 <a href="/psa-cbg/views/pse_form.php" class="app-icon i-green text-center" title="Pós-Treino">
                     <div>
                         <i class="fas fa-heartbeat"></i>
-                        <span class="small d-block mt-1">Pós-Treino</span>
+                        <span class="small d-block mt-1">PFG</span>
                     </div>
                 </a>
                 <a href="/psa-cbg/views/pse_pos_tecnico.php" class="app-icon i-green text-center" title="Pós-Treino">
@@ -230,7 +230,7 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
                 </a>
                 <a href="/psa-cbg/views/lista_pse.php" class="app-icon i-yellow text-center" title="Pós-Treinos Registrados">
                     <i class="fas fa-list"></i>
-                    <span class="small d-block mt-1">Pós-Treinos Registrados</span>
+                    <span class="small d-block mt-1">PFG Registrados</span>
                 </a>
                 <a href="/psa-cbg/views/lista_psa_treino.php" class="app-icon i-yellow text-center" title="Pós-Treinos Registrados">
                     <i class="fas fa-list"></i>

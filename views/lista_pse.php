@@ -95,30 +95,38 @@ $registros = $pseController->listarTodos($data_filtro);
   <!-- Tabela -->
   <div class="table-responsive">
     <table class="table table-dark table-striped align-middle">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Nota PSE</th>
-          <th>Data</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if ($registros): foreach ($registros as $registro): ?>
-        <tr>
-          <td><?= htmlspecialchars($registro['atleta_nome']) ?></td>
-          <td><?= htmlspecialchars($registro['nota_pse']) ?></td>
-          <td><?= isset($registro['created_at']) ? date('d/m/Y', strtotime($registro['created_at'])) : '-' ?></td>
-          <td>
-            <a href="/psa-cbg/controllers/routerExcluirPSE.php?id=<?= $registro['id']; ?>"
-               class="btn btn-danger btn-sm"
-               onclick="return confirm('Deseja excluir este registro de PSE?');">Excluir</a>
-          </td>
-        </tr>
-        <?php endforeach; else: ?>
-        <tr><td colspan="4" class="text-center">Nenhum registro encontrado.</td></tr>
-        <?php endif; ?>
-      </tbody>
+    <thead>
+  <tr>
+    <th>Nome</th>
+    <th>Descrição</th>
+    <th>Nota PSE</th>
+    <th>Grupo</th>
+    <th>Tempo de Treino</th>
+    <th>Turno</th>
+    <th>Data</th>
+    <th>Ações</th>
+  </tr>
+</thead>
+<tbody>
+  <?php if ($registros): foreach ($registros as $registro): ?>
+  <tr>
+    <td><?= htmlspecialchars($registro['atleta_nome']) ?></td>
+    <td><?= htmlspecialchars($registro['descricao']) ?></td>
+    <td><?= htmlspecialchars($registro['nota_pse']) ?></td>
+    <td><?= htmlspecialchars($registro['grupo'] ?? '-') ?></td>
+    <td><?= htmlspecialchars($registro['tempo_treino'] ?? '-') ?></td>
+    <td><?= htmlspecialchars($registro['turno'] ?? '-') ?></td>
+    <td><?= isset($registro['created_at']) ? date('d/m/Y', strtotime($registro['created_at'])) : '-' ?></td>
+    <td>
+      <a href="/psa-cbg/controllers/routerExcluirPSE.php?id=<?= $registro['id']; ?>"
+         class="btn btn-danger btn-sm"
+         onclick="return confirm('Deseja excluir este registro de PSE?');">Excluir</a>
+    </td>
+  </tr>
+  <?php endforeach; else: ?>
+  <tr><td colspan="8" class="text-center">Nenhum registro encontrado.</td></tr>
+  <?php endif; ?>
+</tbody>
     </table>
   </div>
 

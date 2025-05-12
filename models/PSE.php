@@ -6,11 +6,14 @@ use PDO;
 use PDOException;
 
 class PSE {
-    public static function create($atleta_id, $grupo, $avaliacao_pse) {
-        $conn = \Config\Database::getConnection(); // <-- aqui com barra invertida
-        $stmt = $conn->prepare("INSERT INTO pse (atleta_id, grupo, nota_pse, created_at) VALUES (?, ?, ?, NOW())");
-        return $stmt->execute([$atleta_id, $grupo, $avaliacao_pse]);
+    public static function create($atleta_id, $descricao, $nota_pse, $grupo, $tempo_treino, $turno) {
+        $conn = \Config\Database::getConnection();
+        $stmt = $conn->prepare("INSERT INTO pse (atleta_id, nota_pse, grupo, created_at, tempo_treino, turno)
+                                VALUES (?, ?, ?, NOW(), ?, ?)");
+        return $stmt->execute([$atleta_id, $nota_pse, $grupo, $tempo_treino, $turno]);
     }
+    
+    
 
     public static function listarTodos($data = null) {
         $conn = \Config\Database::getConnection(); // <-- aqui também
