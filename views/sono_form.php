@@ -82,6 +82,38 @@ if (!isset($_SESSION['usuario'])) {
     #linha_sono_cinco_1  { background: #65c0db; color: #fff; font-size: 20px; font-weight: bold; }
     #linha_sono_cinco_0  { background: #8cb435; color: #fff; font-size: 20px; font-weight: bold; }
 
+    #linha_sono_dez_10  { background: #bd2b2b; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_9  { background: #bd2b2b; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_8  { background: #b168a0; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_7  { background: #b168a0; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_6  { background: #65c0db; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_5  { background: #65c0db; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_4  { background: #65c0db; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_3  { background: #8cb435; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_2  { background: #8cb435; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_1  { background: #7b9638; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_dez_0  { background: #7b9638; color: #fff; font-size: 20px; font-weight: bold; }
+
+    #linha_sono_vinte_0  { background: #bd2b2b; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_1  { background: #cb6767; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_2  { background: #cb6767; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_3  { background: #b168a0; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_4  { background: #b168a0; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_5  { background: #817fb1; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_6  { background: #817fb1; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_7  { background: #3279a7; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_8  { background: #3279a7; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_9  { background: #4099bb; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_10 { background: #4099bb; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_11  { background: #65c0db; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_12  { background: #65c0db; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_13  { background: #8cb435; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_14 { background: #7b9638; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_15  { background: #8cb435; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_16  { background: #8cb435; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_17  { background:#8cb435; color: #fff; font-size: 20px; font-weight: bold; }
+    #linha_sono_vinte_18  { background: #7b9638; color: #fff; font-size: 20px; font-weight: bold; }
+
     .form-check {
       min-height: 3.5rem !important;
     }
@@ -114,12 +146,12 @@ if (!isset($_SESSION['usuario'])) {
     <p>Escala de Qualidade Total de Recuperação (TQR)</p>
     <?php 
     $labels = [
-      "0"=>"1 - Nada recuperado", "1"=>"2 - Extremamente mal recuperado", "2"=>"3 - Muito mal recuperado",
-      "3"=>"4 - Mal recuperado", "4"=>"5 - Razoavelmente recuperado", "5"=>"6 - Bem recuperado",
-      "6"=>"7 - Muito bem recuperado", "7"=>"8 - Extremamente bem recuperado", "8"=>"9 - Totalmente bem recuperado"
+      "0"=>"6 - Nada recuperado", "1"=>"7 - Extremamente mal recuperado", "2"=>"8 - Extremamente mal recuperado", "3"=>"9 - Muito mal recuperado",
+       "4"=>"10 - Muito mal recuperado", "5"=>"11 - Mal recuperado", "6"=>"12 - Mal recuperado", "7"=>"13 - Razoavelmente recuperado", "8"=>"14 - Razoavelmente recuperado",
+       "9"=>"15 - Bem recuperado", "10"=>"16 - Bem recuperado", "11"=>"17 - Muito bem recuperado", "12"=>"18 - Muito bem recuperado","13"=>"19 - Extremamente bem recuperado", "14"=>"20 - Totalmente bem recuperado"
     ];
     foreach ($labels as $valor => $descricao): ?>
-      <span id="linha_sono_<?= $valor ?>" class="linha_sono">
+      <span id="linha_sono_vinte_<?= $valor ?>" class="linha_sono">
         <input class="form-check-input" type="radio" name="avaliacao_psr" value="<?= $valor ?>" required> <?= $descricao ?>
       </span>
     <?php endforeach; ?>
@@ -144,11 +176,11 @@ if (!isset($_SESSION['usuario'])) {
     <br>
     <?php 
     $labels = [
-      "0"=>"5 - Nenhum pouco Fadigado", "1"=>"4 - Um pouco fadigado", "2"=>"3 - Moderadamente fadigado", "3"=>"2 - Muito fadigado", "4"=>"1 - Fadiga e Exaustão total - Nada sobrando"
+      "0"=>"10 - Nenhum pouco Fadigado", "1"=>"9 - Nenhum pouco Fadigado", "2"=>"8 - Um pouco fadigado", "3"=>"7 - Um pouco fadigado", "4"=>"6 - Moderadamente fadigado", "5"=>"5 - Moderadamente fadigado", "6"=>"6 - Moderadamente fadigado", "7"=>"7 - Muito fadigado", "8"=>"8 - Muito fadigado", "9"=>"9 - Fadiga e Exaustão total - Nada sobrando", "10"=>"10 - Fadiga e Exaustão total - Nada sobrando"
       
     ];
     foreach ($labels as $valor => $descricao): ?>
-      <span id="linha_sono_cinco_<?= $valor ?>" class="linha_sono">
+      <span id="linha_sono_dez_<?= $valor ?>" class="linha_sono">
         <input class="form-check-input" type="radio" name="avaliacao_psr" value="<?= $valor ?>" required> <?= $descricao ?>
       </span>
     <?php endforeach; ?>
@@ -253,6 +285,8 @@ if (!isset($_SESSION['usuario'])) {
   <div class="mb-3">
   <h4>Bem-Estar (DOR MUSCULAR GERAL)*</h4>
   <br>
+  <img src="../assets/img/codigo-dor-geral.png" alt="Mapa Dor" class="img-fluid" style="width: 800px;">
+  <br><br>
   <span class="linha_sono" id="linha_sono_cinco_0">
     <input class="form-check-input" type="radio" name="nivel_estresse" value="1 - Muito relaxada" required>
     5 – Sentindo-me ótima
