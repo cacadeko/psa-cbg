@@ -117,6 +117,32 @@ if (!isset($_SESSION['usuario'])) {
     .form-check {
       min-height: 3.5rem !important;
     }
+
+    .radio-scale-horizontal {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .radio-scale-horizontal label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 25px;
+      color: #fff;
+      margin: 0 25px 0 0;
+    }
+
+    .radio-scale-horizontal input[type="radio"] {
+      margin-bottom: 5px;
+      width: 1em;
+      height: 1em;
+      accent-color: #0d6efd; /* opcional: azul padrão Bootstrap */
+      cursor: pointer;
+    }
+
   </style>
 </head>
 
@@ -172,19 +198,25 @@ if (!isset($_SESSION['usuario'])) {
   </div>
   <br><br>
   <div class="mb-3">
-    <h4>O quanto você se sente cansada? *</h4>
-    <br>
+  <h4>O quanto você se sente cansada? *</h4>
+  <br>
+  <img src="../assets/img/sensacao-cansaco.png" alt="Mapa Dor" class="img-fluid" style="width: 300px;">
+  <br><br>
+  <div class="radio-scale-horizontal">
     <?php 
     $labels = [
-      "0"=>"10 - Nenhum pouco Fadigado", "1"=>"9 - Nenhum pouco Fadigado", "2"=>"8 - Um pouco fadigado", "3"=>"7 - Um pouco fadigado", "4"=>"6 - Moderadamente fadigado", "5"=>"5 - Moderadamente fadigado", "6"=>"6 - Moderadamente fadigado", "7"=>"7 - Muito fadigado", "8"=>"8 - Muito fadigado", "9"=>"9 - Fadiga e Exaustão total - Nada sobrando", "10"=>"10 - Fadiga e Exaustão total - Nada sobrando"
-      
+      "0" => "0", "1" => "1", "2" => "2", "3" => "3", "4" => "4", 
+      "5" => "5", "6" => "6", "7" => "7", "8" => "8", "9" => "9", "10" => "10"
     ];
     foreach ($labels as $valor => $descricao): ?>
-      <span id="linha_sono_dez_<?= $valor ?>" class="linha_sono">
-        <input class="form-check-input" type="radio" name="avaliacao_psr" value="<?= $valor ?>" required> <?= $descricao ?>
-      </span>
+      <label>
+        <input type="radio" name="avaliacao_psr" value="<?= $valor ?>" required>
+        <?= $descricao ?>
+      </label>
     <?php endforeach; ?>
   </div>
+</div>
+
   <br><br>
   <div class="mb-3">
     <h4>Bem-Estar (QUALIDADE DO SONO)*</h4>
@@ -285,8 +317,6 @@ if (!isset($_SESSION['usuario'])) {
   <div class="mb-3">
   <h4>Bem-Estar (DOR MUSCULAR GERAL)*</h4>
   <br>
-  <img src="../assets/img/codigo-dor-geral.png" alt="Mapa Dor" class="img-fluid" style="width: 800px;">
-  <br><br>
   <span class="linha_sono" id="linha_sono_cinco_0">
     <input class="form-check-input" type="radio" name="nivel_estresse" value="1 - Muito relaxada" required>
     5 – Sentindo-me ótima
@@ -314,13 +344,19 @@ if (!isset($_SESSION['usuario'])) {
     <br>
     <img src="../assets/img/escala-dor.png" alt="Mapa Dor" class="img-fluid" style="width: 800px;">
     <br><br>
-    <div class="form-check">
-      <label>Sim</label>
-      <input class="form-check-input" type="radio" name="dor_corpo" value="Sim" required>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="dor_corpo" value="Não" required> Não
-    </div>
+    <div class="radio-scale-horizontal">
+    <?php 
+    $labels = [
+      "0" => "0", "1" => "1", "2" => "2", "3" => "3", "4" => "4", 
+      "5" => "5", "6" => "6", "7" => "7", "8" => "8", "9" => "9", "10" => "10"
+    ];
+    foreach ($labels as $valor => $descricao): ?>
+      <label>
+        <input type="radio" name="avaliacao_psr" value="<?= $valor ?>" required>
+        <?= $descricao ?>
+      </label>
+    <?php endforeach; ?>
+  </div>
   </div>
   <br><br>
   <div class="mb-3">
