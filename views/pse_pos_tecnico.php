@@ -75,6 +75,32 @@ if (!isset($_SESSION['usuario'])) {
         #linha_sono_8  { background: #8cb435;  font-size: 20px; font-weight: bold; color: #ffffff; }
         #linha_sono_9  { background: #aacc53;  font-size: 20px; font-weight: bold; color: #ffffff; }
         #linha_sono_10 { background: #999999;  font-size: 20px; font-weight: bold; color: #ffffff; }
+
+        
+    .radio-scale-horizontal {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .radio-scale-horizontal label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 19px;
+      color: #fff;
+      margin: 0 23px 17px 0;
+    }
+
+    .radio-scale-horizontal input[type="radio"] {
+      margin-bottom: 0px;
+      width: 1em;
+      height: 0.8em;
+      accent-color: #0d6efd;
+      cursor: pointer;
+    }
     </style>
 </head>
 
@@ -120,19 +146,20 @@ if (!isset($_SESSION['usuario'])) {
         <br><br>
         <div class="mb-3">
             <h4>QUAL FOI A SENSAÇÃO DE CANSAÇO FÍSICO DO TREINO/JOGO DE HOJE?</h4>
-            <?php 
-            $x = 10; $y = 0;
-            $intensidade_labels = [
-                '0 - Repouso', '1 - Muito, muito leve.', '2 - leve',
-                '3 - Médio', '4 - Um pouco pesado', '5 - Pesado',
-                '6 - Meio pesado', '7 - Muito pesado', '8 - Extremamente pesado',
-                '9 - Máximo', '10 - Esforço máximo'
-            ];
-            foreach ($intensidade_labels as $valor): ?>
-                <span class="linha_sono" id="linha_sono_<?php echo $x; ?>">
-                    <input class="form-check-input" type="radio" name="nota_pse" value="<?php echo $y; ?>" required> <?php echo $valor; ?>
-                </span>
-            <?php $x--; $y++; endforeach; ?>
+            <img src="../assets/img/codigo-1-10.png" alt="Mapa Dor" class="img-fluid" style="width: 500px; display:block; margin: 0 auto">
+            <div class="radio-scale-horizontal">
+                <?php 
+                $labels = [
+                    "1" => "1", "2" => "2", "3" => "3", "4" => "4", "5" => "5", 
+                    "6" => "6", "7" => "7", "8" => "8", "9" => "9", "10" => "10"
+                ];
+                foreach ($labels as $valor => $descricao): ?>
+                    <label>
+                    <input type="radio" name="nota_pse" value="<?= $valor ?>" required>
+                    <?= $descricao ?>
+                    </label>
+                <?php endforeach; ?>
+            </div>
         </div>
         <br><br>
         <div class="mb-3">
