@@ -22,7 +22,7 @@ if (!isset($_SESSION['usuario'])) {
       display: block;
       padding: 10px;
       margin: 0 auto;
-      width: 80%;
+      width: 100%;
     }
     .top-bar {
       position: fixed;
@@ -130,16 +130,16 @@ if (!isset($_SESSION['usuario'])) {
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: 25px;
+      font-size: 19px;
       color: #fff;
-      margin: 0 25px 0 0;
+      margin: 0 23px 17px 0;
     }
 
     .radio-scale-horizontal input[type="radio"] {
-      margin-bottom: 5px;
+      margin-bottom: 0px;
       width: 1em;
-      height: 1em;
-      accent-color: #0d6efd; /* opcional: azul padrão Bootstrap */
+      height: 0.8em;
+      accent-color: #0d6efd;
       cursor: pointer;
     }
 
@@ -170,17 +170,21 @@ if (!isset($_SESSION['usuario'])) {
     <h4>Como você se sente em relação à sua recuperação? *</h4>
     <br>
     <p>Escala de Qualidade Total de Recuperação (TQR)</p>
-    <?php 
-    $labels = [
-      "0"=>"6 - Nada recuperado", "1"=>"7 - Extremamente mal recuperado", "2"=>"8 - Extremamente mal recuperado", "3"=>"9 - Muito mal recuperado",
-       "4"=>"10 - Muito mal recuperado", "5"=>"11 - Mal recuperado", "6"=>"12 - Mal recuperado", "7"=>"13 - Razoavelmente recuperado", "8"=>"14 - Razoavelmente recuperado",
-       "9"=>"15 - Bem recuperado", "10"=>"16 - Bem recuperado", "11"=>"17 - Muito bem recuperado", "12"=>"18 - Muito bem recuperado","13"=>"19 - Extremamente bem recuperado", "14"=>"20 - Totalmente bem recuperado"
-    ];
-    foreach ($labels as $valor => $descricao): ?>
-      <span id="linha_sono_vinte_<?= $valor ?>" class="linha_sono">
-        <input class="form-check-input" type="radio" name="avaliacao_psr" value="<?= $valor ?>" required> <?= $descricao ?>
-      </span>
-    <?php endforeach; ?>
+    <img src="../assets/img/codigo-tqr.png" alt="Mapa Dor" class="img-fluid" style="width: 500px; display:block; margin: 0 auto">
+    <div class="radio-scale-horizontal">
+      <?php 
+      $labels = [
+        "6" => "6", "7" => "7", "8" => "8", "9" => "9", "10" => "10", 
+        "11" => "11", "12" => "12", "13" => "13", "14" => "14", "15" => "15"
+        , "16" => "16", "17" => "17", "18" => "18", "19" => "19", "20" => "20"
+      ];
+      foreach ($labels as $valor => $descricao): ?>
+        <label>
+          <input type="radio" name="avaliacao_psr" value="<?= $valor ?>" required>
+          <?= $descricao ?>
+        </label>
+      <?php endforeach; ?>
+    </div>
   </div>
   <br><br>
   <div class="mb-3">
@@ -200,7 +204,7 @@ if (!isset($_SESSION['usuario'])) {
   <div class="mb-3">
   <h4>O quanto você se sente cansada? *</h4>
   <br>
-  <img src="../assets/img/sensacao-cansaco.png" alt="Mapa Dor" class="img-fluid" style="width: 300px;">
+  <img src="../assets/img/sensacao-cansaco.png" alt="Mapa Dor" class="img-fluid" style="width: 300px; display:block; margin: 0 auto">
   <br><br>
   <div class="radio-scale-horizontal">
     <?php 
@@ -342,7 +346,7 @@ if (!isset($_SESSION['usuario'])) {
   <div class="mb-3">
     <h4>Caracterize a sua DOR MUSCULAR GERAL de acordo com essa escala: *</h4>
     <br>
-    <img src="../assets/img/escala-dor.png" alt="Mapa Dor" class="img-fluid" style="width: 800px;">
+    <img src="../assets/img/escala-dor.png" alt="Mapa Dor" class="img-fluid" style="width: 500px; display:block; margin: 0 auto"">
     <br><br>
     <div class="radio-scale-horizontal">
     <?php 
@@ -366,7 +370,7 @@ if (!isset($_SESSION['usuario'])) {
   <br><br>
   <div class="mb-3">
     <h4>Com relação dor muscular específica, classifique de acordo com a imagem como é: *</h4>
-    <img src="../assets/img/codigo-dor.png" alt="Mapa Dor" class="img-fluid" style="width: 800px;">
+    <img src="../assets/img/codigo-dor.png" alt="Mapa Dor" class="img-fluid" style="width: 500px; display:block; margin: 0 auto"">
     <br>
     <br>
     <p>DOR MUSCULAR GENERALIZADA</p>
