@@ -1,0 +1,26 @@
+[
+  {
+    "tipo": "PFE",
+    "percentual": 23.51
+  },
+  {
+    "tipo": "PFS",
+    "percentual": 16.38
+  },
+  {
+    "tipo": "Treino Técnico Misto",
+    "percentual": 22.3
+  },
+  {
+    "tipo": "Treino Técnico Fita",
+    "percentual": 17.92
+  },
+  {
+    "tipo": "Físico-Técnico",
+    "percentual": 17.32
+  },
+  {
+    "tipo": "Intervalo",
+    "percentual": 2.03
+  }
+]

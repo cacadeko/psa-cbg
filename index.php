@@ -28,11 +28,7 @@ if (!isset($_SESSION['usuario'])) {
 
 /* ───── 3. VARIÁVEIS DE SESSÃO ───── */
 $usuarioSessao = $_SESSION['usuario'];
-$nivelSessao   = $_SESSION['nivel']   ?? 'atleta';   // admin | treinador | atleta
-
-/* ───── 4. CONSULTAS ÚTEIS ───── */
-use Controllers\RegistroController;
-$statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
+$nivelSessao   = $_SESSION['nivel'];
 
 ?>
 <!DOCTYPE html>
@@ -98,10 +94,15 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
 
     <!-- botão sair -->
     <div class="top-bar">
-        <a href="/psa-cbg/controllers/LogoutController.php" class="app-icon i-red logout-icon text-center" title="Sair">
+    <!-- MENU SUPERIOR -->
+        <a href="/psa-cbg/index.php" style="color:white; margin-right:30px; font-weight:bold; text-decoration:none;">🏠 Início</a>
+        <a href="/psa-cbg/views/dashboard_graficos.php" style="color:white; margin-right:30px; font-weight:bold; text-decoration:none;">📊 Gráficos e Relatórios</a>
+                <a href="/psa-cbg/controllers/LogoutController.php" class="app-icon i-red logout-icon text-center" title="Sair">
             <i class="fas fa-power-off"></i>
         </a>
     </div>
+
+
 
     <!-- painel principal -->
     <div class="container">
@@ -243,14 +244,14 @@ $statusRegistro = RegistroController::obterStatusRegistro();   // 0 = liberado
             </div>
             <?php endif; ?>
 
-                        <!-- ─────────── LINHA AMARELA (relatórios) ─────────── -->
-                        <?php if ($nivelSessao === 'admin' || $nivelSessao === 'treinador'): ?>
-            <div class="d-flex justify-content-center gap-3 mb-3">
-                <a href="/psa-cbg/views/relatorio_presenca_form.php" class="app-icon i-yellow text-center" title="Relatório de Presença">
-                    <i class="fas fa-file-lines"></i>
-                    <span class="small d-block mt-1">Relatório de Presença</span>
-                </a>
-            </div>
+            <!-- ─────────── LINHA AMARELA (relatórios) ─────────── -->
+            <?php if ($nivelSessao === 'admin' || $nivelSessao === 'treinador'): ?>
+                <div class="d-flex justify-content-center gap-3 mb-3">
+                    <a href="/psa-cbg/views/relatorio_presenca_form.php" class="app-icon i-yellow text-center" title="Relatório de Presença">
+                        <i class="fas fa-file-lines"></i>
+                        <span class="small d-block mt-1">Relatório de Presença</span>
+                    </a>
+                </div>
             <?php endif; ?>
 
             <!-- ─────────── LINHA VERMELHA (admin – bloqueio) ─────────── -->

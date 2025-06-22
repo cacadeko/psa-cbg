@@ -6,9 +6,9 @@ use PDOException;
 
 class Database {
     private static $host = 'localhost';
-    private static $dbname = 'u300069101_cbg';
-    private static $username = 'u300069101_cbg'; // Alterar se necessário
-    private static $password = ')1%XxE#7N.;N'; // Alterar se necessário
+    private static $dbname = 'psa_cbg';
+    private static $username = 'root'; // Alterar se necessário
+    private static $password = ''; // Alterar se necessário
     private static $conn;
 
     public static function getConnection() {
