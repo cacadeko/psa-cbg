@@ -154,7 +154,8 @@
 
 <div class="grafico-container">
   <div class="grafico-titulo">PERCEPÇÃO DE ESFORÇO (MÉDIA DA SEMANA)</div>
-<canvas id="graficoSemanas" height="10"></canvas>
+  <canvas id="graficoSemanas" height="110"></canvas>
+
 
 <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 30px; background: #fefefe;">
   
@@ -227,10 +228,10 @@
 </div>
 
 <script>
- new Chart(document.getElementById('graficoEsforco').getContext('2d'), {
+ new Chart(document.getElementById('graficoSemanas').getContext('2d'), {
   type: 'bar',
   data: {
-    labels: ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'],
+    labels: ['Sofia', 'Laura', 'Isabela', 'Amanda', 'Camila', 'Beatriz', 'Elisa'],
     datasets: [
       { label: 'PFE', backgroundColor: '#ffe54c', data: [4, 3, 5, 4, 3, 4, 2] },
       { label: 'PFG', backgroundColor: '#b6f547', data: [5, 4, 4, 5, 4, 4, 3] },
@@ -239,24 +240,25 @@
     ]
   },
   options: {
-    responsive: true,
-    plugins: {
+  responsive: true,
+  plugins: {
       legend: {
         display: true,
         position: 'top'
       },
       datalabels: {
         anchor: 'end',
-        align: 'end',
+        align: 'start',
         color: '#000',
-        font: { weight: 'bold', size: 10 },
-        formatter: value => value
+        font: { weight: 'bold', size: 11 },
+        formatter: value => value + '%'
       }
     },
     scales: {
       y: {
         beginAtZero: true,
-        max: 1
+        max: 10,
+        ticks: { stepSize: 1 }
       }
     }
   },
