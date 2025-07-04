@@ -59,11 +59,11 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">E-mail</label>
-                    <input type="text" class="form-control" name="email" value="<?php echo htmlspecialchars($atleta['email']); ?>" required>
+                    <input type="text" class="form-control" name="email" value="<?php echo htmlspecialchars($atleta['email']); ?>">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Telefone/Celular</label>
-                    <input type="text" class="form-control" name="telefone" value="<?php echo htmlspecialchars($atleta['telefone']); ?>" required>
+                    <input type="text" class="form-control" name="telefone" value="<?php echo htmlspecialchars($atleta['telefone']); ?>">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Categoria</label>

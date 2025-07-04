@@ -18,8 +18,8 @@ $user=$u->fetch(PDO::FETCH_ASSOC) ?: die('Usuário não encontrado');
 <h3 class="text-center mb-4">Editar Usuário</h3>
 <form method="POST" action="/psa-cbg/controllers/routerEditarUsuario.php">
 <input type="hidden" name="id" value="<?= $user['id'] ?>">
-<div class="mb-3"><label class="form-label">Nome *</label><input name="nome" class="form-control" value="<?= htmlspecialchars($user['nome']) ?>" required></div>
-<div class="mb-3"><label class="form-label">E-mail *</label><input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user['email']) ?>" required></div>
+<div class="mb-3"><label class="form-label">Nome *</label><input name="nome" class="form-control" value="<?= htmlspecialchars($user['nome']) ?>"></div>
+<div class="mb-3"><label class="form-label">E-mail *</label><input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user['email']) ?>"></div>
 <div class="mb-3"><label class="form-label">Senha (deixe vazio para manter)</label><input type="password" name="senha" class="form-control"></div>
 <div class="mb-3"><label class="form-label">Nível</label>
 <select name="nivel" class="form-select">

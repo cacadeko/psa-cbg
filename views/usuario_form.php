@@ -6,9 +6,9 @@
 </head><body><div class="card p-4" style="background:rgba(255,255,255,0.08);max-width:500px;width:100%;">
 <h3 class="text-center mb-4">Cadastrar Usuário</h3>
 <form method="POST" action="/psa-cbg/controllers/routerUsuario.php">
-<div class="mb-3"><label class="form-label">Nome *</label><input name="nome" class="form-control" required></div>
-<div class="mb-3"><label class="form-label">E-mail *</label><input type="email" name="email" class="form-control" required></div>
-<div class="mb-3"><label class="form-label">Senha *</label><input type="password" name="senha" class="form-control" required></div>
+<div class="mb-3"><label class="form-label">Nome *</label><input name="nome" class="form-control"></div>
+<div class="mb-3"><label class="form-label">E-mail *</label><input type="email" name="email" class="form-control"></div>
+<div class="mb-3"><label class="form-label">Senha *</label><input type="password" name="senha" class="form-control"></div>
 <div class="mb-3"><label class="form-label">Nível</label>
 <select name="nivel" class="form-select">
   <option value="aluno">Aluno</option><option value="treinador">Treinador</option><option value="admin">Admin</option>
