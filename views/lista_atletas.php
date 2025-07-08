@@ -80,6 +80,29 @@ $atletas = $atletaController->listar();
 
 <div class="container mt-5 pt-5">
   <h3 class="text-center mb-4">Lista de Atletas</h3>
+<?php if (isset($_GET['deleted']) && $_GET['deleted'] == 1): ?>
+  <div class="alert alert-success text-center" role="alert">
+    ✅ Atleta excluído com sucesso.
+  </div>
+<?php elseif (isset($_GET['erro'])): ?>
+  <?php if ($_GET['erro'] === 'pfe_associado'): ?>
+    <div class="alert alert-warning text-center" role="alert">
+      ⚠️ Não é possível excluir o atleta. Existe um registro de <strong>PFE</strong> vinculado a ele.
+    </div>
+  <?php elseif ($_GET['erro'] === 'id_nao_informado'): ?>
+    <div class="alert alert-danger text-center" role="alert">
+      ❌ ID do atleta não foi informado.
+    </div>
+  <?php elseif ($_GET['erro'] === 'erro_exclusao'): ?>
+    <div class="alert alert-danger text-center" role="alert">
+      ❌ Erro ao excluir o atleta.
+    </div>
+  <?php elseif ($_GET['erro'] === 'excecao'): ?>
+    <div class="alert alert-danger text-center" role="alert">
+      ❌ Erro inesperado durante a exclusão.
+    </div>
+  <?php endif; ?>
+<?php endif; ?>
 
   <div class="table-responsive">
     <table class="table table-dark table-striped align-middle">
@@ -128,5 +151,12 @@ $atletas = $atletaController->listar();
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  setTimeout(() => {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => alert.style.display = 'none');
+  }, 5000);
+</script>
+
 </body>
 </html>

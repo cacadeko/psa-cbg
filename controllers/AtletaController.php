@@ -94,19 +94,35 @@ class AtletaController
     
 
     /* ───────────────────────────── EXCLUIR ─────────────────────────── */
-    public function excluir()
+    public function excluir(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
-            $id = $_GET['id'];
+        $id = $_GET['id'] ?? null;
 
-            if (Atleta::excluir($id)) {
-                header('Location: /psa-cbg/views/lista_atletas.php?success=1');
+        if (!$id) {
+            header('Location: /psa-cbg/views/lista_atletas.php?erro=id_nao_informado');
+            exit;
+        }
+
+        try {
+            if (!\Models\Atleta::excluir($id)) {
+                header('Location: /psa-cbg/views/lista_atletas.php?erro=erro_exclusao');
                 exit;
             }
-            die("Erro ao excluir atleta.");
+
+            header('Location: /psa-cbg/views/lista_atletas.php?deleted=1');
+            exit;
+
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') {
+                header('Location: /psa-cbg/views/lista_atletas.php?erro=pfe_associado');
+                exit;
+            }
+
+            header('Location: /psa-cbg/views/lista_atletas.php?erro=excecao');
+            exit;
         }
-        die("Requisição inválida.");
     }
+
 
     /* ───────────────────────────── EDITAR ──────────────────────────── */
     public function editar()

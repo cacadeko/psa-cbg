@@ -53,8 +53,24 @@ class UsuariosController
     /* EXCLUIR */
     public function excluir(int $id): void
     {
-        UsuariosModel::delete($id);
-        header('Location: /psa-cbg/views/lista_usuarios.php?deleted=1');
-        exit;
+        try {
+            if (!\Models\UsuariosModel::delete($id)) {
+                header('Location: /psa-cbg/views/lista_usuarios.php?erro=erro_exclusao');
+                exit;
+            }
+
+            header('Location: /psa-cbg/views/lista_usuarios.php?deleted=1');
+            exit;
+
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') {
+                header('Location: /psa-cbg/views/lista_usuarios.php?erro=usuario_vinculado');
+                exit;
+            }
+
+            header('Location: /psa-cbg/views/lista_usuarios.php?erro=excecao');
+            exit;
+        }
     }
+
 }

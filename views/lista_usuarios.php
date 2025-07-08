@@ -82,6 +82,11 @@ if (isset($_GET['error']))   { $msg = 'Ocorreu um erro.';                $alert=
 
 <div class="container mt-5 pt-5">
   <h3 class="text-center mb-4">Usuários do Sistema</h3>
+  <?php if (isset($_GET['erro']) && $_GET['erro'] === 'usuario_vinculado'): ?>
+    <div class="alert alert-warning text-center">
+      ❌ Não é possível excluir este usuário. Ele está vinculado a um atleta no sistema.
+    </div>
+  <?php endif; ?>
 
   <?php if ($msg): ?>
     <div class="alert alert-<?= $alert ?>"><?= $msg ?></div>

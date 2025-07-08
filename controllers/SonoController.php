@@ -17,55 +17,41 @@ class SonoController {
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $atleta_id = $_POST['atleta_id'] ?? null;
-            $hora_dormir = $_POST['hora_dormir'] ?? null;
-            $hora_acordar = $_POST['hora_acordar'] ?? null;
-            $dor_corpo = $_POST['dor_corpo'] ?? null;
-            $local_dor = $_POST['local_dor'] ?? null;
-            $intensidade_dor = $_POST['intensidade_dor'] ?? null;
-            $avaliacao_psr = $_POST['avaliacao_psr'] ?? null;
+            $avaliacao_recuperacao = $_POST['avaliacao_recuperacao'] ?? null;
+            $avaliacao_fadiga = $_POST['avaliacao_fadiga'] ?? null;
             $avaliacao_sono = $_POST['avaliacao_sono'] ?? null;
+            $avaliacao_dor = $_POST['avaliacao_dor'] ?? null;
+            $horas_sono_total = $_POST['horas_sono_total'] ?? null;
+            $tempo_para_dormir = $_POST['tempo_para_dormir'] ?? null;
+            $uso_medicacao = isset($_POST['uso_medicacao']) ? implode(',', $_POST['uso_medicacao']) : null;
             $acordou_durante_a_noite = $_POST['acordou_durante_a_noite'] ?? null;
+            $local_dor = $_POST['local_dor'] ?? null;
+            $dor_corpo = $_POST['dor_corpo'] ?? null;
+            $estresse_geral = $_POST['estresse_geral'] ?? null;
+            $estresse_umor = $_POST['estresse_umor'] ?? null;
+            $periodo_premenstrual = $_POST['periodo_premenstrual'] ?? null;
+            $periodo_menstrual = $_POST['periodo_menstrual'] ?? null;
+            $uso_medicacao_outro = $_POST['uso_medicacao_outro'] ?? null;
+            $motivo_medicacao = isset($_POST['motivo_medicacao']) ? implode(',', $_POST['motivo_medicacao']) : null;
+            $motivo_medicacao_outro = $_POST['motivo_medicacao_outro'] ?? null;
 
-            $data_hoje = date('Y-m-d');
+            $salvo = \Models\QualidadeSono::create(
+                $atleta_id, $avaliacao_recuperacao, $avaliacao_fadiga, $avaliacao_sono,
+                $avaliacao_dor, $horas_sono_total, $tempo_para_dormir, $uso_medicacao,
+                $acordou_durante_a_noite, $local_dor, $dor_corpo, $estresse_geral,
+                $estresse_umor, $periodo_premenstrual, $periodo_menstrual,
+                $uso_medicacao_outro, $motivo_medicacao, $motivo_medicacao_outro
+            );
 
-            // echo "<pre>";
-            // print("id-atleta:".$atleta_id."<br> Hora dormir:".$hora_dormir."<br> Hora acordar:".$hora_acordar."<br> PSR:".$avaliacao_psr."<br> Sono:".$avaliacao_sono."<br> Acordou:".$acordou_durante_a_noite."<br> Dor".$dor_corpo."<br>Local:".$local_dor."<br> Intensidade:".$intensidade_dor)."<br>";
-            // print_r($_POST);
-            // echo "</pre>";
-            // exit; // Interrompe o script para inspecionar os dados recebidos
-
-            // echo "<pre>";
-            // print($local_dor);
-            // echo "</pre>";
-            // exit; // Interrompe o script para inspecionar os dados recebidos
-
-
-            //Verifica se algum campo obrigatório está vazio
-            if (!$atleta_id || !$hora_dormir ) { 
-                die("Erro: Todos os campos obrigatórios devem ser preenchidos.");
+            if ($salvo) {
+                header('Location: /psa-cbg/views/lista_sono.php?success=1');
+            } else {
+                echo "Erro ao salvar.";
             }
-
-            $conn = Database::getConnection();
-            $stmt = $conn->prepare("SELECT COUNT(*) FROM qualidade_sono WHERE atleta_id = ? AND DATE(created_at) = ?");
-            $stmt->execute([$atleta_id, $data_hoje]);
-            $existeCadastro = $stmt->fetchColumn();
-
-            if ($existeCadastro > 0) {
-                die("Erro: Apenas um cadastro de sono permitido por dia.");
-            }
-
-            try {
-                if (QualidadeSono::create($atleta_id, $hora_dormir, $hora_acordar, $dor_corpo, $local_dor, $intensidade_dor, $avaliacao_psr, $avaliacao_sono, $acordou_durante_a_noite)) {
-                    header('Location: /psa-cbg/index.php?success=1');
-                    exit;
-                } else {
-                    throw new Exception("Erro ao inserir no banco de dados.");
-                }
-            } catch (Exception $e) {
-                die("Erro ao registrar qualidade do sono: " . $e->getMessage());
-            }
+            exit;
         }
     }
+
 
     public function listarTodos($data = null)
     {

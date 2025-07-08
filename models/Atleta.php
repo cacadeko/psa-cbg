@@ -82,11 +82,19 @@ class Atleta {
     
 
 
-    public static function excluir($id) {
-        $conn = Database::getConnection();
-        $stmt = $conn->prepare("DELETE FROM atletas WHERE id = ?");
-        return $stmt->execute([$id]);
+    public static function excluir($id)
+    {
+        try {
+            $conn = Database::getConnection();
+            $stmt = $conn->prepare("DELETE FROM atletas WHERE id = ?");
+            return $stmt->execute([$id]);
+
+        } catch (\PDOException $e) {
+            // Repassa o erro para ser tratado no controller
+            throw $e;
+        }
     }
+
 
     public static function editar($id, $nome, $data_nascimento, $posicao, $email, $telefone, $categoria, $senha, $acesso) {
         $conn = Database::getConnection();

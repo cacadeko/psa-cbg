@@ -94,79 +94,71 @@ $sono = $sonoController->listarTodos($data_filtro);
 
     <!-- Tabela -->
     <div class="table-responsive mt-4">
-        <table class="table table-dark table-striped align-middle">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>PSR</th>
-                    <th>Sono</th>
-                    <th>Acordou à Noite</th>
-                    <th>Hora que Dormiu</th>
-                    <th>Hora que Acordou</th>
-                    <th>Dor no Corpo</th>
-                    <th>Local da Dor</th>
-                    <th>Mapa da Dor</th>
-                    <th>Intensidade da Dor</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($sono as $registro): ?>
-                <tr>
-                    <td><?= htmlspecialchars($registro['atleta_nome']); ?></td>
-                    <td><?= htmlspecialchars($registro['avaliacao_psr']); ?></td>
-                    <td><?= htmlspecialchars($registro['avaliacao_sono']); ?></td>
-                    <td><?= htmlspecialchars($registro['acordou_durante_a_noite']); ?></td>
-                    <td><?= htmlspecialchars($registro['hora_dormir']); ?></td>
-                    <td><?= htmlspecialchars($registro['hora_acordar']); ?></td>
-                    <td><?= htmlspecialchars($registro['dor_corpo']); ?></td>
-                    <td><?= htmlspecialchars($registro['local_dor']); ?></td>
-                    <td>
-                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMapa<?= $registro['id']; ?>">
-                            Ver Mapa
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="modalMapa<?= $registro['id']; ?>" tabindex="-1" aria-labelledby="modalLabel<?= $registro['id']; ?>" aria-hidden="true">
-                          <div class="modal-dialog modal-xl modal-dialog-centered">
-                            <div class="modal-content bg-dark text-light">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="modalLabel<?= $registro['id']; ?>">Mapa da Dor - <?= htmlspecialchars($registro['atleta_nome']); ?></h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                              </div>
-                              <div class="modal-body text-center">
-                                <img src="https://athleticmap.com/images/mapador.png" alt="Mapa da dor" class="img-fluid">
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                    <td><?= htmlspecialchars($registro['intensidade_dor']); ?></td>
-                    <td>
-                        <a href="/psa-cbg/controllers/routerExcluirSono.php?id=<?= $registro['id']; ?>" 
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('Tem certeza que deseja excluir este registro de sono?');">
-                           Excluir
-                        </a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
+  <table class="table table-dark table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Atleta</th>
+        <th>Recuperação</th>
+        <th>Fadiga</th>
+        <th>Sono</th>
+        <th>Estresse</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($sono as $registro): ?>
+      <tr>
+        <td><?= date('d/m/Y', strtotime($registro['data_registro'])) ?></td>
+        <td><?= htmlspecialchars($registro['nome']) ?></td>
+        <td><?= $registro['avaliacao_recuperacao'] ?></td>
+        <td><?= $registro['avaliacao_fadiga'] ?></td>
+        <td><?= $registro['avaliacao_sono'] ?></td>
+        <td><?= $registro['estresse_geral'] ?></td>
+        <td>
+          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalView<?= $registro['id'] ?>">
+            <i class="fas fa-eye"></i>
+          </button>
+          <a href="/psa-cbg/controllers/routerExcluirSono.php?id=<?= $registro['id']; ?>"
+             class="btn btn-danger btn-sm"
+             onclick="return confirm('Deseja excluir este registro?');">
+             <i class="fas fa-trash-alt"></i>
+          </a>
+        </td>
+      </tr>
 
-                <!-- Média -->
-                <tr style="background-color: rgba(255,255,255,0.1); font-weight: bold;">
-                    <td>MÉDIA</td>
-                    <td><?= number_format(array_sum(array_column($sono, "avaliacao_psr")) / count($sono), 2, ",", "."); ?></td>
-                    <td><?= number_format(array_sum(array_column($sono, "avaliacao_sono")) / count($sono), 2, ",", "."); ?></td>
-                    <td colspan="6">—</td>
-                    <td><?= number_format(array_sum(array_column($sono, "intensidade_dor")) / count($sono), 2, ",", "."); ?></td>
-                    <td></td>
-                </tr>
+      <!-- Modal Detalhes -->
+      <div class="modal fade" id="modalView<?= $registro['id'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $registro['id'] ?>" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalLabel<?= $registro['id'] ?>">Detalhes do Registro</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Recuperação:</strong> <?= $registro['avaliacao_recuperacao'] ?></p>
+              <p><strong>Fadiga:</strong> <?= $registro['avaliacao_fadiga'] ?></p>
+              <p><strong>Qualidade do Sono:</strong> <?= $registro['avaliacao_sono'] ?></p>
+              <p><strong>Dor Muscular:</strong> <?= $registro['avaliacao_dor'] ?></p>
+              <p><strong>Estresse Geral:</strong> <?= $registro['estresse_geral'] ?></p>
+              <p><strong>Estresse Humor:</strong> <?= $registro['estresse_umor'] ?></p>
+              <p><strong>Período Menstrual:</strong> <?= $registro['periodo_menstrual'] ?></p>
+              <p><strong>Pré-Menstrual:</strong> <?= $registro['periodo_premenstrual'] ?></p>
+              <p><strong>Uso de Medicação:</strong> <?= $registro['uso_medicacao'] ?></p>
+              <p><strong>Motivo Medicação:</strong> <?= $registro['motivo_medicacao'] ?></p>
+              <p><strong>Outro Medicamento:</strong> <?= $registro['uso_medicacao_outro'] ?></p>
+              <p><strong>Outro Motivo:</strong> <?= $registro['motivo_medicacao_outro'] ?></p>
+              <p><strong>Local da Dor:</strong> <?= $registro['local_dor'] ?></p>
+              <p><strong>Data Registro:</strong> <?= date('d/m/Y H:i', strtotime($registro['data_registro'])) ?></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
 
-            </tbody>
-        </table>
-    </div>
 
     <div class="d-flex justify-content-end">
         <a href="/psa-cbg/index.php" class="btn btn-light mt-3">Voltar</a>
