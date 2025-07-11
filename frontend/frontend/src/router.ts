@@ -2,6 +2,12 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import('./views/LoginView.vue'),
+    meta: { public: true },
+  },
+  {
     path: '/',
     name: 'Dashboard',
     component: () => import('./views/DashboardView.vue'),
@@ -31,6 +37,19 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+// Guard de autenticação
+router.beforeEach((to, from, next) => {
+  const isPublic = to.meta.public;
+  const isLoggedIn = !!localStorage.getItem('token');
+  if (!isPublic && !isLoggedIn) {
+    next('/login');
+  } else if (isPublic && isLoggedIn && to.path === '/login') {
+    next('/');
+  } else {
+    next();
+  }
 });
 
 export default router; 

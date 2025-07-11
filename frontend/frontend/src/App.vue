@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter, RouterView } from 'vue-router';
+import { ref, computed } from 'vue';
+import { useRoute, useRouter, RouterView } from 'vue-router';
 // Importe componentes do PrimeVue
 import Sidebar from 'primevue/sidebar';
 import Button from 'primevue/button';
 import Avatar from 'primevue/avatar';
 
-// Simulação de usuário logado
 const user = ref({ nome: 'Usuário Exemplo' });
 const sidebarVisible = ref(false);
 const router = useRouter();
+const route = useRoute();
 
 const menuItems = [
   { label: 'Dashboard', icon: 'pi pi-chart-bar', route: '/' },
@@ -17,48 +17,50 @@ const menuItems = [
   { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios' },
   { label: 'Sono', icon: 'pi pi-moon', route: '/sono' },
   { label: 'PSE', icon: 'pi pi-heart', route: '/pse' },
-  // Adicione mais menus conforme necessário
 ];
 
-function goTo(route: string) {
+function goTo(routePath: string) {
   sidebarVisible.value = false;
-  router.push(route);
+  router.push(routePath);
 }
 
 function logout() {
-  // Lógica de logout
-  alert('Logout!');
+  localStorage.removeItem('token');
+  router.push('/login');
 }
+
+const isLoginPage = computed(() => route.path === '/login');
 </script>
 
 <template>
   <div class="layout">
-    <!-- Sidebar -->
-    <Sidebar v-model:visible="sidebarVisible" :modal="false" class="sidebar">
-      <div class="sidebar-logo">
-        <img src="./assets/logo-atm.png" alt="Athletic Map" height="40" />
-        <img src="./assets/logo-cbg.svg" alt="CBG" height="40" style="margin-left: 8px;" />
-      </div>
-      <ul class="sidebar-menu">
-        <li v-for="item in menuItems" :key="item.label" @click="goTo(item.route)">
-          <i :class="item.icon" style="margin-right:8px" /> {{ item.label }}
-        </li>
-      </ul>
-    </Sidebar>
+    <template v-if="!isLoginPage">
+      <!-- Sidebar -->
+      <Sidebar v-model:visible="sidebarVisible" :modal="false" class="sidebar">
+        <div class="sidebar-logo">
+          <img src="./assets/logo-atm.png" alt="Athletic Map" height="40" />
+          <img src="./assets/logo-cbg.svg" alt="CBG" height="40" style="margin-left: 8px;" />
+        </div>
+        <ul class="sidebar-menu">
+          <li v-for="item in menuItems" :key="item.label" @click="goTo(item.route)">
+            <i :class="item.icon" style="margin-right:8px" /> {{ item.label }}
+          </li>
+        </ul>
+      </Sidebar>
 
-    <!-- Topbar -->
-    <div class="topbar">
-      <Button icon="pi pi-bars" class="p-button-text p-button-lg" @click="sidebarVisible = true" />
-      <div class="topbar-title">PSA-CBG Dashboard</div>
-      <div class="topbar-user">
-        <span>{{ user.nome }}</span>
-        <Avatar icon="pi pi-user" shape="circle" style="margin: 0 8px;" />
-        <Button icon="pi pi-sign-out" class="p-button-text p-button-danger" @click="logout" />
+      <!-- Topbar -->
+      <div class="topbar">
+        <Button icon="pi pi-bars" class="p-button-text p-button-lg" @click="sidebarVisible = true" />
+        <div class="topbar-title">PSA-CBG Dashboard</div>
+        <div class="topbar-user">
+          <span>{{ user.nome }}</span>
+          <Avatar icon="pi pi-user" shape="circle" style="margin: 0 8px;" />
+          <Button icon="pi pi-sign-out" class="p-button-text p-button-danger" @click="logout" />
+        </div>
       </div>
-    </div>
-
+    </template>
     <!-- Conteúdo principal -->
-    <div class="main-content">
+    <div class="main-content" :class="{ 'login-content': isLoginPage }">
       <RouterView />
     </div>
   </div>
@@ -122,5 +124,13 @@ function logout() {
   padding: 2rem;
   background: #f9f9f9;
   overflow-y: auto;
+}
+.login-content {
+  padding: 0;
+  background: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 </style>
