@@ -7,29 +7,44 @@
       <Column field="atleta" header="Atleta" />
       <Column field="qualidade" header="Qualidade" />
       <Column field="horas" header="Horas Dormidas" />
-      <!-- Adicione mais colunas conforme necessário -->
+      <Column header="Ações">
+        <template #body="slotProps">
+          <Button icon="pi pi-pencil" class="p-button-text p-button-sm" @click="editarSono(slotProps.data)" />
+          <Button icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm" @click="confirmarExclusao(slotProps.data)" />
+        </template>
+      </Column>
     </DataTable>
     <div v-else>Carregando...</div>
     <div v-if="erro" class="erro-msg">{{ erro }}</div>
 
-    <Dialog v-model:visible="showDialog" header="Novo Registro de Sono" :modal="true" :closable="true" :style="{ width: '400px' }">
-      <form @submit.prevent="cadastrarSono">
+    <!-- Modal de Cadastro/Edição -->
+    <Dialog v-model:visible="showDialog" :header="editando ? 'Editar Registro de Sono' : 'Novo Registro de Sono'" :modal="true" :closable="true" :style="{ width: '400px' }">
+      <form @submit.prevent="salvarSono">
         <div class="p-field">
           <label for="atleta">Atleta</label>
-          <input id="atleta" v-model="novoSono.atleta" type="text" class="p-inputtext p-component" required />
+          <input id="atleta" v-model="sonoForm.atleta" type="text" class="p-inputtext p-component" required />
         </div>
         <div class="p-field">
           <label for="qualidade">Qualidade</label>
-          <input id="qualidade" v-model="novoSono.qualidade" type="text" class="p-inputtext p-component" required />
+          <select id="qualidade" v-model="sonoForm.qualidade" class="p-inputtext p-component" required>
+            <option value="">Selecione...</option>
+            <option value="Excelente">Excelente</option>
+            <option value="Boa">Boa</option>
+            <option value="Regular">Regular</option>
+            <option value="Ruim">Ruim</option>
+          </select>
         </div>
         <div class="p-field">
           <label for="horas">Horas Dormidas</label>
-          <input id="horas" v-model="novoSono.horas" type="number" class="p-inputtext p-component" required />
+          <input id="horas" v-model="sonoForm.horas" type="number" min="0" max="24" step="0.5" class="p-inputtext p-component" required />
         </div>
-        <Button label="Salvar" type="submit" class="p-mt-2 p-button-success" />
+        <Button :label="editando ? 'Atualizar' : 'Salvar'" type="submit" class="p-mt-2 p-button-success" />
       </form>
       <div v-if="erroCadastro" class="erro-msg">{{ erroCadastro }}</div>
     </Dialog>
+
+    <!-- Confirmação de Exclusão -->
+    <ConfirmDialog />
   </div>
 </template>
 
@@ -39,14 +54,18 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 import api from '../services/api';
 
 const sono = ref<any[]>([]);
 const loading = ref(true);
 const erro = ref('');
 const showDialog = ref(false);
-const novoSono = ref({ atleta: '', qualidade: '', horas: '' });
+const editando = ref(false);
+const sonoForm = ref({ id: null, atleta: '', qualidade: '', horas: '' });
 const erroCadastro = ref('');
+const confirm = useConfirm();
 
 async function carregarSono() {
   loading.value = true;
@@ -62,15 +81,44 @@ async function carregarSono() {
 
 onMounted(carregarSono);
 
-async function cadastrarSono() {
-  erroCadastro.value = '';
+function editarSono(registro: any) {
+  editando.value = true;
+  sonoForm.value = { ...registro };
+  showDialog.value = true;
+}
+
+function confirmarExclusao(registro: any) {
+  confirm.require({
+    message: `Deseja realmente excluir o registro de sono do atleta "${registro.atleta}"?`,
+    header: 'Confirmar Exclusão',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => excluirSono(registro.id),
+  });
+}
+
+async function excluirSono(id: number) {
   try {
-    await api.post('/sono', novoSono.value);
-    showDialog.value = false;
-    novoSono.value = { atleta: '', qualidade: '', horas: '' };
+    await api.delete(`/sono/${id}`);
     await carregarSono();
   } catch (e: any) {
-    erroCadastro.value = 'Erro ao cadastrar registro de sono';
+    erro.value = 'Erro ao excluir registro de sono';
+  }
+}
+
+async function salvarSono() {
+  erroCadastro.value = '';
+  try {
+    if (editando.value) {
+      await api.put(`/sono/${sonoForm.value.id}`, sonoForm.value);
+    } else {
+      await api.post('/sono', sonoForm.value);
+    }
+    showDialog.value = false;
+    sonoForm.value = { id: null, atleta: '', qualidade: '', horas: '' };
+    editando.value = false;
+    await carregarSono();
+  } catch (e: any) {
+    erroCadastro.value = editando.value ? 'Erro ao atualizar registro de sono' : 'Erro ao cadastrar registro de sono';
   }
 }
 </script>

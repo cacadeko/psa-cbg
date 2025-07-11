@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const api = axios.create({
   baseURL: 'http://localhost:8080', // ajuste conforme necessário
@@ -12,5 +13,18 @@ api.interceptors.request.use(config => {
   }
   return config;
 });
+
+// Interceptor para tratar erros de autenticação
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      // Token expirado ou inválido
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default api; 

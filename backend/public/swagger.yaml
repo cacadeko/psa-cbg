@@ -1,0 +1,1391 @@
+openapi: 3.0.0
+info:
+  title: PSA-CBG API
+  description: API para gerenciamento de dados esportivos do PSA-CBG
+  version: 1.0.0
+  contact:
+    name: Athletic Map
+    url: https://athleticmap.com.br
+
+servers:
+  - url: http://localhost:8080
+    description: Servidor de desenvolvimento
+  - url: https://api.psa-cbg.com
+    description: Servidor de produção
+
+paths:
+  /api/atletas:
+    get:
+      summary: Listar atletas
+      description: Retorna a lista de todos os atletas
+      tags:
+        - Atletas
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de atletas retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Atleta'
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+    
+    post:
+      summary: Cadastrar atleta
+      description: Cria um novo atleta
+      tags:
+        - Atletas
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtletaInput'
+      responses:
+        '201':
+          description: Atleta criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do atleta criado
+        '400':
+          description: Dados inválidos
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+
+  /api/atletas/{id}:
+    get:
+      summary: Buscar atleta por ID
+      description: Retorna um atleta específico
+      tags:
+        - Atletas
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do atleta
+      responses:
+        '200':
+          description: Atleta encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Atleta'
+        '404':
+          description: Atleta não encontrado
+        '401':
+          description: Não autorizado
+    
+    put:
+      summary: Atualizar atleta
+      description: Atualiza os dados de um atleta
+      tags:
+        - Atletas
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do atleta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtletaInput'
+      responses:
+        '200':
+          description: Atleta atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Atleta não encontrado
+        '401':
+          description: Não autorizado
+    
+    delete:
+      summary: Excluir atleta
+      description: Remove um atleta do sistema
+      tags:
+        - Atletas
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do atleta
+      responses:
+        '200':
+          description: Atleta excluído com sucesso
+        '404':
+          description: Atleta não encontrado
+        '401':
+          description: Não autorizado
+
+  /api/usuarios:
+    get:
+      summary: Listar usuários
+      description: Retorna a lista de todos os usuários
+      tags:
+        - Usuários
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuários retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Não autorizado
+    
+    post:
+      summary: Cadastrar usuário
+      description: Cria um novo usuário
+      tags:
+        - Usuários
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+        '400':
+          description: Dados inválidos
+        '401':
+          description: Não autorizado
+
+  /api/usuarios/{id}:
+    get:
+      summary: Buscar usuário por ID
+      tags:
+        - Usuários
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuário não encontrado
+    
+    put:
+      summary: Atualizar usuário
+      tags:
+        - Usuários
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '200':
+          description: Usuário atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Usuário não encontrado
+    
+    delete:
+      summary: Excluir usuário
+      tags:
+        - Usuários
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuário excluído com sucesso
+        '404':
+          description: Usuário não encontrado
+
+  /api/pse:
+    get:
+      summary: Listar registros de PSE
+      description: Retorna a lista de todos os registros de PSE
+      tags:
+        - PSE
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de PSE retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PSE'
+        '401':
+          description: Não autorizado
+    
+    post:
+      summary: Cadastrar registro de PSE
+      description: Cria um novo registro de PSE
+      tags:
+        - PSE
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PSEInput'
+      responses:
+        '201':
+          description: PSE criado com sucesso
+        '400':
+          description: Dados inválidos
+        '401':
+          description: Não autorizado
+
+  /api/pse/{id}:
+    get:
+      summary: Buscar PSE por ID
+      tags:
+        - PSE
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PSE encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PSE'
+        '404':
+          description: PSE não encontrado
+    
+    put:
+      summary: Atualizar PSE
+      tags:
+        - PSE
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PSEInput'
+      responses:
+        '200':
+          description: PSE atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: PSE não encontrado
+    
+    delete:
+      summary: Excluir PSE
+      tags:
+        - PSE
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PSE excluído com sucesso
+        '404':
+          description: PSE não encontrado
+
+  /api/sono:
+    get:
+      summary: Listar registros de sono
+      description: Retorna a lista de todos os registros de sono
+      tags:
+        - Sono
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de sono retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sono'
+        '401':
+          description: Não autorizado
+    
+    post:
+      summary: Cadastrar registro de sono
+      description: Cria um novo registro de sono
+      tags:
+        - Sono
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SonoInput'
+      responses:
+        '201':
+          description: Registro de sono criado com sucesso
+        '400':
+          description: Dados inválidos
+        '401':
+          description: Não autorizado
+
+  /api/sono/{id}:
+    get:
+      summary: Buscar registro de sono por ID
+      tags:
+        - Sono
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Registro de sono encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sono'
+        '404':
+          description: Registro de sono não encontrado
+    
+    put:
+      summary: Atualizar registro de sono
+      tags:
+        - Sono
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SonoInput'
+      responses:
+        '200':
+          description: Registro de sono atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Registro de sono não encontrado
+    
+    delete:
+      summary: Excluir registro de sono
+      tags:
+        - Sono
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Registro de sono excluído com sucesso
+        '404':
+          description: Registro de sono não encontrado
+
+  /api/login:
+    post:
+      summary: Autenticar usuário
+      description: Realiza login do usuário e retorna token de acesso
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - usuario
+                - senha
+              properties:
+                usuario:
+                  type: string
+                  description: Nome de usuário ou email
+                senha:
+                  type: string
+                  description: Senha do usuário
+      responses:
+        '200':
+          description: Login realizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Token JWT de acesso
+                  usuario:
+                    $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Credenciais inválidas
+        '400':
+          description: Dados inválidos
+
+  /api/logout:
+    post:
+      summary: Fazer logout
+      description: Invalida o token de acesso do usuário
+      tags:
+        - Autenticação
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout realizado com sucesso
+        '401':
+          description: Não autorizado
+
+  /api/pfe:
+    get:
+      summary: Listar registros de PFE
+      description: Retorna a lista de todos os registros de PFE (Percepção de Fadiga Específica)
+      tags:
+        - PFE
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de PFE retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PFE'
+        '401':
+          description: Não autorizado
+    
+    post:
+      summary: Cadastrar registro de PFE
+      description: Cria um novo registro de PFE
+      tags:
+        - PFE
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PFEInput'
+      responses:
+        '201':
+          description: PFE criado com sucesso
+        '400':
+          description: Dados inválidos
+        '401':
+          description: Não autorizado
+
+  /api/pfe/{id}:
+    get:
+      summary: Buscar PFE por ID
+      tags:
+        - PFE
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PFE encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PFE'
+        '404':
+          description: PFE não encontrado
+    
+    put:
+      summary: Atualizar PFE
+      tags:
+        - PFE
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PFEInput'
+      responses:
+        '200':
+          description: PFE atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: PFE não encontrado
+    
+    delete:
+      summary: Excluir PFE
+      tags:
+        - PFE
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PFE excluído com sucesso
+        '404':
+          description: PFE não encontrado
+
+  /api/jogos:
+    get:
+      summary: Listar jogos
+      description: Retorna a lista de todos os jogos
+      tags:
+        - Jogos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de jogos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Jogo'
+        '401':
+          description: Não autorizado
+    
+    post:
+      summary: Cadastrar jogo
+      description: Cria um novo jogo
+      tags:
+        - Jogos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JogoInput'
+      responses:
+        '201':
+          description: Jogo criado com sucesso
+        '400':
+          description: Dados inválidos
+        '401':
+          description: Não autorizado
+
+  /api/jogos/{id}:
+    get:
+      summary: Buscar jogo por ID
+      tags:
+        - Jogos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Jogo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Jogo'
+        '404':
+          description: Jogo não encontrado
+    
+    put:
+      summary: Atualizar jogo
+      tags:
+        - Jogos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JogoInput'
+      responses:
+        '200':
+          description: Jogo atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Jogo não encontrado
+    
+    delete:
+      summary: Excluir jogo
+      tags:
+        - Jogos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Jogo excluído com sucesso
+        '404':
+          description: Jogo não encontrado
+
+  /api/minutagem:
+    get:
+      summary: Listar registros de minutagem
+      description: Retorna a lista de todos os registros de minutagem
+      tags:
+        - Minutagem
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de minutagem retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Minutagem'
+        '401':
+          description: Não autorizado
+    
+    post:
+      summary: Cadastrar registro de minutagem
+      description: Cria um novo registro de minutagem
+      tags:
+        - Minutagem
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MinutagemInput'
+      responses:
+        '201':
+          description: Minutagem criada com sucesso
+        '400':
+          description: Dados inválidos
+        '401':
+          description: Não autorizado
+
+  /api/minutagem/{id}:
+    get:
+      summary: Buscar minutagem por ID
+      tags:
+        - Minutagem
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Minutagem encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Minutagem'
+        '404':
+          description: Minutagem não encontrada
+    
+    put:
+      summary: Atualizar minutagem
+      tags:
+        - Minutagem
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MinutagemInput'
+      responses:
+        '200':
+          description: Minutagem atualizada com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Minutagem não encontrada
+    
+    delete:
+      summary: Excluir minutagem
+      tags:
+        - Minutagem
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Minutagem excluída com sucesso
+        '404':
+          description: Minutagem não encontrada
+
+  /api/treinadores:
+    get:
+      summary: Listar treinadores
+      description: Retorna a lista de todos os treinadores
+      tags:
+        - Treinadores
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de treinadores retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Treinador'
+        '401':
+          description: Não autorizado
+    
+    post:
+      summary: Cadastrar treinador
+      description: Cria um novo treinador
+      tags:
+        - Treinadores
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TreinadorInput'
+      responses:
+        '201':
+          description: Treinador criado com sucesso
+        '400':
+          description: Dados inválidos
+        '401':
+          description: Não autorizado
+
+  /api/treinadores/{id}:
+    get:
+      summary: Buscar treinador por ID
+      tags:
+        - Treinadores
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Treinador encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treinador'
+        '404':
+          description: Treinador não encontrado
+    
+    put:
+      summary: Atualizar treinador
+      tags:
+        - Treinadores
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TreinadorInput'
+      responses:
+        '200':
+          description: Treinador atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Treinador não encontrado
+    
+    delete:
+      summary: Excluir treinador
+      tags:
+        - Treinadores
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Treinador excluído com sucesso
+        '404':
+          description: Treinador não encontrado
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Atleta:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do atleta
+        nome:
+          type: string
+          description: Nome completo do atleta
+        idade:
+          type: integer
+          description: Idade do atleta
+        created_at:
+          type: string
+          format: date-time
+          description: Data de criação do registro
+        updated_at:
+          type: string
+          format: date-time
+          description: Data da última atualização
+      required:
+        - id
+        - nome
+        - idade
+
+    AtletaInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome completo do atleta
+        idade:
+          type: integer
+          description: Idade do atleta
+      required:
+        - nome
+        - idade
+
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do usuário
+        nome:
+          type: string
+          description: Nome completo do usuário
+        email:
+          type: string
+          format: email
+          description: Email do usuário
+        nivel:
+          type: string
+          enum: [admin, treinador, atleta]
+          description: Nível de acesso do usuário
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - nome
+        - email
+        - nivel
+
+    UsuarioInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome completo do usuário
+        email:
+          type: string
+          format: email
+          description: Email do usuário
+        senha:
+          type: string
+          description: Senha do usuário
+        nivel:
+          type: string
+          enum: [admin, treinador, atleta]
+          description: Nível de acesso do usuário
+      required:
+        - nome
+        - email
+        - senha
+        - nivel
+
+    PSE:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do registro
+        atleta_id:
+          type: integer
+          description: ID do atleta
+        atleta:
+          type: string
+          description: Nome do atleta
+        valor:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: Valor da percepção subjetiva de esforço (1-10)
+        data:
+          type: string
+          format: date
+          description: Data do registro
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - atleta_id
+        - valor
+        - data
+
+    PSEInput:
+      type: object
+      properties:
+        atleta:
+          type: string
+          description: Nome do atleta
+        valor:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: Valor da percepção subjetiva de esforço (1-10)
+        data:
+          type: string
+          format: date
+          description: Data do registro
+      required:
+        - atleta
+        - valor
+        - data
+
+    Sono:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do registro
+        atleta_id:
+          type: integer
+          description: ID do atleta
+        atleta:
+          type: string
+          description: Nome do atleta
+        qualidade:
+          type: string
+          enum: [Excelente, Boa, Regular, Ruim]
+          description: Qualidade do sono
+        horas:
+          type: number
+          minimum: 0
+          maximum: 24
+          description: Horas dormidas
+        data:
+          type: string
+          format: date
+          description: Data do registro
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - atleta_id
+        - qualidade
+        - horas
+
+    SonoInput:
+      type: object
+      properties:
+        atleta:
+          type: string
+          description: Nome do atleta
+        qualidade:
+          type: string
+          enum: [Excelente, Boa, Regular, Ruim]
+          description: Qualidade do sono
+        horas:
+          type: number
+          minimum: 0
+          maximum: 24
+          description: Horas dormidas
+      required:
+        - atleta
+        - qualidade
+        - horas
+
+    PFE:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do registro
+        atleta_id:
+          type: integer
+          description: ID do atleta
+        atleta:
+          type: string
+          description: Nome do atleta
+        valor:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: Valor da percepção de fadiga específica (1-10)
+        data:
+          type: string
+          format: date
+          description: Data do registro
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - atleta_id
+        - valor
+        - data
+
+    PFEInput:
+      type: object
+      properties:
+        atleta:
+          type: string
+          description: Nome do atleta
+        valor:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: Valor da percepção de fadiga específica (1-10)
+        data:
+          type: string
+          format: date
+          description: Data do registro
+      required:
+        - atleta
+        - valor
+        - data
+
+    Jogo:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do jogo
+        nome:
+          type: string
+          description: Nome do jogo
+        data:
+          type: string
+          format: date
+          description: Data do jogo
+        local:
+          type: string
+          description: Local do jogo
+        adversario:
+          type: string
+          description: Nome do adversário
+        resultado:
+          type: string
+          description: Resultado do jogo
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - nome
+        - data
+
+    JogoInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome do jogo
+        data:
+          type: string
+          format: date
+          description: Data do jogo
+        local:
+          type: string
+          description: Local do jogo
+        adversario:
+          type: string
+          description: Nome do adversário
+        resultado:
+          type: string
+          description: Resultado do jogo
+      required:
+        - nome
+        - data
+
+    Minutagem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do registro
+        atleta_id:
+          type: integer
+          description: ID do atleta
+        atleta:
+          type: string
+          description: Nome do atleta
+        jogo_id:
+          type: integer
+          description: ID do jogo
+        minutos:
+          type: integer
+          description: Minutos jogados
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - atleta_id
+        - jogo_id
+        - minutos
+
+    MinutagemInput:
+      type: object
+      properties:
+        atleta:
+          type: string
+          description: Nome do atleta
+        jogo:
+          type: string
+          description: Nome do jogo
+        minutos:
+          type: integer
+          description: Minutos jogados
+      required:
+        - atleta
+        - jogo
+        - minutos
+
+    Treinador:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do treinador
+        nome:
+          type: string
+          description: Nome completo do treinador
+        email:
+          type: string
+          format: email
+          description: Email do treinador
+        telefone:
+          type: string
+          description: Telefone do treinador
+        especialidade:
+          type: string
+          description: Especialidade do treinador
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - nome
+        - email
+
+    TreinadorInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome completo do treinador
+        email:
+          type: string
+          format: email
+          description: Email do treinador
+        telefone:
+          type: string
+          description: Telefone do treinador
+        especialidade:
+          type: string
+          description: Especialidade do treinador
+      required:
+        - nome
+        - email
+
+tags:
+  - name: Atletas
+    description: Operações relacionadas aos atletas
+  - name: Usuários
+    description: Operações relacionadas aos usuários do sistema
+  - name: PSE
+    description: Operações relacionadas à Percepção Subjetiva de Esforço
+  - name: PFE
+    description: Operações relacionadas à Percepção de Fadiga Específica
+  - name: Sono
+    description: Operações relacionadas à qualidade do sono
+  - name: Jogos
+    description: Operações relacionadas aos jogos
+  - name: Minutagem
+    description: Operações relacionadas à minutagem dos atletas
+  - name: Treinadores
+    description: Operações relacionadas aos treinadores
+  - name: Autenticação
+    description: Operações de login e logout 
