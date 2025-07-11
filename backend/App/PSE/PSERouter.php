@@ -1,0 +1,36 @@
+<?php
+namespace App\PSE;
+
+class PSERouter
+{
+    public static function routes($app, PSEController $controller)
+    {
+        $app->post('/pse', function($request, $response) use ($controller) {
+            $data = $request->getParsedBody();
+            $registro = $controller->criar($data);
+            return $response->withJson($registro);
+        });
+
+        $app->get('/pse', function($request, $response) use ($controller) {
+            $registros = $controller->listar();
+            return $response->withJson($registros);
+        });
+
+        $app->get('/pse/{id}', function($request, $response, $args) use ($controller) {
+            $registro = $controller->obter((int)$args['id']);
+            return $response->withJson($registro);
+        });
+
+        $app->put('/pse/{id}', function($request, $response, $args) use ($controller) {
+            $data = $request->getParsedBody();
+            $data['id'] = (int)$args['id'];
+            $registro = $controller->atualizar($data);
+            return $response->withJson($registro);
+        });
+
+        $app->delete('/pse/{id}', function($request, $response, $args) use ($controller) {
+            $controller->remover((int)$args['id']);
+            return $response->withStatus(204);
+        });
+    }
+} 
