@@ -5,6 +5,7 @@ import { useRoute, useRouter, RouterView } from 'vue-router';
 import Sidebar from 'primevue/sidebar';
 import Button from 'primevue/button';
 import Avatar from 'primevue/avatar';
+import Toast from 'primevue/toast';
 
 const user = ref({ nome: 'Usuário Exemplo' });
 const sidebarVisible = ref(false);
@@ -15,8 +16,18 @@ const menuItems = [
   { label: 'Dashboard', icon: 'pi pi-chart-bar', route: '/' },
   { label: 'Atletas', icon: 'pi pi-users', route: '/atletas' },
   { label: 'Usuários', icon: 'pi pi-user', route: '/usuarios' },
+  { label: 'Treinadores', icon: 'pi pi-user-plus', route: '/treinadores' },
+  { label: 'Jogos', icon: 'pi pi-calendar', route: '/jogos' },
+  { label: 'Minutagem', icon: 'pi pi-clock', route: '/minutagem' },
   { label: 'Sono', icon: 'pi pi-moon', route: '/sono' },
   { label: 'PSE', icon: 'pi pi-heart', route: '/pse' },
+  { label: 'PFE', icon: 'pi pi-exclamation-triangle', route: '/pfe' },
+  { label: 'Relatórios', icon: 'pi pi-chart-line', route: '/relatorios' },
+  { label: 'Percepção de Fadiga', icon: 'pi pi-chart-pie', route: '/percepcao-fadiga' },
+  { label: 'Carga Semanal', icon: 'pi pi-chart-bar', route: '/carga-semanal' },
+  { label: 'Relatório de Presença', icon: 'pi pi-calendar-times', route: '/relatorio-presenca' },
+  { label: 'Percepção por Grupo', icon: 'pi pi-chart-bar', route: '/percepcao-grupo' },
+  { label: 'Diferença entre Semanas', icon: 'pi pi-chart-line', route: '/diferenca-semanas' },
 ];
 
 function goTo(routePath: string) {
@@ -63,6 +74,9 @@ const isLoginPage = computed(() => route.path === '/login');
     <div class="main-content" :class="{ 'login-content': isLoginPage }">
       <RouterView />
     </div>
+    
+    <!-- Toast para notificações -->
+    <Toast />
   </div>
 </template>
 

@@ -32,6 +32,56 @@ const routes: RouteRecordRaw[] = [
     name: 'PSE',
     component: () => import('./views/PSEView.vue'),
   },
+  {
+    path: '/relatorios',
+    name: 'Relatórios',
+    component: () => import('./views/RelatoriosView.vue'),
+  },
+  {
+    path: '/treinadores',
+    name: 'Treinadores',
+    component: () => import('./views/TreinadoresView.vue'),
+  },
+  {
+    path: '/jogos',
+    name: 'Jogos',
+    component: () => import('./views/JogosView.vue'),
+  },
+  {
+    path: '/minutagem',
+    name: 'Minutagem',
+    component: () => import('./views/MinutagemView.vue'),
+  },
+  {
+    path: '/pfe',
+    name: 'PFE',
+    component: () => import('./views/PFEView.vue'),
+  },
+  {
+    path: '/percepcao-fadiga',
+    name: 'Percepção de Fadiga',
+    component: () => import('./views/PercepcaoFadigaView.vue'),
+  },
+  {
+    path: '/carga-semanal',
+    name: 'Carga Semanal',
+    component: () => import('./views/CargaSemanalView.vue'),
+  },
+  {
+    path: '/relatorio-presenca',
+    name: 'Relatório de Presença',
+    component: () => import('./views/RelatorioPresencaView.vue'),
+  },
+  {
+    path: '/percepcao-grupo',
+    name: 'Percepção por Grupo',
+    component: () => import('./views/PercepcaoGrupoView.vue'),
+  },
+  {
+    path: '/diferenca-semanas',
+    name: 'Diferença entre Semanas',
+    component: () => import('./views/DiferencaSemanasView.vue'),
+  },
 ];
 
 const router = createRouter({
