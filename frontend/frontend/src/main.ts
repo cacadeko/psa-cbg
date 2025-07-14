@@ -4,6 +4,13 @@ import App from './App.vue'
 
 // PrimeVue
 import PrimeVue from 'primevue/config';
+import ConfirmationService from 'primevue/confirmationservice';
+import 'primevue/resources/themes/saga-blue/theme.css';
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';
+
+// PrimeVue Components
 import Button from 'primevue/button';
 import Sidebar from 'primevue/sidebar';
 import Avatar from 'primevue/avatar';
@@ -22,18 +29,17 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
-import 'primevue/resources/themes/saga-blue/theme.css';
-import 'primevue/resources/primevue.min.css';
-import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.css';
 
-// Vue Router (será criado em seguida)
+// Vue Router
 import router from './router';
 
 const app = createApp(App);
 app.use(PrimeVue);
 app.use(ToastService);
+app.use(ConfirmationService);
 app.use(router);
+
+// Register components
 app.component('Button', Button);
 app.component('Sidebar', Sidebar);
 app.component('Avatar', Avatar);
@@ -49,4 +55,5 @@ app.component('TabPanel', TabPanel);
 app.component('Dropdown', Dropdown);
 app.component('Calendar', Calendar);
 app.component('Toast', Toast);
+
 app.mount('#app');

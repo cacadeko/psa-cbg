@@ -1,19 +1,17 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <img src="./assets/logo-atm.png" alt="Athletic Map" height="50" style="margin-bottom: 1rem;" />
-      <img src="./assets/logo-cbg.svg" alt="CBG" height="50" style="margin-bottom: 1rem; margin-left: 1rem;" />
-      <h2>Login</h2>
+      <h2>Login PSA-CBG</h2>
       <form @submit.prevent="login">
-        <div class="p-field">
+        <div class="field">
           <label for="usuario">Usuário</label>
-          <input id="usuario" v-model="usuario" type="text" class="p-inputtext p-component" required />
+          <input id="usuario" v-model="usuario" type="text" required />
         </div>
-        <div class="p-field">
+        <div class="field">
           <label for="senha">Senha</label>
-          <input id="senha" v-model="senha" type="password" class="p-inputtext p-component" required />
+          <input id="senha" v-model="senha" type="password" required />
         </div>
-        <Button label="Entrar" type="submit" class="p-mt-2 p-button-primary" />
+        <button type="submit">Entrar</button>
       </form>
       <div v-if="erro" class="erro-msg">{{ erro }}</div>
     </div>
@@ -23,26 +21,19 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Button from 'primevue/button';
-import api from '../services/api';
 
 const usuario = ref('');
 const senha = ref('');
 const erro = ref('');
 const router = useRouter();
 
-async function login() {
+function login() {
   erro.value = '';
-  try {
-    const { data } = await api.post('/login', {
-      usuario: usuario.value,
-      senha: senha.value,
-    });
-    // Supondo que o backend retorna um token JWT
-    localStorage.setItem('token', data.token);
-    router.push('/');
-  } catch (e: any) {
-    erro.value = e.response?.data?.message || 'Usuário ou senha inválidos';
+  if (usuario.value === 'admin' && senha.value === 'admin') {
+    localStorage.setItem('token', 'fake-token');
+    router.push('/dashboard');
+  } else {
+    erro.value = 'Usuário ou senha inválidos';
   }
 }
 </script>
@@ -59,17 +50,46 @@ async function login() {
   background: #fff;
   padding: 2rem 2.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 16px #0001;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 300px;
 }
-.p-field {
+.field {
   margin-bottom: 1rem;
   width: 100%;
+}
+.field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+.field input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+button {
+  background: #003366;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 100%;
+}
+button:hover {
+  background: #004488;
 }
 .erro-msg {
   color: #d32f2f;
   margin-top: 1rem;
+}
+h2 {
+  color: #003366;
+  margin-bottom: 1.5rem;
 }
 </style> 

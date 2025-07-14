@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute, useRouter, RouterView } from 'vue-router';
-// Importe componentes do PrimeVue
+// PrimeVue
 import Sidebar from 'primevue/sidebar';
 import Button from 'primevue/button';
 import Avatar from 'primevue/avatar';

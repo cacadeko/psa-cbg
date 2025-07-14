@@ -13,18 +13,18 @@ class AtletaModel {
         string $email,
         ?string $telefone,
         ?string $categoria,
-        ?string $acesso,
         ?string $senha,
+        ?string $acesso,
         int    $treinador_id,
         ?int   $usuario_id = null
     ): int|false {
         $pdo = Database::getConnection();
         $sql = "INSERT INTO atletas
                 (nome, data_nascimento, posicao, email, telefone,
-                 categoria, acesso, senha, treinador_id, usuario_id)
+                 categoria, senha, acesso, created_at, usuario_id, treinador_id)
                 VALUES
                 (:nome, :data_nascimento, :posicao, :email, :telefone,
-                 :categoria, :acesso, :senha, :treinador_id, :usuario_id)";
+                 :categoria, :senha, :acesso, CURRENT_TIMESTAMP, :usuario_id, :treinador_id)";
         $stmt = $pdo->prepare($sql);
         $ok = $stmt->execute([
             ':nome'          => $nome,
@@ -33,10 +33,10 @@ class AtletaModel {
             ':email'         => $email,
             ':telefone'      => $telefone,
             ':categoria'     => $categoria,
-            ':acesso'        => $acesso,
             ':senha'         => $senha,
-            ':treinador_id'  => $treinador_id,
-            ':usuario_id'    => $usuario_id
+            ':acesso'        => $acesso,
+            ':usuario_id'    => $usuario_id,
+            ':treinador_id'  => $treinador_id
         ]);
         return $ok ? (int)$pdo->lastInsertId() : false;
     }

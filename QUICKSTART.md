@@ -11,11 +11,7 @@ cd backend
 composer install
 
 # Configurar banco (crie um arquivo .env)
-echo "DB_HOST=localhost
-DB_DATABASE=psa_cbg
-DB_USERNAME=root
-DB_PASSWORD=
-JWT_SECRET=sua_chave_secreta_123" > .env
+echo "DB_HOST=localhost DB_DATABASE=psa_cbg DB_USERNAME=root DB_PASSWORD=JWT_SECRET=Influx@3099" > .env
 
 # Executar servidor
 cd public

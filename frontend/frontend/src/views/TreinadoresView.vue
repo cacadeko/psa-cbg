@@ -4,23 +4,19 @@
       <h2>👨‍💼 Treinadores</h2>
       <Button label="Novo Treinador" icon="pi pi-plus" @click="showCreateDialog = true" />
     </div>
-
-    <!-- Filtros -->
     <div class="filters-container">
       <div class="filters">
         <div>
           <label for="search">Buscar</label>
-          <InputText v-model="filters.search" placeholder="Nome, email ou especialidade..." />
+          <InputText v-model="filters.global.value" placeholder="Nome, email ou especialidade..." />
         </div>
         <div>
           <label for="especialidade">Especialidade</label>
-          <Dropdown v-model="filters.especialidade" :options="especialidades" optionLabel="label" optionValue="value" placeholder="Todas" showClear />
+          <Dropdown v-model="filters.especialidade.value" :options="especialidades" optionLabel="label" optionValue="value" placeholder="Todas" showClear />
         </div>
         <Button label="Limpar" icon="pi pi-refresh" @click="clearFilters" />
       </div>
     </div>
-
-    <!-- Tabela -->
     <DataTable 
       :value="treinadores" 
       :loading="loading"
@@ -35,9 +31,9 @@
     >
       <Column field="nome" header="Nome" sortable>
         <template #body="{ data }">
-          <div class="atleta-info">
-            <div class="atleta-name">{{ data.nome }}</div>
-            <div class="atleta-email">{{ data.email }}</div>
+          <div class="treinador-info">
+            <div class="treinador-name">{{ data.nome }}</div>
+            <div class="treinador-email">{{ data.email }}</div>
           </div>
         </template>
       </Column>
@@ -63,8 +59,10 @@
         </template>
       </Column>
     </DataTable>
-
-    <!-- Dialog Criar/Editar -->
+    <div v-if="!loading && treinadores.length === 0 && !erro" class="no-data">
+      Nenhum treinador cadastrado.
+    </div>
+    <div v-if="erro" class="erro-msg">{{ erro }}</div>
     <Dialog v-model:visible="showCreateDialog" :header="editingTreinador ? 'Editar Treinador' : 'Novo Treinador'" modal class="p-fluid">
       <div class="form-grid">
         <div class="field">
@@ -72,41 +70,33 @@
           <InputText id="nome" v-model="form.nome" required autofocus :class="{ 'p-invalid': submitted && !form.nome }" />
           <small class="p-error" v-if="submitted && !form.nome">Nome é obrigatório.</small>
         </div>
-        
         <div class="field">
           <label for="email">E-mail *</label>
           <InputText id="email" v-model="form.email" type="email" required :class="{ 'p-invalid': submitted && !form.email }" />
           <small class="p-error" v-if="submitted && !form.email">E-mail é obrigatório.</small>
         </div>
-        
         <div class="field">
           <label for="telefone">Telefone</label>
-          <InputText id="telefone" v-model="form.telefone" />
+          <InputText id="telefone" v-model="form.telefone" placeholder="(99) 99999-9999" />
         </div>
-        
         <div class="field">
           <label for="especialidade">Especialidade</label>
-          <InputText id="especialidade" v-model="form.especialidade" />
+          <Dropdown id="especialidade" v-model="form.especialidade" :options="especialidades" optionLabel="label" optionValue="value" placeholder="Selecione uma especialidade" />
         </div>
-        
         <div class="field">
           <label for="data_contratacao">Data de Contratação</label>
-          <Calendar id="data_contratacao" v-model="form.data_contratacao" dateFormat="yy-mm-dd" />
+          <Calendar id="data_contratacao" v-model="form.data_contratacao as Date | null" dateFormat="yy-mm-dd" />
         </div>
-        
         <div class="field">
           <label for="observacoes">Observações</label>
           <Textarea id="observacoes" v-model="form.observacoes" rows="3" />
         </div>
       </div>
-      
       <template #footer>
         <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog" />
-        <Button label="Salvar" icon="pi pi-check" class="p-button-text" @click="saveTreinador" />
+        <Button label="Salvar" icon="pi pi-check" class="p-button-text" @click="saveTreinador" :loading="saving" />
       </template>
     </Dialog>
-
-    <!-- Confirmação de Exclusão -->
     <ConfirmDialog />
   </div>
 </template>
@@ -124,26 +114,41 @@ import Dropdown from 'primevue/dropdown';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
+import { FilterMatchMode } from 'primevue/api';
 import api from '../services/api';
+
+interface Treinador {
+  id?: number;
+  nome: string;
+  email: string;
+  telefone?: string;
+  especialidade?: string;
+  data_contratacao?: string | Date | null;
+  observacoes?: string;
+}
 
 const confirm = useConfirm();
 const toast = useToast();
 
 // Estado
-const treinadores = ref([]);
+const treinadores = ref<Treinador[]>([]);
 const loading = ref(false);
+const saving = ref(false);
 const showCreateDialog = ref(false);
 const submitted = ref(false);
-const editingTreinador = ref(null);
+const editingTreinador = ref<Treinador | null>(null);
+const erro = ref('');
 
-// Filtros
-const filters = ref({
-  search: '',
-  especialidade: null
+// Filtros (formato PrimeVue)
+const filters = ref<any>({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  nome: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  email: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  especialidade: { value: null, matchMode: FilterMatchMode.EQUALS }
 });
 
 // Formulário
-const form = ref({
+const form = ref<Treinador>({
   nome: '',
   email: '',
   telefone: '',
@@ -159,17 +164,21 @@ const especialidades = ref([
   { label: 'Técnica', value: 'Técnica' },
   { label: 'Psicologia', value: 'Psicologia' },
   { label: 'Nutrição', value: 'Nutrição' },
-  { label: 'Médico', value: 'Médico' }
+  { label: 'Médico', value: 'Médico' },
+  { label: 'Coordenador', value: 'Coordenador' },
+  { label: 'Auxiliar', value: 'Auxiliar' }
 ]);
 
 // Carregar dados
 async function loadTreinadores() {
   loading.value = true;
+  erro.value = '';
   try {
     const response = await api.get('/treinadores');
-    treinadores.value = response.data;
-  } catch (error) {
+    treinadores.value = Array.isArray(response.data) ? response.data : [];
+  } catch (error: any) {
     console.error('Erro ao carregar treinadores:', error);
+    erro.value = 'Erro ao carregar treinadores';
     toast.add({
       severity: 'error',
       summary: 'Erro',
@@ -189,31 +198,33 @@ function formatDate(date: string) {
 // Filtros
 function clearFilters() {
   filters.value = {
-    search: '',
-    especialidade: null
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    nome: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    email: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    especialidade: { value: null, matchMode: FilterMatchMode.EQUALS }
   };
 }
 
 // CRUD
-function editTreinador(treinador: any) {
+function editTreinador(treinador: Treinador) {
   editingTreinador.value = treinador;
   form.value = {
     nome: treinador.nome,
     email: treinador.email,
     telefone: treinador.telefone || '',
     especialidade: treinador.especialidade || '',
-    data_contratacao: treinador.data_contratacao ? new Date(treinador.data_contratacao) : null,
+    data_contratacao: (treinador.data_contratacao && typeof treinador.data_contratacao === 'string') ? new Date(treinador.data_contratacao) : null,
     observacoes: treinador.observacoes || ''
   };
   showCreateDialog.value = true;
 }
 
-function confirmDeleteTreinador(treinador: any) {
+function confirmDeleteTreinador(treinador: Treinador) {
   confirm.require({
     message: `Tem certeza que deseja excluir o treinador "${treinador.nome}"?`,
     header: 'Confirmar Exclusão',
     icon: 'pi pi-exclamation-triangle',
-    accept: () => deleteTreinador(treinador.id)
+    accept: () => deleteTreinador(treinador.id!)
   });
 }
 
@@ -254,18 +265,20 @@ function closeDialog() {
 
 async function saveTreinador() {
   submitted.value = true;
-  
   if (!form.value.nome || !form.value.email) {
     return;
   }
-
+  saving.value = true;
   try {
     const data = {
-      ...form.value,
-      data_contratacao: form.value.data_contratacao ? form.value.data_contratacao.toISOString().split('T')[0] : null
+      nome: form.value.nome.trim(),
+      email: form.value.email.trim(),
+      telefone: form.value.telefone || '',
+      especialidade: form.value.especialidade || '',
+      data_contratacao: form.value.data_contratacao ? (form.value.data_contratacao as Date).toISOString().split('T')[0] : '',
+      observacoes: form.value.observacoes || ''
     };
-
-    if (editingTreinador.value) {
+    if (editingTreinador.value && editingTreinador.value.id) {
       await api.put(`/treinadores/${editingTreinador.value.id}`, data);
       toast.add({
         severity: 'success',
@@ -282,17 +295,19 @@ async function saveTreinador() {
         life: 3000
       });
     }
-    
     closeDialog();
     loadTreinadores();
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao salvar treinador:', error);
+    const errorMessage = error?.response?.data?.error || 'Erro ao salvar treinador';
     toast.add({
       severity: 'error',
       summary: 'Erro',
-      detail: 'Erro ao salvar treinador',
+      detail: errorMessage,
       life: 3000
     });
+  } finally {
+    saving.value = false;
   }
 }
 
@@ -308,7 +323,6 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 1rem;
 }
-
 .filters-container {
   background: white;
   padding: 1rem;
@@ -316,52 +330,43 @@ onMounted(() => {
   margin-bottom: 1rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
 .filters {
   display: flex;
   gap: 1rem;
   align-items: end;
   flex-wrap: wrap;
 }
-
 .filters > div {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-
 .filters label {
   font-size: 0.875rem;
   font-weight: 500;
   color: #374151;
 }
-
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
-
 .field {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-
-.atleta-info {
+.treinador-info {
   display: flex;
   flex-direction: column;
 }
-
-.atleta-name {
+.treinador-name {
   font-weight: 500;
 }
-
-.atleta-email {
+.treinador-email {
   font-size: 0.875rem;
   color: #6b7280;
 }
-
 .especialidade-badge {
   background: #e0e7ff;
   color: #3730a3;
@@ -369,5 +374,16 @@ onMounted(() => {
   border-radius: 4px;
   font-size: 0.875rem;
   font-weight: 500;
+}
+.no-data {
+  text-align: center;
+  color: #888;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+.erro-msg {
+  color: #d32f2f;
+  margin-top: 1rem;
+  text-align: center;
 }
 </style> 

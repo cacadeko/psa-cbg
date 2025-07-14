@@ -1,0 +1,362 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Treinadores - PSA-CBG",
+    "description": "API para gerenciamento de treinadores com criação automática de usuários",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api",
+      "description": "Servidor de desenvolvimento"
+    }
+  ],
+  "paths": {
+    "/treinadores": {
+      "get": {
+        "summary": "Listar treinadores",
+        "description": "Retorna a lista de todos os treinadores cadastrados",
+        "tags": ["Treinadores"],
+        "responses": {
+          "200": {
+            "description": "Lista de treinadores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Treinador"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "nome": "João Silva",
+                    "email": "joao.silva@email.com",
+                    "telefone": "(11) 99999-9999",
+                    "especialidade": "Preparação Física",
+                    "data_contratacao": "2024-01-15",
+                    "observacoes": "Especialista em treinamento de força",
+                    "usuario_id": 5
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar treinador",
+        "description": "Cria um novo treinador e automaticamente um usuário associado",
+        "tags": ["Treinadores"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreinadorCreate"
+              },
+              "example": {
+                "nome": "João Silva",
+                "email": "joao.silva@email.com",
+                "telefone": "(11) 99999-9999",
+                "especialidade": "Preparação Física",
+                "data_contratacao": "2024-01-15",
+                "observacoes": "Especialista em treinamento de força"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Treinador criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID do treinador criado"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Mensagem de sucesso"
+                    }
+                  }
+                },
+                "example": {
+                  "id": 1,
+                  "message": "Treinador criado com sucesso"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Nome e email são obrigatórios"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treinadores/{id}": {
+      "put": {
+        "summary": "Atualizar treinador",
+        "description": "Atualiza os dados de um treinador existente",
+        "tags": ["Treinadores"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do treinador"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreinadorUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Treinador atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "message": "Treinador atualizado com sucesso"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro na atualização",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir treinador",
+        "description": "Remove um treinador do sistema",
+        "tags": ["Treinadores"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do treinador"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Treinador excluído com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "message": "Treinador excluído com sucesso"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro na exclusão",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Treinador": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID único do treinador"
+          },
+          "nome": {
+            "type": "string",
+            "description": "Nome completo do treinador"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email do treinador"
+          },
+          "telefone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Telefone do treinador"
+          },
+          "especialidade": {
+            "type": "string",
+            "nullable": true,
+            "description": "Especialidade do treinador"
+          },
+          "data_contratacao": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Data de contratação"
+          },
+          "observacoes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Observações adicionais"
+          },
+          "usuario_id": {
+            "type": "integer",
+            "nullable": true,
+            "description": "ID do usuário associado"
+          }
+        },
+        "required": ["id", "nome", "email"]
+      },
+      "TreinadorCreate": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "description": "Nome completo do treinador"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email do treinador"
+          },
+          "telefone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Telefone do treinador"
+          },
+          "especialidade": {
+            "type": "string",
+            "nullable": true,
+            "description": "Especialidade do treinador"
+          },
+          "data_contratacao": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Data de contratação"
+          },
+          "observacoes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Observações adicionais"
+          }
+        },
+        "required": ["nome", "email"]
+      },
+      "TreinadorUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID do treinador"
+          },
+          "nome": {
+            "type": "string",
+            "description": "Nome completo do treinador"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email do treinador"
+          },
+          "telefone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Telefone do treinador"
+          },
+          "especialidade": {
+            "type": "string",
+            "nullable": true,
+            "description": "Especialidade do treinador"
+          },
+          "data_contratacao": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Data de contratação"
+          },
+          "observacoes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Observações adicionais"
+          }
+        },
+        "required": ["id", "nome", "email"]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Treinadores",
+      "description": "Operações relacionadas ao gerenciamento de treinadores"
+    }
+  ]
+} 

@@ -7,15 +7,13 @@ $pdo = new \PDO(
     $_ENV['DB_USERNAME'],
     $_ENV['DB_PASSWORD']
 );
+
 $repo = new AtletaRepository($pdo);
-$service = new AtletaService($repo);
+$usuarioRepo = new \App\Usuario\UsuarioRepository($pdo);
+$service = new AtletaService($repo, $usuarioRepo);
 $controller = new AtletaController($service);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SERVER['REQUEST_URI'] === '/api/atletas') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $controller->cadastrar($data);
-    exit;
-}
+// Removido o if que tratava POST para /api/atletas
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
@@ -33,9 +31,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'GET':
         // Exemplo: listar atletas
-        $nivel = $_SESSION['nivel'] ?? 'aluno';
-        $treinadorId = $_SESSION['usuario_id'] ?? 0;
-        $result = $controller->listar($nivel, $treinadorId);
+        $result = $controller->listar();
         echo json_encode($result);
         break;
     case 'DELETE':

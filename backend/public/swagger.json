@@ -1,0 +1,734 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API PSA-CBG Unificada",
+    "description": "API unificada para gerenciamento de atletas, treinadores, usuários, PSE, sono e autenticação.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:8000/api", "description": "API REST" },
+    { "url": "http://localhost:8000", "description": "Raiz do servidor" }
+  ],
+  "paths": {
+    "/treinadores": {
+      "get": {
+        "summary": "Listar treinadores",
+        "description": "Retorna a lista de todos os treinadores cadastrados",
+        "tags": ["Treinadores"],
+        "responses": {
+          "200": {
+            "description": "Lista de treinadores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Treinador" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar treinador",
+        "description": "Cria um novo treinador e automaticamente um usuário associado",
+        "tags": ["Treinadores"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TreinadorCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Treinador criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer", "description": "ID do treinador criado" },
+                    "message": { "type": "string", "description": "Mensagem de sucesso" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "error": { "type": "string" } }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treinadores/{id}": {
+      "put": {
+        "summary": "Atualizar treinador",
+        "description": "Atualiza os dados de um treinador existente",
+        "tags": ["Treinadores"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID do treinador" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TreinadorUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Treinador atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "message": { "type": "string" } } }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro na atualização",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "error": { "type": "string" } } }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir treinador",
+        "description": "Remove um treinador do sistema",
+        "tags": ["Treinadores"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID do treinador" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Treinador excluído com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "message": { "type": "string" } } }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro na exclusão",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "error": { "type": "string" } } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/atletas": {
+      "get": {
+        "summary": "Listar atletas",
+        "description": "Retorna a lista de todos os atletas cadastrados",
+        "tags": ["Atletas"],
+        "responses": {
+          "200": {
+            "description": "Lista de atletas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Atleta" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar atleta",
+        "tags": ["Atletas"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AtletaInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Atleta criado com sucesso" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/api/atletas/{id}": {
+      "get": {
+        "summary": "Buscar atleta por ID",
+        "tags": ["Atletas"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atleta encontrado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Atleta" } } }
+          },
+          "404": { "description": "Atleta não encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar atleta",
+        "tags": ["Atletas"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AtletaInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Atleta atualizado com sucesso" },
+          "400": { "description": "Dados inválidos" },
+          "404": { "description": "Atleta não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Excluir atleta",
+        "tags": ["Atletas"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Atleta excluído com sucesso" },
+          "404": { "description": "Atleta não encontrado" }
+        }
+      }
+    },
+    "/api/usuarios": {
+      "get": {
+        "summary": "Listar usuários",
+        "description": "Retorna a lista de todos os usuários cadastrados",
+        "tags": ["Usuários"],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Usuario" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar usuário",
+        "tags": ["Usuários"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UsuarioInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário criado com sucesso" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/api/usuarios/{id}": {
+      "get": {
+        "summary": "Buscar usuário por ID",
+        "tags": ["Usuários"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Usuario" } } }
+          },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar usuário",
+        "tags": ["Usuários"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UsuarioInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuário atualizado com sucesso" },
+          "400": { "description": "Dados inválidos" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Excluir usuário",
+        "tags": ["Usuários"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Usuário excluído com sucesso" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      }
+    },
+    "/api/pse": {
+      "get": {
+        "summary": "Listar registros de PSE",
+        "tags": ["PSE"],
+        "responses": {
+          "200": {
+            "description": "Lista de PSE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PSE" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar registro de PSE",
+        "tags": ["PSE"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PSEInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "PSE criado com sucesso" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/api/pse/{id}": {
+      "get": {
+        "summary": "Buscar registro de PSE por ID",
+        "tags": ["PSE"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "PSE encontrado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PSE" } } }
+          },
+          "404": { "description": "PSE não encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar registro de PSE",
+        "tags": ["PSE"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PSEInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "PSE atualizado com sucesso" },
+          "400": { "description": "Dados inválidos" },
+          "404": { "description": "PSE não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Excluir registro de PSE",
+        "tags": ["PSE"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "PSE excluído com sucesso" },
+          "404": { "description": "PSE não encontrado" }
+        }
+      }
+    },
+    "/api/sono": {
+      "get": {
+        "summary": "Listar registros de sono",
+        "tags": ["Sono"],
+        "responses": {
+          "200": {
+            "description": "Lista de sono",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Sono" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar registro de sono",
+        "tags": ["Sono"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SonoInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Sono criado com sucesso" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/api/sono/{id}": {
+      "get": {
+        "summary": "Buscar registro de sono por ID",
+        "tags": ["Sono"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sono encontrado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Sono" } } }
+          },
+          "404": { "description": "Sono não encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar registro de sono",
+        "tags": ["Sono"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SonoInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Sono atualizado com sucesso" },
+          "400": { "description": "Dados inválidos" },
+          "404": { "description": "Sono não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Excluir registro de sono",
+        "tags": ["Sono"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Sono excluído com sucesso" },
+          "404": { "description": "Sono não encontrado" }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "summary": "Autenticar usuário",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario", "senha"],
+                "properties": {
+                  "usuario": { "type": "string" },
+                  "senha": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" },
+                    "usuario": { "$ref": "#/components/schemas/Usuario" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Credenciais inválidas" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Treinador": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "ID único do treinador" },
+          "nome": { "type": "string", "description": "Nome completo do treinador" },
+          "email": { "type": "string", "format": "email", "description": "Email do treinador" },
+          "telefone": { "type": "string", "description": "Telefone do treinador" },
+          "especialidade": { "type": "string", "description": "Especialidade do treinador" },
+          "data_contratacao": { "type": "string", "format": "date", "description": "Data de contratação" },
+          "observacoes": { "type": "string", "description": "Observações" },
+          "usuario_id": { "type": "integer", "description": "ID do usuário associado" }
+        },
+        "required": ["id", "nome", "email"]
+      },
+      "TreinadorCreate": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "description": "Nome completo do treinador" },
+          "email": { "type": "string", "format": "email", "description": "Email do treinador" },
+          "telefone": { "type": "string", "description": "Telefone do treinador" },
+          "especialidade": { "type": "string", "description": "Especialidade do treinador" },
+          "data_contratacao": { "type": "string", "format": "date", "description": "Data de contratação" },
+          "observacoes": { "type": "string", "description": "Observações" }
+        },
+        "required": ["nome", "email"]
+      },
+      "TreinadorUpdate": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "description": "Nome completo do treinador" },
+          "email": { "type": "string", "format": "email", "description": "Email do treinador" },
+          "telefone": { "type": "string", "description": "Telefone do treinador" },
+          "especialidade": { "type": "string", "description": "Especialidade do treinador" },
+          "data_contratacao": { "type": "string", "format": "date", "description": "Data de contratação" },
+          "observacoes": { "type": "string", "description": "Observações" }
+        }
+      },
+      "Atleta": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "ID único do atleta" },
+          "nome": { "type": "string", "description": "Nome completo do atleta" },
+          "email": { "type": "string", "format": "email", "description": "Email do atleta" },
+          "telefone": { "type": "string", "description": "Telefone do atleta" },
+          "data_nascimento": { "type": "string", "format": "date", "description": "Data de nascimento do atleta" },
+          "observacoes": { "type": "string", "description": "Observações" },
+          "treinador_id": { "type": "integer", "description": "ID do treinador associado" }
+        },
+        "required": ["id", "nome", "email"]
+      },
+      "AtletaCreate": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "description": "Nome completo do atleta" },
+          "email": { "type": "string", "format": "email", "description": "Email do atleta" },
+          "telefone": { "type": "string", "description": "Telefone do atleta" },
+          "data_nascimento": { "type": "string", "format": "date", "description": "Data de nascimento do atleta" },
+          "observacoes": { "type": "string", "description": "Observações" },
+          "treinador_id": { "type": "integer", "description": "ID do treinador associado" }
+        },
+        "required": ["nome", "email"]
+      },
+      "AtletaUpdate": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "description": "Nome completo do atleta" },
+          "email": { "type": "string", "format": "email", "description": "Email do atleta" },
+          "telefone": { "type": "string", "description": "Telefone do atleta" },
+          "data_nascimento": { "type": "string", "format": "date", "description": "Data de nascimento do atleta" },
+          "observacoes": { "type": "string", "description": "Observações" },
+          "treinador_id": { "type": "integer", "description": "ID do treinador associado" }
+        }
+      },
+      "AtletaInput": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "description": "Nome completo do atleta", "example": "João Silva" },
+          "data_nascimento": { "type": "string", "format": "date", "description": "Data de nascimento do atleta", "example": "2005-03-15" },
+          "posicao": { "type": "string", "enum": ["Atleta", "Ginasta"], "description": "Posição do atleta", "example": "Atleta" },
+          "email": { "type": "string", "format": "email", "description": "Email do atleta", "example": "joao.silva@email.com" },
+          "telefone": { "type": "string", "description": "Telefone do atleta", "example": "(11) 99999-9999" },
+          "categoria": { "type": "string", "enum": ["G1", "G2", "G3", "G4", "G5"], "description": "Categoria/Grupo do atleta", "example": "G1" },
+          "senha": { "type": "string", "description": "Senha do atleta (opcional)", "example": "" },
+          "acesso": { "type": "string", "description": "Tipo de acesso do atleta (opcional)", "example": "" },
+          "treinador_id": { "type": "integer", "description": "ID do treinador", "example": 1 },
+          "usuario_id": { "type": "integer", "description": "ID do usuário (opcional)", "example": 0 }
+        },
+        "required": ["nome", "data_nascimento", "posicao", "email", "telefone", "categoria"]
+      },
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "ID único do usuário" },
+          "username": { "type": "string", "description": "Nome de usuário" },
+          "email": { "type": "string", "format": "email", "description": "Email do usuário" },
+          "role": { "type": "string", "description": "Papel do usuário (ex: 'admin', 'user')" },
+          "is_active": { "type": "boolean", "description": "Status de atividade do usuário" }
+        },
+        "required": ["id", "username", "email"]
+      },
+      "UsuarioCreate": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "description": "Nome de usuário" },
+          "email": { "type": "string", "format": "email", "description": "Email do usuário" },
+          "password": { "type": "string", "description": "Senha do usuário" },
+          "role": { "type": "string", "description": "Papel do usuário (ex: 'admin', 'user')" }
+        },
+        "required": ["username", "email", "password"]
+      },
+      "UsuarioUpdate": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "description": "Nome de usuário" },
+          "email": { "type": "string", "format": "email", "description": "Email do usuário" },
+          "password": { "type": "string", "description": "Senha do usuário" },
+          "role": { "type": "string", "description": "Papel do usuário (ex: 'admin', 'user')" }
+        }
+      },
+      "UsuarioInput": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "description": "Nome de usuário", "example": "usuario123" },
+          "email": { "type": "string", "format": "email", "description": "Email do usuário", "example": "usuario@email.com" },
+          "password": { "type": "string", "description": "Senha do usuário", "example": "123456" },
+          "role": { "type": "string", "description": "Papel do usuário (ex: 'admin', 'treinador', 'atleta')", "example": "atleta" }
+        },
+        "required": ["username", "email", "password", "role"]
+      },
+      "PSE": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "ID único do PSE" },
+          "nome": { "type": "string", "description": "Nome do PSE" },
+          "endereco": { "type": "string", "description": "Endereço do PSE" },
+          "telefone": { "type": "string", "description": "Telefone do PSE" },
+          "observacoes": { "type": "string", "description": "Observações" }
+        },
+        "required": ["id", "nome"]
+      },
+      "PSECreate": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "description": "Nome do PSE" },
+          "endereco": { "type": "string", "description": "Endereço do PSE" },
+          "telefone": { "type": "string", "description": "Telefone do PSE" },
+          "observacoes": { "type": "string", "description": "Observações" }
+        },
+        "required": ["nome"]
+      },
+      "PSEUpdate": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "description": "Nome do PSE" },
+          "endereco": { "type": "string", "description": "Endereço do PSE" },
+          "telefone": { "type": "string", "description": "Telefone do PSE" },
+          "observacoes": { "type": "string", "description": "Observações" }
+        }
+      },
+      "PSEInput": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "description": "Nome do PSE", "example": "PSE 1" },
+          "endereco": { "type": "string", "description": "Endereço do PSE", "example": "Rua Exemplo, 123" },
+          "telefone": { "type": "string", "description": "Telefone do PSE", "example": "(11) 99999-9999" },
+          "observacoes": { "type": "string", "description": "Observações", "example": "Observação opcional" }
+        },
+        "required": ["nome"]
+      },
+      "Sono": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "ID único do sono" },
+          "atleta_id": { "type": "integer", "description": "ID do atleta associado" },
+          "data_sono": { "type": "string", "format": "date-time", "description": "Data e hora do sono" },
+          "duracao": { "type": "integer", "description": "Duração do sono em minutos" },
+          "observacoes": { "type": "string", "description": "Observações" }
+        },
+        "required": ["id", "atleta_id", "data_sono", "duracao"]
+      },
+      "SonoCreate": {
+        "type": "object",
+        "properties": {
+          "atleta_id": { "type": "integer", "description": "ID do atleta associado" },
+          "data_sono": { "type": "string", "format": "date-time", "description": "Data e hora do sono" },
+          "duracao": { "type": "integer", "description": "Duração do sono em minutos" },
+          "observacoes": { "type": "string", "description": "Observações" }
+        },
+        "required": ["atleta_id", "data_sono", "duracao"]
+      },
+      "SonoUpdate": {
+        "type": "object",
+        "properties": {
+          "atleta_id": { "type": "integer", "description": "ID do atleta associado" },
+          "data_sono": { "type": "string", "format": "date-time", "description": "Data e hora do sono" },
+          "duracao": { "type": "integer", "description": "Duração do sono em minutos" },
+          "observacoes": { "type": "string", "description": "Observações" }
+        }
+      },
+      "SonoInput": {
+        "type": "object",
+        "properties": {
+          "atleta_id": { "type": "integer", "description": "ID do atleta associado", "example": 1 },
+          "data_sono": { "type": "string", "format": "date-time", "description": "Data e hora do sono", "example": "2024-06-01T22:00:00Z" },
+          "duracao": { "type": "integer", "description": "Duração do sono em minutos", "example": 480 },
+          "observacoes": { "type": "string", "description": "Observações", "example": "Dormiu bem" }
+        },
+        "required": ["atleta_id", "data_sono", "duracao"]
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "description": "Nome de usuário", "example": "usuario123" },
+          "password": { "type": "string", "description": "Senha do usuário", "example": "123456" }
+        },
+        "required": ["username", "password"]
+      }
+    }
+  },
+  "tags": [
+    { "name": "Treinadores", "description": "Operações relacionadas ao gerenciamento de treinadores" },
+    { "name": "Atletas", "description": "Operações relacionadas ao gerenciamento de atletas" },
+    { "name": "Usuários", "description": "Operações relacionadas ao gerenciamento de usuários" },
+    { "name": "PSE", "description": "Operações relacionadas ao PSE" },
+    { "name": "Sono", "description": "Operações relacionadas ao sono" },
+    { "name": "Autenticação", "description": "Login e autenticação" }
+  ]
+} 

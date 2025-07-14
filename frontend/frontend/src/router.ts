@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -9,6 +10,11 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/',
+    name: 'DashboardHome',
+    component: () => import('./views/DashboardView.vue'),
+  },
+  {
+    path: '/dashboard',
     name: 'Dashboard',
     component: () => import('./views/DashboardView.vue'),
   },
