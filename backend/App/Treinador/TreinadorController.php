@@ -70,7 +70,8 @@ class TreinadorController
             'observacoes' => $treinador->getObservacoes(),
             'usuario_id' => $treinador->getUsuarioId(),
             'nivel' => $treinador->getNivel(),
-            'ativo' => $treinador->getAtivo()
+            'ativo' => $treinador->getAtivo(),
+            'senha_hash' => $treinador->getSenhaHash()
         ];
     }
 } 

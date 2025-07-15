@@ -16,7 +16,7 @@ class TreinadorRepository
             // Update
             $stmt = $this->pdo->prepare("
                 UPDATE treinadores 
-                SET nome = ?, email = ?, telefone = ?, especialidade = ?, data_contratacao = ?, observacoes = ?, usuario_id = ?, nivel = ?, ativo = ?, updated_at = NOW()
+                SET nome = ?, email = ?, telefone = ?, especialidade = ?, data_contratacao = ?, observacoes = ?, usuario_id = ?, nivel = ?, ativo = ?, senha_hash = ?, updated_at = NOW()
                 WHERE id = ?
             ");
             
@@ -30,6 +30,7 @@ class TreinadorRepository
                 $treinador->getUsuarioId(),
                 $treinador->getNivel(),
                 $treinador->getAtivo(),
+                $treinador->getSenhaHash(),
                 $treinador->getId()
             ]);
             
@@ -37,8 +38,8 @@ class TreinadorRepository
         } else {
             // Insert
             $stmt = $this->pdo->prepare("
-                INSERT INTO treinadores (nome, email, telefone, especialidade, data_contratacao, observacoes, usuario_id, nivel, ativo, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+                INSERT INTO treinadores (nome, email, telefone, especialidade, data_contratacao, observacoes, usuario_id, nivel, ativo, senha_hash, criado_em, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
             ");
             
             $stmt->execute([
@@ -50,7 +51,8 @@ class TreinadorRepository
                 $treinador->getObservacoes(),
                 $treinador->getUsuarioId(),
                 $treinador->getNivel(),
-                $treinador->getAtivo()
+                $treinador->getAtivo(),
+                $treinador->getSenhaHash()
             ]);
             
             $id = $this->pdo->lastInsertId();
@@ -79,6 +81,7 @@ class TreinadorRepository
             $data['usuario_id'],
             $data['nivel'] ?? 'treinador',
             $data['ativo'] ?? true,
+            $data['senha_hash'] ?? '',
             $data['id']
         );
     }
@@ -100,6 +103,7 @@ class TreinadorRepository
                 $row['usuario_id'],
                 $row['nivel'] ?? 'treinador',
                 $row['ativo'] ?? true,
+                $row['senha_hash'] ?? '',
                 $row['id']
             );
         }

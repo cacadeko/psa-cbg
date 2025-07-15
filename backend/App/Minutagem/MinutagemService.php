@@ -10,9 +10,9 @@ class MinutagemService
         $this->repository = $repository;
     }
 
-    public function criarRegistro(int $id, int $atletaId, string $data, int $minutos, string $atividade): Minutagem
+    public function criarRegistro(int $id, int $atletaId, int $jogoId, bool $titular, ?int $minutoEntrou, ?int $minutoSaiu, int $minutosPrimeiroTempo, int $minutosSegundoTempo, ?string $observacoes = null): Minutagem
     {
-        $registro = new Minutagem($id, $atletaId, $data, $minutos, $atividade);
+        $registro = new Minutagem($id, $atletaId, $jogoId, $titular, $minutoEntrou, $minutoSaiu, $minutosPrimeiroTempo, $minutosSegundoTempo, $observacoes);
         $this->repository->add($registro);
         return $registro;
     }

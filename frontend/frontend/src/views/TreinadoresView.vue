@@ -5,17 +5,13 @@
       <Button label="Novo Treinador" icon="pi pi-plus" @click="showCreateDialog = true" />
     </div>
     <div class="filters-container">
-      <div class="filters">
-        <div>
-          <label for="search">Buscar</label>
-          <InputText v-model="filters.global.value" placeholder="Nome, email ou especialidade..." />
-        </div>
-        <div>
-          <label for="especialidade">Especialidade</label>
-          <Dropdown v-model="filters.especialidade.value" :options="especialidades" optionLabel="label" optionValue="value" placeholder="Todas" showClear />
-        </div>
-        <Button label="Limpar" icon="pi pi-refresh" @click="clearFilters" />
+      <div class="search-box">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search" />
+          <InputText v-model="filters.global.value" placeholder="Buscar treinadores..." class="p-inputtext-sm" />
+        </span>
       </div>
+      <Button label="Novo Treinador" icon="pi pi-plus" class="custom-primary-btn" @click="showCreateDialog = true" style="background-color: #2563eb; border-color: #2563eb; color: #fff; margin-left: 1rem;" />
     </div>
     <DataTable 
       :value="treinadores" 
@@ -76,12 +72,22 @@
           <small class="p-error" v-if="submitted && !form.email">E-mail é obrigatório.</small>
         </div>
         <div class="field">
+          <label for="senha">Senha *</label>
+          <InputText id="senha" v-model="form.senha" type="password" :class="{ 'p-invalid': submitted && !form.senha }" />
+          <small class="p-error" v-if="submitted && !form.senha">Senha é obrigatória.</small>
+        </div>
+        <div class="field">
           <label for="telefone">Telefone</label>
           <InputText id="telefone" v-model="form.telefone" placeholder="(99) 99999-9999" />
         </div>
         <div class="field">
           <label for="especialidade">Especialidade</label>
           <Dropdown id="especialidade" v-model="form.especialidade" :options="especialidades" optionLabel="label" optionValue="value" placeholder="Selecione uma especialidade" />
+        </div>
+        <div class="field">
+          <label for="nivel">Nível *</label>
+          <Dropdown id="nivel" v-model="form.nivel" :options="niveis" optionLabel="label" optionValue="value" placeholder="Selecione o nível" required :class="{ 'p-invalid': submitted && !form.nivel }" />
+          <small class="p-error" v-if="submitted && !form.nivel">Nível é obrigatório.</small>
         </div>
         <div class="field">
           <label for="data_contratacao">Data de Contratação</label>
@@ -125,6 +131,8 @@ interface Treinador {
   especialidade?: string;
   data_contratacao?: string | Date | null;
   observacoes?: string;
+  senha?: string;
+  nivel?: string;
 }
 
 const confirm = useConfirm();
@@ -154,7 +162,9 @@ const form = ref<Treinador>({
   telefone: '',
   especialidade: '',
   data_contratacao: null,
-  observacoes: ''
+  observacoes: '',
+  senha: '',
+  nivel: ''
 });
 
 // Opções de especialidade
@@ -168,6 +178,13 @@ const especialidades = ref([
   { label: 'Coordenador', value: 'Coordenador' },
   { label: 'Auxiliar', value: 'Auxiliar' }
 ]);
+
+const niveis = [
+  { label: 'Admin', value: 'admin' },
+  { label: 'Treinador', value: 'treinador' },
+  { label: 'Auxiliar', value: 'auxiliar' },
+  { label: 'Estagiário', value: 'estagiario' }
+];
 
 // Carregar dados
 async function loadTreinadores() {
@@ -214,7 +231,9 @@ function editTreinador(treinador: Treinador) {
     telefone: treinador.telefone || '',
     especialidade: treinador.especialidade || '',
     data_contratacao: (treinador.data_contratacao && typeof treinador.data_contratacao === 'string') ? new Date(treinador.data_contratacao) : null,
-    observacoes: treinador.observacoes || ''
+    observacoes: treinador.observacoes || '',
+    senha: '', // Limpar senha ao editar
+    nivel: treinador.nivel || ''
   };
   showCreateDialog.value = true;
 }
@@ -259,7 +278,9 @@ function closeDialog() {
     telefone: '',
     especialidade: '',
     data_contratacao: null,
-    observacoes: ''
+    observacoes: '',
+    senha: '',
+    nivel: ''
   };
 }
 
@@ -276,7 +297,9 @@ async function saveTreinador() {
       telefone: form.value.telefone || '',
       especialidade: form.value.especialidade || '',
       data_contratacao: form.value.data_contratacao ? (form.value.data_contratacao as Date).toISOString().split('T')[0] : '',
-      observacoes: form.value.observacoes || ''
+      observacoes: form.value.observacoes || '',
+      senha: form.value.senha || '', // Incluir senha se for nova
+      nivel: form.value.nivel || ''
     };
     if (editingTreinador.value && editingTreinador.value.id) {
       await api.put(`/treinadores/${editingTreinador.value.id}`, data);
@@ -329,17 +352,27 @@ onMounted(() => {
   border-radius: 8px;
   margin-bottom: 1rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.filters {
   display: flex;
+  align-items: center;
   gap: 1rem;
-  align-items: end;
   flex-wrap: wrap;
 }
-.filters > div {
+.search-box {
+  flex-grow: 1;
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+}
+.search-box .p-inputtext {
+  background-color: transparent;
+  border: none;
+  padding-left: 0.5rem;
+  font-size: 0.875rem;
+}
+.search-box .p-inputtext:focus {
+  box-shadow: none;
 }
 .filters label {
   font-size: 0.875rem;

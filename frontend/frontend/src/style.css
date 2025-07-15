@@ -3,29 +3,36 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Nova paleta inspirada no dashboard do Dribbble */
+  --color-bg: #f7f8fa;
+  --color-card: #fff;
+  --color-primary: #4f6bed;
+  --color-primary-dark: #364fc7;
+  --color-accent: #7c3aed;
+  --color-accent-light: #c7d2fe;
+  --color-blue-light: #a5b4fc;
+  --color-gray-dark: #23272f;
+  --color-text: #23272f;
+  --color-link: #4f6bed;
+  --color-link-hover: #7c3aed;
+  --color-success: #22c55e;
+  --color-success-dark: #16a34a;
+  --color-success-light: #bbf7d0;
+  --color-success-accent: #4ade80;
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--color-link);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--color-link-hover);
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 h1 {
@@ -40,19 +47,24 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--color-primary);
+  color: #fff;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background 0.2s, border-color 0.2s;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-accent);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto var(--color-accent-light);
 }
 
 .card {
+  background: var(--color-card);
+  box-shadow: 0 2px 8px rgba(79,107,237,0.06);
+  border-radius: 12px;
   padding: 2em;
 }
 
@@ -65,13 +77,45 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--color-text);
+    background-color: var(--color-bg);
   }
   a:hover {
-    color: #747bff;
+    color: var(--color-link-hover);
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--color-primary);
   }
+}
+
+.custom-success-btn,
+.custom-success-btn:focus,
+.custom-success-btn:active {
+  background-color: var(--color-success) !important;
+  border-color: var(--color-success) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.custom-success-btn:hover {
+  background-color: var(--color-success-dark) !important;
+  border-color: var(--color-success-dark) !important;
+  color: #fff !important;
+}
+
+/* Badges e elementos de destaque positivos */
+.badge-success {
+  background: var(--color-success-light);
+  color: var(--color-success-dark);
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Elementos de progresso ou barras positivas */
+.progress-success {
+  background: linear-gradient(90deg, var(--color-success-accent) 0%, var(--color-success) 100%);
+  height: 8px;
+  border-radius: 4px;
 }

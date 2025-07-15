@@ -10,9 +10,9 @@ class JogoService
         $this->repository = $repository;
     }
 
-    public function criarJogo(int $id, string $data, string $local, string $adversario, ?string $resultado = null, ?string $observacoes = null): Jogo
+    public function criarJogo(int $id, string $data, string $local, string $adversario, ?string $campeonato = null, ?string $resultado = null, ?string $observacoes = null): Jogo
     {
-        $jogo = new Jogo($id, $data, $local, $adversario, $resultado, $observacoes);
+        $jogo = new Jogo($id, $data, $local, $adversario, $campeonato, $resultado, $observacoes);
         $this->repository->add($jogo);
         return $jogo;
     }

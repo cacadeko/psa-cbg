@@ -10,15 +10,15 @@
       <div class="filters">
         <div>
           <label for="search">Buscar</label>
-          <InputText v-model="filters.search" placeholder="Adversário, local ou campeonato..." />
+          <InputText v-model="filters.global.value" placeholder="Adversário, local ou campeonato..." />
         </div>
         <div>
           <label for="data_inicio">Data Início</label>
-          <Calendar v-model="filters.dataInicio" dateFormat="yy-mm-dd" />
+          <Calendar v-model="filters.data_jogo.value" dateFormat="yy-mm-dd" />
         </div>
         <div>
           <label for="data_fim">Data Fim</label>
-          <Calendar v-model="filters.dataFim" dateFormat="yy-mm-dd" />
+          <Calendar v-model="filters.data_jogo.value" dateFormat="yy-mm-dd" />
         </div>
         <Button label="Limpar" icon="pi pi-refresh" @click="clearFilters" />
       </div>
@@ -68,6 +68,9 @@
           <Button icon="pi pi-trash" class="p-button-rounded p-button-warning" @click="confirmDeleteJogo(data)" />
         </template>
       </Column>
+      <template #empty>
+        Nenhum jogo cadastrado.
+      </template>
     </DataTable>
 
     <!-- Dialog Criar/Editar -->
@@ -131,26 +134,46 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import api from '../services/api';
+import { FilterMatchMode } from 'primevue/api';
 
 const confirm = useConfirm();
 const toast = useToast();
 
 // Estado
-const jogos = ref([]);
+interface Jogo {
+  id?: number;
+  data_jogo: string | Date | null;
+  adversario: string;
+  local_jogo: string;
+  campeonato?: string;
+  resultado?: string;
+  observacoes?: string;
+}
+const editingJogo = ref<Jogo | null>(null);
+const jogos = ref<Jogo[]>([]);
 const loading = ref(false);
 const showCreateDialog = ref(false);
 const submitted = ref(false);
-const editingJogo = ref(null);
 
 // Filtros
 const filters = ref({
-  search: '',
-  dataInicio: null,
-  dataFim: null
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  adversario: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  local_jogo: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  campeonato: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  data_jogo: { value: null, matchMode: FilterMatchMode.EQUALS },
+  resultado: { value: null, matchMode: FilterMatchMode.CONTAINS }
 });
 
 // Formulário
-const form = ref({
+const form = ref<{
+  data_jogo: Date | null,
+  adversario: string,
+  local_jogo: string,
+  campeonato: string,
+  resultado: string,
+  observacoes: string
+}>({
   data_jogo: null,
   adversario: '',
   local_jogo: '',
@@ -164,7 +187,9 @@ async function loadJogos() {
   loading.value = true;
   try {
     const response = await api.get('/jogos');
-    jogos.value = response.data;
+    jogos.value = Array.isArray(response.data)
+      ? response.data.filter(jogo => jogo && jogo.id)
+      : [];
   } catch (error) {
     console.error('Erro ao carregar jogos:', error);
     toast.add({
@@ -179,8 +204,10 @@ async function loadJogos() {
 }
 
 // Formatação
-function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('pt-BR');
+function formatDate(date: string | Date | null) {
+  if (!date) return '';
+  const d = new Date(date);
+  return isNaN(d.getTime()) ? '' : d.toLocaleDateString('pt-BR');
 }
 
 function getResultadoClass(resultado: string) {
@@ -194,9 +221,12 @@ function getResultadoClass(resultado: string) {
 // Filtros
 function clearFilters() {
   filters.value = {
-    search: '',
-    dataInicio: null,
-    dataFim: null
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    adversario: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    local_jogo: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    campeonato: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    data_jogo: { value: null, matchMode: FilterMatchMode.EQUALS },
+    resultado: { value: null, matchMode: FilterMatchMode.CONTAINS }
   };
 }
 
@@ -204,7 +234,7 @@ function clearFilters() {
 function editJogo(jogo: any) {
   editingJogo.value = jogo;
   form.value = {
-    data_jogo: new Date(jogo.data_jogo),
+    data_jogo: jogo.data_jogo ? new Date(jogo.data_jogo) : null,
     adversario: jogo.adversario,
     local_jogo: jogo.local_jogo,
     campeonato: jogo.campeonato || '',
@@ -260,18 +290,15 @@ function closeDialog() {
 
 async function saveJogo() {
   submitted.value = true;
-  
   if (!form.value.data_jogo || !form.value.adversario || !form.value.local_jogo) {
     return;
   }
-
   try {
     const data = {
       ...form.value,
-      data_jogo: form.value.data_jogo.toISOString().split('T')[0]
+      data_jogo: form.value.data_jogo instanceof Date ? form.value.data_jogo.toISOString().split('T')[0] : form.value.data_jogo
     };
-
-    if (editingJogo.value) {
+    if (editingJogo.value && editingJogo.value.id) {
       await api.put(`/jogos/${editingJogo.value.id}`, data);
       toast.add({
         severity: 'success',
@@ -288,7 +315,6 @@ async function saveJogo() {
         life: 3000
       });
     }
-    
     closeDialog();
     loadJogos();
   } catch (error) {

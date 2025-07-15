@@ -13,6 +13,7 @@ class Treinador
     private ?int $usuarioId;
     private string $nivel;
     private bool $ativo;
+    private string $senhaHash;
 
     public function __construct(
         string $nome,
@@ -24,6 +25,7 @@ class Treinador
         ?int $usuarioId = null,
         string $nivel = 'treinador',
         bool $ativo = true,
+        string $senhaHash = '',
         ?int $id = null
     ) {
         $this->nome = $nome;
@@ -35,6 +37,7 @@ class Treinador
         $this->usuarioId = $usuarioId;
         $this->nivel = $nivel;
         $this->ativo = $ativo;
+        $this->senhaHash = $senhaHash;
         $this->id = $id ?? 0;
     }
 
@@ -136,5 +139,15 @@ class Treinador
     public function setAtivo(bool $ativo): void
     {
         $this->ativo = $ativo;
+    }
+
+    public function getSenhaHash(): string
+    {
+        return $this->senhaHash;
+    }
+
+    public function setSenhaHash(string $senhaHash): void
+    {
+        $this->senhaHash = $senhaHash;
     }
 } 

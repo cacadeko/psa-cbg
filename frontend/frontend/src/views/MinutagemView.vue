@@ -10,15 +10,15 @@
       <div class="filters">
         <div>
           <label for="search">Buscar</label>
-          <InputText v-model="filters.search" placeholder="Atleta ou jogo..." />
+          <InputText v-model="filters.global.value" placeholder="Atleta ou jogo..." />
         </div>
         <div>
           <label for="jogo">Jogo</label>
-          <Dropdown v-model="filters.jogo_id" :options="jogos" optionLabel="label" optionValue="value" placeholder="Todos os jogos" showClear />
+          <Dropdown v-model="filters.jogo_id.value" :options="jogos" optionLabel="label" optionValue="value" placeholder="Todos os jogos" showClear />
         </div>
         <div>
           <label for="atleta">Atleta</label>
-          <Dropdown v-model="filters.atleta_id" :options="atletas" optionLabel="label" optionValue="value" placeholder="Todos os atletas" showClear />
+          <Dropdown v-model="filters.atleta_id.value" :options="atletas" optionLabel="label" optionValue="value" placeholder="Todos os atletas" showClear />
         </div>
         <Button label="Limpar" icon="pi pi-refresh" @click="clearFilters" />
       </div>
@@ -178,9 +178,9 @@ const editingMinutagem = ref(null);
 
 // Filtros
 const filters = ref({
-  search: '',
-  jogo_id: null,
-  atleta_id: null
+  global: { value: null, matchMode: 'contains' },
+  jogo_id: { value: null, matchMode: 'equals' },
+  atleta_id: { value: null, matchMode: 'equals' }
 });
 
 // Formulário
@@ -246,9 +246,9 @@ function formatDate(date: string) {
 // Filtros
 function clearFilters() {
   filters.value = {
-    search: '',
-    jogo_id: null,
-    atleta_id: null
+    global: { value: null, matchMode: 'contains' },
+    jogo_id: { value: null, matchMode: 'equals' },
+    atleta_id: { value: null, matchMode: 'equals' }
   };
 }
 

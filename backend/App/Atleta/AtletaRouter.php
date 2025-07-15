@@ -35,14 +35,19 @@ switch ($_SERVER['REQUEST_METHOD']) {
         echo json_encode($result);
         break;
     case 'DELETE':
-        // Exemplo: excluir atleta
-        parse_str($_SERVER['QUERY_STRING'], $params);
-        $id = $params['id'] ?? null;
-        if ($id && $controller->excluir((int)$id)) {
-            echo json_encode(['deleted' => true]);
+        // Corrigido: extrair o ID do path da URL
+        $uri = $_SERVER['REQUEST_URI'];
+        if (preg_match('#/api/atletas/(\\d+)#', $uri, $matches)) {
+            $id = (int)$matches[1];
+            if ($controller->excluir($id)) {
+                echo json_encode(['deleted' => true]);
+            } else {
+                http_response_code(400);
+                echo json_encode(['error' => 'Erro ao excluir']);
+            }
         } else {
             http_response_code(400);
-            echo json_encode(['error' => 'Erro ao excluir']);
+            echo json_encode(['error' => 'ID inválido na URL']);
         }
         break;
     case 'PUT':

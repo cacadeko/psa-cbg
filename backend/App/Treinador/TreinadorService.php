@@ -42,7 +42,8 @@ class TreinadorService
             $data['observacoes'] ?? '',
             $usuarioId,
             $data['nivel'] ?? 'treinador',
-            $data['ativo'] ?? true
+            $data['ativo'] ?? true,
+            $senhaHash
         );
         
         return $this->repository->save($treinador);
@@ -77,6 +78,9 @@ class TreinadorService
             if (!empty($data['senha'])) {
                 $senhaHash = password_hash($data['senha'], PASSWORD_DEFAULT);
                 $this->usuarioRepo->atualizarSenha($data['usuario_id'], $senhaHash);
+                // Atualizar também no treinador
+                $data['senha_hash'] = $senhaHash;
+                $this->repository->editar($data);
             }
         }
         return $ok;
