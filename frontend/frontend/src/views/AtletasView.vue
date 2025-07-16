@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h2>Atletas</h2>
-    
-    <!-- Filtros e Busca -->
+    <div class="header-actions">
+      <h2>👥 Atletas</h2>
+    </div>
     <div class="filters-container">
       <div class="search-box">
         <span class="p-input-icon-left">
           <i class="pi pi-search" />
-          <InputText v-model="filters.global" placeholder="Buscar atletas..." class="p-inputtext-sm" />
+          <InputText v-model="filters.global.value" placeholder="Buscar atletas..." class="p-inputtext-sm" />
         </span>
       </div>
       <Button label="Novo Atleta" icon="pi pi-plus" class="custom-primary-btn" @click="abrirNovoAtleta" style="background-color: #2563eb; border-color: #2563eb; color: #fff;" />
@@ -15,37 +15,69 @@
     
     <DataTable 
       :value="atletas" 
-      v-if="!loading"
-      :paginator="true"
+      :loading="loading"
+      :paginator="true" 
       :rows="10"
       :rowsPerPageOptions="[5, 10, 20, 50]"
       :filters="filters"
       filterDisplay="menu"
-      :globalFilterFields="['nome', 'idade']"
-      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} atletas"
+      :globalFilterFields="['nome', 'email', 'posicao', 'categoria']"
+      responsiveLayout="scroll"
+      class="p-datatable-sm"
     >
-      <Column field="id" header="ID" sortable />
-      <Column field="nome" header="Nome" sortable />
-      <Column field="data_nascimento" header="Nascimento" sortable />
-      <Column field="posicao" header="Posição" sortable />
-      <Column field="email" header="Email" sortable />
-      <Column field="telefone" header="Telefone" sortable />
-      <Column field="categoria" header="Grupo" sortable />
-      <Column header="Treinador" sortable>
-        <template #body="slotProps">
-          {{ getTreinadorNome(slotProps.data.treinador_id) }}
+      <Column field="nome" header="Nome" sortable>
+        <template #body="{ data }">
+          <div class="atleta-info">
+            <div class="atleta-name">{{ data.nome }}</div>
+            <div class="atleta-email">{{ data.email }}</div>
+          </div>
         </template>
       </Column>
-      <Column field="created_at" header="Criado em" sortable />
+      <Column field="data_nascimento" header="Nascimento" sortable>
+        <template #body="{ data }">
+          {{ data.data_nascimento ? formatDate(data.data_nascimento) : '-' }}
+        </template>
+      </Column>
+      <Column field="posicao" header="Posição" sortable>
+        <template #body="{ data }">
+          <span class="posicao-badge">{{ data.posicao || '-' }}</span>
+        </template>
+      </Column>
+      <Column field="telefone" header="Telefone" sortable>
+        <template #body="{ data }">
+          {{ data.telefone || '-' }}
+        </template>
+      </Column>
+      <Column field="categoria" header="Grupo" sortable>
+        <template #body="{ data }">
+          <span class="categoria-badge">{{ data.categoria || '-' }}</span>
+        </template>
+      </Column>
+      <Column header="Treinador" sortable>
+        <template #body="{ data }">
+          {{ getTreinadorNome(data.treinador_id) }}
+        </template>
+      </Column>
       <Column header="Ações" :exportable="false" style="min-width:8rem">
         <template #body="slotProps">
-          <Button icon="pi pi-pencil" class="p-button-text p-button-sm" @click="editarAtleta(slotProps.data)" />
-          <Button icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm" @click="confirmarExclusao(slotProps.data)" />
+          <div class="acoes-btns">
+            <Button 
+              icon="pi pi-pencil" 
+              class="p-button-text p-button-sm btn-acao" 
+              @click="editarAtleta(slotProps.data)" 
+            />
+            <Button 
+              icon="pi pi-trash" 
+              class="p-button-text p-button-danger p-button-sm btn-acao" 
+              @click="confirmarExclusao(slotProps.data)" 
+            />
+          </div>
         </template>
       </Column>
     </DataTable>
-    <div v-else>Carregando...</div>
+    <div v-if="!loading && atletas.length === 0 && !erro" class="no-data">
+      Nenhum atleta cadastrado.
+    </div>
     <div v-if="erro" class="erro-msg">{{ erro }}</div>
 
     <!-- Modal de Cadastro/Edição -->
@@ -166,6 +198,10 @@ function maskTelefone(value: string) {
   value = value.replace(/(\d{2})(\d)/, '($1) $2');
   value = value.replace(/(\d{5})(\d{1,4})$/, '$1-$2');
   return value;
+}
+
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('pt-BR');
 }
 
 const filters = ref<any>({
@@ -294,21 +330,43 @@ function getTreinadorNome(treinadorId: number | null): string {
 </script>
 
 <style scoped>
-.erro-msg {
-  color: #d32f2f;
-  margin-top: 1rem;
-}
-
-.filters-container {
+.header-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
 
+.filters-container {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .search-box {
-  flex: 1;
-  max-width: 300px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+}
+
+.search-box .p-inputtext {
+  background-color: transparent;
+  border: none;
+  padding-left: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.search-box .p-inputtext:focus {
+  box-shadow: none;
 }
 
 .form-grid {
@@ -334,6 +392,53 @@ function getTreinadorNome(treinadorId: number | null): string {
 .form-labels-top label {
   margin-bottom: 0.3rem;
   font-weight: 500;
+}
+
+/* Informações do atleta */
+.atleta-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.atleta-name {
+  font-weight: 500;
+}
+
+.atleta-email {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Badges */
+.posicao-badge {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.categoria-badge {
+  background: #10b981;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.no-data {
+  text-align: center;
+  color: #888;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+.erro-msg {
+  color: #d32f2f;
+  margin-top: 1rem;
+  text-align: center;
 }
 
 /* Paleta de cores baseada no azul do menu e verde da logo */
@@ -405,22 +510,7 @@ h2 {
   font-weight: 500;
 }
 
-/* Botões de ação na tabela */
-.p-button-text.p-button-sm {
-  color: #2563eb !important;
-}
-
-.p-button-text.p-button-sm:hover {
-  background-color: rgba(37, 99, 235, 0.1) !important;
-}
-
-.p-button-text.p-button-danger.p-button-sm {
-  color: #ef4444 !important;
-}
-
-.p-button-text.p-button-danger.p-button-sm:hover {
-  background-color: rgba(239, 68, 68, 0.1) !important;
-}
+/* Botões de ação na tabela - REMOVIDO CONFLITO */
 
 /* Força a cor azul no ícone do botão de fechar do Dialog */
 .p-dialog .p-dialog-header-close,
@@ -449,5 +539,42 @@ h2 {
 .p-dialog .p-dialog-header-close:hover svg {
   color: #1d4ed8 !important;
   fill: #1d4ed8 !important;
+}
+
+.acoes-btns {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* Estilos específicos para botões de ação */
+.acoes-btns .p-button {
+  background: #2563eb !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 0.7rem !important;
+  transition: background 0.2s;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.acoes-btns .p-button:hover {
+  background: #1d4ed8 !important;
+}
+
+/* Forçar ícones brancos com máxima especificidade */
+.acoes-btns .p-button .pi,
+.acoes-btns .p-button-text .pi,
+.acoes-btns .p-button-danger .pi,
+.acoes-btns .btn-acao .pi {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  font-size: 1.1rem !important;
+}
+
+/* Sobrescrever qualquer cor do PrimeVue */
+.acoes-btns .p-button * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 </style> 

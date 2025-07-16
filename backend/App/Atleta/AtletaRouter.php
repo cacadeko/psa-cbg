@@ -3,9 +3,9 @@
 namespace App\Atleta;
 
 $pdo = new \PDO(
-    'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'],
-    $_ENV['DB_USERNAME'],
-    $_ENV['DB_PASSWORD']
+    'mysql:host=localhost;dbname=psa-cbg',
+    'root',
+    ''
 );
 
 $repo = new AtletaRepository($pdo);

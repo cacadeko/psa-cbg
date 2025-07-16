@@ -18,4 +18,20 @@ class UsuarioController {
             echo json_encode(['error' => 'Credenciais inválidas']);
         }
     }
+
+    public function store(array $data): int {
+        return $this->service->cadastrar($data);
+    }
+
+    public function listar(): array {
+        return $this->service->listar();
+    }
+
+    public function editar(array $data): bool {
+        return $this->service->editar($data);
+    }
+
+    public function excluir(int $id): bool {
+        return $this->service->excluir($id);
+    }
 } 

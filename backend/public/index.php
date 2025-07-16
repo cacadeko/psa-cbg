@@ -46,6 +46,8 @@ if (strpos($path, '/treinadores') === 0) {
     require __DIR__ . '/../App/Presentation/Routes/api.php';
 } elseif (strpos($path, '/minutagem') === 0) {
     require __DIR__ . '/../App/Presentation/Routes/api.php';
+} elseif (strpos($path, '/pre-treino') === 0) {
+    require __DIR__ . '/../App/PreTreino/PreTreinoRouter.php';
 } else {
     // Rota padrão - incluir atletas
     require __DIR__ . '/../App/Atleta/AtletaRouter.php';

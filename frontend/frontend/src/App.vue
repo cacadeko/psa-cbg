@@ -22,6 +22,7 @@ const menuItems = [
   { label: 'Sono', icon: 'pi pi-moon', route: '/sono' },
   { label: 'PSE', icon: 'pi pi-heart', route: '/pse' },
   { label: 'PFE', icon: 'pi pi-exclamation-triangle', route: '/pfe' },
+  { label: 'Pré-Treino', icon: 'pi pi-dumbbell', route: '/pre-treino' },
   { label: 'Relatórios', icon: 'pi pi-chart-line', route: '/relatorios' },
   { label: 'Percepção de Fadiga', icon: 'pi pi-chart-pie', route: '/percepcao-fadiga' },
   { label: 'Carga Semanal', icon: 'pi pi-chart-bar', route: '/carga-semanal' },

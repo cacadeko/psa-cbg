@@ -88,6 +88,11 @@ const routes: RouteRecordRaw[] = [
     name: 'Diferença entre Semanas',
     component: () => import('./views/DiferencaSemanasView.vue'),
   },
+  {
+    path: '/pre-treino',
+    name: 'Pré-Treino',
+    component: () => import('./views/PreTreinoView.vue'),
+  },
 ];
 
 const router = createRouter({

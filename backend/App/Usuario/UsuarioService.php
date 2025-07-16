@@ -24,4 +24,39 @@ class UsuarioService {
         ];
         return JWT::encode($payload, $this->jwtSecret, 'HS256');
     }
+
+    public function cadastrar(array $data): int {
+        $senhaHash = password_hash($data['senha'], PASSWORD_DEFAULT);
+        $usuario = new Usuario(
+            $data['nome'] ?? '',
+            $data['email'] ?? '',
+            $senhaHash
+        );
+        return $this->repo->save($usuario);
+    }
+
+    public function listar(): array {
+        return $this->repo->listarTodos();
+    }
+
+    public function editar(array $data): bool {
+        $usuario = $this->repo->findById($data['id']);
+        if (!$usuario) {
+            return false;
+        }
+        
+        $usuario->setNome($data['nome'] ?? '');
+        $usuario->setEmail($data['email'] ?? '');
+        
+        if (!empty($data['senha'])) {
+            $senhaHash = password_hash($data['senha'], PASSWORD_DEFAULT);
+            $usuario->setSenhaHash($senhaHash);
+        }
+        
+        return $this->repo->update($usuario);
+    }
+
+    public function excluir(int $id): bool {
+        return $this->repo->delete($id);
+    }
 } 
