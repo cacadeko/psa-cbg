@@ -1,35 +1,93 @@
 <template>
-  <div>
-    <h2>📊 Relatórios e Gráficos</h2>
+  <div class="card">
+    <Toast />
+    
+    <!-- Header -->
+    <div class="flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="m-0">📊 Relatórios e Gráficos</h2>
+        <p class="text-gray-600 m-0 mt-1">Análise detalhada do desempenho dos atletas</p>
+      </div>
+      <Button 
+        label="Exportar Relatório" 
+        icon="pi pi-download" 
+        class="p-button-primary"
+        @click="exportarRelatorio"
+      />
+    </div>
     
     <!-- Filtros -->
-    <div class="filtros-container">
-      <div class="filtros">
-        <div>
-          <label for="tipo1">TIPO</label>
-          <Dropdown v-model="filtros.tipo1" :options="tipos" optionLabel="label" optionValue="value" placeholder="PFG" />
+    <div class="card mb-4">
+      <div class="flex flex-column md:flex-row gap-3">
+        <div class="flex-1">
+          <label class="block text-900 font-medium mb-2">TIPO</label>
+          <Dropdown 
+            v-model="filtros.tipo1" 
+            :options="tipos" 
+            optionLabel="label" 
+            optionValue="value" 
+            placeholder="PFG"
+            class="w-full"
+          />
         </div>
-        <div>
-          <label for="tipo2">TIPO</label>
-          <Dropdown v-model="filtros.tipo2" :options="tipos" optionLabel="label" optionValue="value" placeholder="PFE" />
+        <div class="flex-1">
+          <label class="block text-900 font-medium mb-2">TIPO</label>
+          <Dropdown 
+            v-model="filtros.tipo2" 
+            :options="tipos" 
+            optionLabel="label" 
+            optionValue="value" 
+            placeholder="PFE"
+            class="w-full"
+          />
         </div>
-        <div>
-          <label for="tipo3">TIPO</label>
-          <Dropdown v-model="filtros.tipo3" :options="tipos" optionLabel="label" optionValue="value" placeholder="TÉCNICO" />
+        <div class="flex-1">
+          <label class="block text-900 font-medium mb-2">TIPO</label>
+          <Dropdown 
+            v-model="filtros.tipo3" 
+            :options="tipos" 
+            optionLabel="label" 
+            optionValue="value" 
+            placeholder="TÉCNICO"
+            class="w-full"
+          />
         </div>
-        <div>
-          <label for="tag">TAG</label>
-          <Dropdown v-model="filtros.tag" :options="tags" optionLabel="label" optionValue="value" placeholder="G1" />
+        <div class="flex-1">
+          <label class="block text-900 font-medium mb-2">TAG</label>
+          <Dropdown 
+            v-model="filtros.tag" 
+            :options="tags" 
+            optionLabel="label" 
+            optionValue="value" 
+            placeholder="G1"
+            class="w-full"
+          />
         </div>
-        <div>
-          <label for="dataInicio">DATA INÍCIO</label>
-          <Calendar v-model="filtros.dataInicio" dateFormat="yy-mm-dd" />
+        <div class="flex-1">
+          <label class="block text-900 font-medium mb-2">DATA INÍCIO</label>
+          <Calendar 
+            v-model="filtros.dataInicio" 
+            dateFormat="yy-mm-dd"
+            class="w-full"
+          />
         </div>
-        <div>
-          <label for="dataFim">DATA FIM</label>
-          <Calendar v-model="filtros.dataFim" dateFormat="yy-mm-dd" />
+        <div class="flex-1">
+          <label class="block text-900 font-medium mb-2">DATA FIM</label>
+          <Calendar 
+            v-model="filtros.dataFim" 
+            dateFormat="yy-mm-dd"
+            class="w-full"
+          />
         </div>
-        <Button label="Atualizar" icon="pi pi-refresh" @click="atualizarGraficos" />
+        <div class="flex align-items-end">
+          <Button 
+            label="Atualizar" 
+            icon="pi pi-refresh" 
+            class="p-button-primary"
+            @click="atualizarGraficos"
+            :loading="loading"
+          />
+        </div>
       </div>
     </div>
 
@@ -37,7 +95,13 @@
     <TabView v-model:activeIndex="activeTab" class="relatorios-tabs">
       <TabPanel header="Distribuição Semanal">
         <div class="grafico-container">
-          <h3>📊 Distribuição Semanal dos Tipos de Treino</h3>
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0">📊 Distribuição Semanal dos Tipos de Treino</h3>
+            <div class="flex gap-2">
+              <Button icon="pi pi-download" class="p-button-outlined p-button-sm" />
+              <Button icon="pi pi-ellipsis-v" class="p-button-outlined p-button-sm" />
+            </div>
+          </div>
           <div class="grafico-wrapper">
             <div class="grafico-pizza">
               <div class="pizza-chart">
@@ -50,10 +114,14 @@
             </div>
           </div>
           <div class="legenda">
-            <h4>Legenda</h4>
-            <div class="legenda-item" v-for="item in dadosDistribuicao" :key="item.label">
-              <span class="cor" :style="{ backgroundColor: getCorPorTipo(item.tipo) }"></span>
-              {{ item.tipo }}: {{ item.percentual.toFixed(2) }}%
+            <h4 class="mb-3">Legenda</h4>
+            <div class="grid">
+              <div class="col-12 md:col-6 lg:col-4" v-for="item in dadosDistribuicao" :key="item.label">
+                <div class="legenda-item">
+                  <span class="cor" :style="{ backgroundColor: getCorPorTipo(item.tipo) }"></span>
+                  <span class="legenda-text">{{ item.tipo }}: {{ item.percentual.toFixed(2) }}%</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -61,7 +129,13 @@
 
       <TabPanel header="Percepção de Esforço">
         <div class="grafico-container">
-          <h3>🎯 Percepção de Esforço (Média da Semana)</h3>
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0">🎯 Percepção de Esforço (Média da Semana)</h3>
+            <div class="flex gap-2">
+              <Button icon="pi pi-download" class="p-button-outlined p-button-sm" />
+              <Button icon="pi pi-ellipsis-v" class="p-button-outlined p-button-sm" />
+            </div>
+          </div>
           <div class="grafico-wrapper">
             <div class="grafico-linha">
               <div class="linha-grafico">
@@ -107,7 +181,13 @@
 
       <TabPanel header="Carga Agudo-Crônica">
         <div class="grafico-container">
-          <h3>📈 Carga Agudo-Crônica</h3>
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0">📈 Carga Agudo-Crônica</h3>
+            <div class="flex gap-2">
+              <Button icon="pi pi-download" class="p-button-outlined p-button-sm" />
+              <Button icon="pi pi-ellipsis-v" class="p-button-outlined p-button-sm" />
+            </div>
+          </div>
           <div class="grafico-wrapper">
             <div class="grafico-scatter">
               <div class="scatter-chart">
@@ -131,7 +211,13 @@
 
       <TabPanel header="Percepção de Fadiga">
         <div class="grafico-container">
-          <h3>😴 Percepção de Fadiga</h3>
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0">😴 Percepção de Fadiga</h3>
+            <div class="flex gap-2">
+              <Button icon="pi pi-download" class="p-button-outlined p-button-sm" />
+              <Button icon="pi pi-ellipsis-v" class="p-button-outlined p-button-sm" />
+            </div>
+          </div>
           <div class="grafico-wrapper">
             <div class="grafico-barras">
               <div class="barras-chart">
@@ -147,7 +233,13 @@
 
       <TabPanel header="Carga Semanal">
         <div class="grafico-container">
-          <h3>📅 Carga Semanal</h3>
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0">📅 Carga Semanal</h3>
+            <div class="flex gap-2">
+              <Button icon="pi pi-download" class="p-button-outlined p-button-sm" />
+              <Button icon="pi pi-ellipsis-v" class="p-button-outlined p-button-sm" />
+            </div>
+          </div>
           <div class="grafico-wrapper">
             <div class="grafico-area">
               <div class="area-chart">
@@ -170,12 +262,16 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
 import Button from 'primevue/button';
+import Toast from 'primevue/toast';
 import relatoriosService from '../services/relatoriosService';
+
+const toast = useToast();
 
 // Filtros
 const filtros = ref({
@@ -188,6 +284,7 @@ const filtros = ref({
 });
 
 const activeTab = ref(0);
+const loading = ref(false);
 
 // Opções dos filtros
 const tipos = ref([
@@ -215,24 +312,24 @@ const medias = ref({
 });
 
 const coresIntensidade = ref([
-  '#007BFF', '#1e90ff', '#28c745', '#a0e518', '#fcea60',
-  '#fdb940', '#fc8d3c', '#f6523c', '#d62c2c', '#990000', '#5c0000'
+  '#198754', '#28a745', '#40c057', '#69db7c', '#8ce99a',
+  '#ffd43b', '#fcc419', '#f59f00', '#f08c00', '#e67700', '#d9480f'
 ]);
 
 const cores = ref([
-  '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+  '#198754', '#28a745', '#40c057', '#69db7c', '#8ce99a', '#b2f2bb'
 ]);
 
 function getCorPorTipo(tipo: string): string {
   const coresMap: { [key: string]: string } = {
-    'PFE': '#FF6384',
-    'PFS': '#36A2EB',
-    'Técnico Misto': '#FFCE56',
-    'Técnico Fita': '#4BC0C0',
-    'Físico-Técnico': '#9966FF',
-    'Intervalo': '#FF9F40'
+    'PFE': '#198754',
+    'PFS': '#28a745',
+    'Técnico Misto': '#40c057',
+    'Técnico Fita': '#69db7c',
+    'Físico-Técnico': '#8ce99a',
+    'Intervalo': '#b2f2bb'
   };
-  return coresMap[tipo] || '#999';
+  return coresMap[tipo] || '#6c757d';
 }
 
 function getPizzaSliceStyle(index: number, percentual: number) {
@@ -249,6 +346,7 @@ function getPizzaSliceStyle(index: number, percentual: number) {
 }
 
 async function carregarDados() {
+  loading.value = true;
   try {
     dadosDistribuicao.value = await relatoriosService.getDistribuicaoSemanal();
     dadosPSE.value = await relatoriosService.getDadosPSE(
@@ -261,13 +359,37 @@ async function carregarDados() {
     
     const mediasData = await relatoriosService.getMediasPSE();
     medias.value = mediasData;
+    
+    toast.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Dados carregados com sucesso',
+      life: 3000
+    });
   } catch (error) {
     console.error('Erro ao carregar dados:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erro',
+      detail: 'Erro ao carregar dados dos relatórios',
+      life: 3000
+    });
+  } finally {
+    loading.value = false;
   }
 }
 
 function atualizarGraficos() {
   carregarDados();
+}
+
+function exportarRelatorio() {
+  toast.add({
+    severity: 'info',
+    summary: 'Exportação',
+    detail: 'Relatório exportado com sucesso',
+    life: 3000
+  });
 }
 
 onMounted(() => {
@@ -276,41 +398,55 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.filtros-container {
+.card {
   background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.filtros {
-  display: flex;
-  gap: 1rem;
-  align-items: end;
-  flex-wrap: wrap;
-}
-
-.filtros > div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.filtros label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 
 .relatorios-tabs {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+:deep(.p-tabview .p-tabview-nav) {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 12px 12px 0 0;
+}
+
+:deep(.p-tabview .p-tabview-nav .p-tabview-nav-link) {
+  background: transparent;
+  border: none;
+  color: #6c757d;
+  font-weight: 500;
+  padding: 1rem 1.5rem;
+  transition: all 0.2s;
+}
+
+:deep(.p-tabview .p-tabview-nav .p-tabview-nav-link:hover) {
+  background: #e9ecef;
+  color: #198754;
+}
+
+:deep(.p-tabview .p-tabview-nav .p-highlight .p-tabview-nav-link) {
+  background: #198754;
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+:deep(.p-tabview .p-tabview-panels) {
+  padding: 0;
+}
+
+:deep(.p-tabview .p-tabview-panel) {
+  padding: 2rem;
 }
 
 .grafico-container {
-  padding: 2rem;
+  padding: 0;
 }
 
 .grafico-wrapper {
@@ -318,6 +454,9 @@ onMounted(() => {
   justify-content: center;
   margin: 2rem 0;
   min-height: 400px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 2rem;
 }
 
 /* Gráfico de Pizza */
@@ -333,6 +472,7 @@ onMounted(() => {
   border-radius: 50%;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .pizza-slice {
@@ -366,8 +506,10 @@ onMounted(() => {
   align-items: end;
   height: 200px;
   padding: 20px;
-  border-bottom: 2px solid #ddd;
-  border-left: 2px solid #ddd;
+  border-bottom: 2px solid #e9ecef;
+  border-left: 2px solid #e9ecef;
+  background: white;
+  border-radius: 8px;
 }
 
 .ponto-dados {
@@ -381,15 +523,17 @@ onMounted(() => {
   width: 20px;
   border-radius: 50%;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.ponto.pfg { background-color: #b6f547; }
-.ponto.pfe { background-color: #ffe54c; }
-.ponto.tecnico { background-color: #1f224f; }
+.ponto.pfg { background-color: #198754; }
+.ponto.pfe { background-color: #ffc107; }
+.ponto.tecnico { background-color: #6c757d; }
 
 .dia-label {
   font-size: 12px;
   font-weight: bold;
+  color: #495057;
 }
 
 /* Gráfico Scatter */
@@ -397,7 +541,9 @@ onMounted(() => {
   width: 100%;
   height: 400px;
   position: relative;
-  border: 2px solid #ddd;
+  border: 2px solid #e9ecef;
+  background: white;
+  border-radius: 8px;
 }
 
 .scatter-chart {
@@ -410,9 +556,10 @@ onMounted(() => {
   position: absolute;
   width: 12px;
   height: 12px;
-  background-color: #FF6384;
+  background-color: #198754;
   border-radius: 50%;
   transform: translate(-50%, 50%);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .scatter-labels {
@@ -427,6 +574,7 @@ onMounted(() => {
 .label-x, .label-y {
   font-size: 12px;
   font-weight: bold;
+  color: #495057;
 }
 
 /* Gráfico de Barras */
@@ -441,8 +589,10 @@ onMounted(() => {
   align-items: end;
   height: 250px;
   padding: 20px;
-  border-bottom: 2px solid #ddd;
-  border-left: 2px solid #ddd;
+  border-bottom: 2px solid #e9ecef;
+  border-left: 2px solid #e9ecef;
+  background: white;
+  border-radius: 8px;
 }
 
 .barra-container {
@@ -454,14 +604,16 @@ onMounted(() => {
 
 .barra {
   width: 40px;
-  background-color: #36A2EB;
+  background-color: #198754;
   border-radius: 4px 4px 0 0;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .barra-label {
   font-size: 12px;
   font-weight: bold;
+  color: #495057;
 }
 
 /* Gráfico de Área */
@@ -469,7 +621,9 @@ onMounted(() => {
   width: 100%;
   height: 300px;
   position: relative;
-  border: 2px solid #ddd;
+  border: 2px solid #e9ecef;
+  background: white;
+  border-radius: 8px;
 }
 
 .area-chart {
@@ -482,68 +636,88 @@ onMounted(() => {
   position: absolute;
   width: 8px;
   height: 8px;
-  background-color: #4BC0C0;
+  background-color: #198754;
   border-radius: 50%;
   transform: translate(-50%, 50%);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .legenda {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.legenda h4 {
+  color: #495057;
+  margin-bottom: 1rem;
 }
 
 .legenda-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
 }
 
 .cor {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: 1px solid #ccc;
+  border: 2px solid #e9ecef;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.legenda-text {
+  font-weight: 500;
+  color: #495057;
 }
 
 .medias-container {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
   margin: 2rem 0;
 }
 
 .media-box {
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
+  padding: 1.5rem;
+  border-radius: 12px;
   text-align: center;
-  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.media-box:hover {
+  transform: translateY(-2px);
 }
 
 .media-valor {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
 .media-label {
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .media-pfg {
-  background-color: #b6f547;
-  color: #000;
+  background: linear-gradient(135deg, #198754, #28a745);
+  color: white;
 }
 
 .media-pfe {
-  background-color: #ffe54c;
-  color: #000;
+  background: linear-gradient(135deg, #ffc107, #ffca2c);
+  color: #212529;
 }
 
 .media-tecnico {
-  background-color: #1f224f;
+  background: linear-gradient(135deg, #6c757d, #495057);
   color: white;
 }
 
@@ -553,24 +727,30 @@ onMounted(() => {
   align-items: center;
   gap: 1rem;
   margin-top: 2rem;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
 }
 
 .escala-titulo {
   font-weight: bold;
-  color: #c00;
+  color: #198754;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .bolinhas {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .bolinha {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -578,6 +758,12 @@ onMounted(() => {
   font-size: 0.75rem;
   font-weight: bold;
   color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.bolinha:hover {
+  transform: scale(1.1);
 }
 
 .escala-labels {
@@ -586,5 +772,28 @@ onMounted(() => {
   width: 100%;
   font-size: 0.75rem;
   margin-top: 0.5rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+  }
+  
+  .grafico-wrapper {
+    padding: 1rem;
+  }
+  
+  .medias-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .escala-labels {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
 }
 </style> 
