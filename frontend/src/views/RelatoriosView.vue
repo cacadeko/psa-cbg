@@ -91,6 +91,67 @@
       </div>
     </div>
   </div>
+
+  <!-- Percepção de Esforço (Média da Semana) - Legacy Chart Migration -->
+  <div class="legacy-percepcao-esforco">
+    <div class="header">
+      <img src="https://upload.wikimedia.org/wikipedia/pt/thumb/0/00/CBG_logo.svg/1200px-CBG_logo.svg.png" alt="Logo CBG" />
+      <strong>CONFEDERAÇÃO BRASILEIRA DE GINÁSTICA</strong>
+    </div>
+    <div class="filtros">
+      <div>
+        <label for="tipo1">TIPO</label>
+        <select id="tipo1"><option>PFG</option></select>
+      </div>
+      <div>
+        <label for="tipo2">TIPO</label>
+        <select id="tipo2"><option>PFE</option></select>
+      </div>
+      <div>
+        <label for="tipo3">TIPO</label>
+        <select id="tipo3"><option>TÉCNICO</option></select>
+      </div>
+      <div>
+        <label for="tag">TAG</label>
+        <select id="tag"><option>G1</option></select>
+      </div>
+      <div>
+        <label for="dataInicio">DATA</label>
+        <input type="date" id="dataInicio" value="2025-05-18" />
+      </div>
+      <div>
+        <label for="dataFim">&nbsp;</label>
+        <input type="date" id="dataFim" value="2025-05-24" />
+      </div>
+    </div>
+    <div class="grafico-container">
+      <div class="grafico-titulo">PERCEPÇÃO DE ESFORÇO (MÉDIA DA SEMANA)</div>
+      <BarChartPercepcaoEsforco />
+      <div class="below-chart">
+        <div class="intensidade-scale">
+          <div class="scale-header">
+            <img src="https://upload.wikimedia.org/wikipedia/pt/thumb/0/00/CBG_logo.svg/1200px-CBG_logo.svg.png" style="height: 30px;" />
+            <span style="color: #c00; font-weight: bold;">INTENSIDADE DO TREINO</span>
+          </div>
+          <div class="bolinhas">
+            <span v-for="(color, idx) in bolinhaColors" :key="idx" class="bolinha" :style="{ background: color }">{{ idx }}</span>
+          </div>
+          <div class="legendas">
+            <span>LEVE</span>
+            <span style="margin-left: 60px;">MODERADO</span>
+            <span style="margin-left: 70px;">INTENSO</span>
+            <span style="margin-left: 60px;">MUITO INTENSO</span>
+          </div>
+        </div>
+        <div class="summary-boxes">
+          <div class="summary-box pfg">4<br /><span>PFG<br />MÉDIA GERAL</span></div>
+          <div class="summary-box pfe">4<br /><span>PFE<br />MÉDIA GERAL</span></div>
+          <div class="summary-box tecnico">4<br /><span>TÉCNICO<br />MÉDIA GERAL</span></div>
+          <div class="summary-box preventivo">4<br /><span>PREVENTIVO<br />MÉDIA GERAL</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -289,6 +350,71 @@ onMounted(criarGraficos)
 watch([graficoAtivo, filtros], criarGraficos)
 </script>
 
+<script setup>
+import { defineComponent, ref } from 'vue';
+import { Bar } from 'vue-chartjs';
+import {
+  Chart,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+Chart.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend, ChartDataLabels);
+
+const bolinhaColors = [
+  '#007BFF', '#1e90ff', '#28c745', '#a0e518', '#fcea60',
+  '#fdb940', '#fc8d3c', '#f6523c', '#d62c2c', '#990000', '#5c0000'
+];
+
+const chartData = {
+  labels: ['Sofia', 'Laura', 'Isabela', 'Amanda', 'Camila', 'Beatriz', 'Elisa'],
+  datasets: [
+    { label: 'PFE', backgroundColor: '#ffe54c', data: [4, 3, 5, 4, 3, 4, 2] },
+    { label: 'PFG', backgroundColor: '#b6f547', data: [5, 4, 4, 5, 4, 4, 3] },
+    { label: 'TÉCNICO', backgroundColor: '#1f224f', data: [5, 5, 5, 5, 4, 4, 1] },
+    { label: 'PREVENTIVO', backgroundColor: '#fc8d3c', data: [3, 3, 3, 2, 3, 2, 2] },
+  ],
+};
+
+const chartOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: true,
+      position: 'top',
+    },
+    datalabels: {
+      anchor: 'end',
+      align: 'start',
+      color: '#000',
+      font: { weight: 'bold', size: 11 },
+      formatter: value => value + '%',
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 10,
+      ticks: { stepSize: 1 },
+    },
+  },
+};
+
+const BarChartPercepcaoEsforco = defineComponent({
+  name: 'BarChartPercepcaoEsforco',
+  setup() {
+    return () => (
+      <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />
+    );
+  },
+});
+</script>
+
 <style scoped>
 .relatorios-container { background: #f7f7f7; min-height: 100vh; }
 .header { background: #001f7f; color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -315,4 +441,119 @@ watch([graficoAtivo, filtros], criarGraficos)
 .media-tecnico { background: #1f224f; color: #fff; }
 .media-preventivo { background: #fc8d3c; }
 .media-box span { font-size: 13px; font-weight: normal; text-transform: uppercase; }
+
+.legacy-percepcao-esforco {
+  background: #f7f7f7;
+  margin: 30px auto;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.04);
+  max-width: 1100px;
+  padding-bottom: 30px;
+}
+.legacy-percepcao-esforco .header {
+  background: #001f7f;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.legacy-percepcao-esforco .header img {
+  height: 40px;
+}
+.legacy-percepcao-esforco .filtros {
+  background: #fff;
+  padding: 15px 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #eee;
+}
+.legacy-percepcao-esforco .filtros label {
+  font-size: 14px;
+  margin-right: 5px;
+}
+.legacy-percepcao-esforco .grafico-container {
+  background: #fff;
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+.legacy-percepcao-esforco .grafico-titulo {
+  background: #000;
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.legacy-percepcao-esforco .below-chart {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 30px;
+  background: #fefefe;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+.legacy-percepcao-esforco .intensidade-scale {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.legacy-percepcao-esforco .scale-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.legacy-percepcao-esforco .bolinhas {
+  display: flex;
+  gap: 6px;
+  margin-top: 5px;
+}
+.legacy-percepcao-esforco .bolinha {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  line-height: 25px;
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
+}
+.legacy-percepcao-esforco .legendas {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-top: 5px;
+  width: 100%;
+}
+.legacy-percepcao-esforco .summary-boxes {
+  display: flex;
+  gap: 20px;
+}
+.legacy-percepcao-esforco .summary-box {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 15px 20px;
+  width: 100px;
+  color: #000;
+  background: #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.legacy-percepcao-esforco .summary-box.pfg { background: #b6f547; color: #000; }
+.legacy-percepcao-esforco .summary-box.pfe { background: #ffe54c; color: #000; }
+.legacy-percepcao-esforco .summary-box.tecnico { background: #1f224f; color: #fff; }
+.legacy-percepcao-esforco .summary-box.preventivo { background: #fc8d3c; color: #000; }
 </style> 
